@@ -1,0 +1,552 @@
+/**
+ * Estilos del Chatbot MET Mallorca
+ */
+
+/* Importar fuente Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Variables CSS */
+:root {
+    --met-primary: #E86A1C;
+    --met-primary-dark: #c55815;
+    --met-secondary: #385074;
+    --met-text: #333333;
+    --met-text-light: #666666;
+    --met-bg: #ffffff;
+    --met-bg-light: #f8f9fa;
+    --met-border: #e0e0e0;
+    --met-shadow: rgba(232, 106, 28, 0.15);
+    --met-shadow-dark: rgba(56, 80, 116, 0.2);
+}
+
+/* Widget contenedor */
+.met-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Botón flotante */
+.met-chatbot-toggle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    border: none;
+    box-shadow: 0 4px 20px var(--met-shadow), 0 2px 8px var(--met-shadow-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.met-chatbot-toggle:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 8px 24px var(--met-shadow), 0 4px 12px var(--met-shadow-dark);
+}
+
+.met-chatbot-toggle i {
+    font-size: 26px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.met-chatbot-icon {
+    display: block;
+}
+
+.met-chatbot-close {
+    display: none;
+    position: absolute;
+}
+
+.met-chatbot-widget.open .met-chatbot-icon {
+    display: none;
+}
+
+.met-chatbot-widget.open .met-chatbot-close {
+    display: block;
+}
+
+/* Diálogo flotante de invitación */
+.met-chatbot-invitation {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    z-index: 9998;
+    animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.met-chatbot-invitation-content {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 200px;
+    max-width: 280px;
+}
+
+.met-chatbot-invitation-text {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--met-text);
+    flex: 1;
+}
+
+.met-chatbot-invitation-close {
+    color: var(--met-text-light);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.met-chatbot-invitation-close:hover {
+    background: var(--met-bg-light);
+    color: var(--met-text);
+}
+
+.met-chatbot-invitation-arrow {
+    position: absolute;
+    bottom: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Animación de entrada */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Animación de salida */
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px) scale(0.8);
+    }
+}
+
+.met-chatbot-invitation.hiding {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* Ventana del chat */
+.met-chatbot-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    max-width: calc(100vw - 40px);
+    height: 600px;
+    max-height: calc(100vh - 120px);
+    background: var(--met-bg);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px var(--met-shadow);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+.met-chatbot-widget.open .met-chatbot-window {
+    display: flex;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.met-chatbot-header {
+    background: linear-gradient(135deg, var(--met-secondary) 0%, var(--met-primary) 100%);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.met-chatbot-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.met-chatbot-avatar {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.met-chatbot-avatar i {
+    font-size: 20px;
+}
+
+.met-chatbot-header-text h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.met-chatbot-status {
+    font-size: 12px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.met-chatbot-status i {
+    font-size: 8px;
+    color: #4ade80;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.met-chatbot-minimize {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.met-chatbot-minimize:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.met-chatbot-minimize svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Área de mensajes */
+.met-chatbot-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--met-bg-light);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.met-chatbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.met-chatbot-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.met-chatbot-messages::-webkit-scrollbar-thumb {
+    background: var(--met-border);
+    border-radius: 3px;
+}
+
+/* Mensaje */
+.met-message {
+    display: flex;
+    gap: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.met-message.bot {
+    align-items: flex-start;
+}
+
+.met-message.user {
+    align-items: flex-end;
+    flex-direction: row-reverse;
+}
+
+.met-message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.met-message-avatar i {
+    font-size: 16px;
+}
+
+.met-message.user .met-message-avatar {
+    background: linear-gradient(135deg, var(--met-secondary) 0%, #2a3f5a 100%);
+}
+
+.met-message-content {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.met-message.bot .met-message-content {
+    background: white;
+    color: var(--met-text);
+    border-bottom-left-radius: 4px;
+}
+
+.met-message.user .met-message-content {
+    background: var(--met-primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Typing indicator */
+.met-typing {
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+}
+
+.met-typing span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--met-text-light);
+    animation: typing 1.4s infinite;
+}
+
+.met-typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.met-typing span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    30% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+/* Área de input */
+.met-chatbot-input-area {
+    background: white;
+    border-top: 1px solid var(--met-border);
+    padding: 16px;
+}
+
+/* Opciones (botones) */
+.met-chatbot-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.met-option-button {
+    background: white;
+    border: 2px solid var(--met-primary);
+    color: var(--met-primary);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.met-option-button:hover {
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    color: white;
+    transform: translateX(6px);
+    box-shadow: 0 4px 12px var(--met-shadow);
+    border-color: var(--met-primary);
+}
+
+.met-option-button i {
+    font-size: 16px;
+}
+
+/* Input de texto */
+.met-chatbot-text-input {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.met-chatbot-input {
+    flex: 1;
+    padding: 16px 18px;
+    border: 2px solid var(--met-border);
+    border-radius: 16px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    background: var(--met-bg-light);
+    resize: none;
+    min-height: 50px;
+    max-height: 120px;
+    line-height: 1.4;
+}
+
+.met-chatbot-input:focus {
+    border-color: var(--met-primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(232, 106, 28, 0.1);
+}
+
+.met-chatbot-input::placeholder {
+    color: var(--met-text-light);
+    opacity: 0.8;
+}
+
+.met-chatbot-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px var(--met-shadow);
+}
+
+.met-chatbot-send:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 4px 12px var(--met-shadow);
+}
+
+.met-chatbot-send i {
+    font-size: 16px;
+}
+
+/* Footer */
+.met-chatbot-footer {
+    background: var(--met-bg-light);
+    padding: 12px 16px;
+    text-align: center;
+    border-top: 1px solid var(--met-border);
+}
+
+.met-chatbot-footer small {
+    font-size: 11px;
+    color: var(--met-text-light);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.met-chatbot-footer a {
+    color: var(--met-primary);
+    text-decoration: none;
+}
+
+.met-chatbot-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .met-chatbot-widget {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .met-chatbot-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        bottom: 70px;
+        right: -10px;
+    }
+    
+    .met-chatbot-toggle {
+        width: 56px;
+        height: 56px;
+    }
+}
