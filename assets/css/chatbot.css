@@ -531,6 +531,99 @@
     text-decoration: underline;
 }
 
+/* Estilos para mensajes con formulario embebido */
+.met-message-form .met-message-content {
+    max-width: 95%;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+}
+
+.met-form-content {
+    width: 100%;
+}
+
+/* Estilos para el formulario de reservas embebido */
+.met-form-content .chbs-main {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+.met-form-content form {
+    margin: 0;
+}
+
+.met-form-content input,
+.met-form-content select,
+.met-form-content textarea {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+}
+
+.met-form-content button[type="submit"] {
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    border: none;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.met-form-content button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--met-shadow);
+}
+
+/* Fallback cuando el plugin no está activo */
+.met-booking-form-fallback {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.met-booking-form-fallback p {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.met-booking-form-fallback strong {
+    color: var(--met-text);
+    font-weight: 600;
+}
+
+.met-booking-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    color: white !important;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.met-booking-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--met-shadow);
+    text-decoration: none;
+}
+
+/* Ajustes para formularios largos */
+.met-message-form {
+    max-width: 100%;
+}
+
+.met-chatbot-messages .met-message-form .met-message-content {
+    max-width: 100%;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .met-chatbot-widget {
@@ -548,5 +641,14 @@
     .met-chatbot-toggle {
         width: 56px;
         height: 56px;
+    }
+    
+    .met-booking-form-fallback {
+        padding: 16px;
+    }
+    
+    .met-booking-link {
+        display: block;
+        text-align: center;
     }
 }

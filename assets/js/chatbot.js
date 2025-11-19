@@ -49,7 +49,7 @@
             
             // Enviar mensaje con Ctrl+Enter o Shift+Enter
             $('#met-chatbot-input').on('keydown', function(e) {
-                if ((e.ctrlKey || e.shiftKey) && e.which === 13) {
+                if (e.which === 13 && !e.shiftKey) {
                     e.preventDefault();
                     self.sendTextMessage();
                 }
@@ -161,19 +161,26 @@
             this.state.currentStep = data.nextStep;
             this.state.conversationData = data.data || {};
             
-            // Agregar mensaje del bot
-            this.addMessage('bot', data.message);
-            
-            // Mostrar opciones o input
-            if (data.options && data.options.length > 0) {
-                this.showOptions(data.options);
-                this.hideTextInput();
-            } else if (data.inputType) {
-                this.showTextInput(data.inputType);
+            // Si es un formulario embebido, manejarlo de forma especial
+            if (data.showForm) {
+                this.addFormMessage('bot', data.message);
                 this.hideOptions();
+                this.hideTextInput();
             } else {
-                this.hideOptions();
-                this.hideTextInput();
+                // Agregar mensaje del bot
+                this.addMessage('bot', data.message);
+                
+                // Mostrar opciones o input
+                if (data.options && data.options.length > 0) {
+                    this.showOptions(data.options);
+                    this.hideTextInput();
+                } else if (data.inputType) {
+                    this.showTextInput(data.inputType);
+                    this.hideOptions();
+                } else {
+                    this.hideOptions();
+                    this.hideTextInput();
+                }
             }
             
             // Si hay una acción especial (como verificar reserva)
@@ -263,6 +270,47 @@
             this.state.messages.push({ type, content });
         },
         
+        // Agregar mensaje con formulario embebido
+        addFormMessage: function(type, content) {
+            const messagesContainer = $('#met-chatbot-messages');
+            
+            const avatar = type === 'bot' 
+                ? '<i class="fas fa-robot"></i>'
+                : '<i class="fas fa-user"></i>';
+            
+            const messageHtml = `
+                <div class="met-message ${type} met-message-form">
+                    <div class="met-message-avatar">${avatar}</div>
+                    <div class="met-message-content met-form-content">${content}</div>
+                </div>
+            `;
+            
+            messagesContainer.append(messageHtml);
+            
+            // Esperar un momento para que el DOM se actualice
+            setTimeout(() => {
+                this.scrollToBottom();
+                // Reinicializar scripts del formulario si es necesario
+                this.initializeBookingForm();
+            }, 100);
+            
+            // Guardar en estado
+            this.state.messages.push({ type, content, isForm: true });
+        },
+        
+        // Inicializar formulario de reservas
+        initializeBookingForm: function() {
+            // Si el plugin de reservas tiene scripts de inicialización, ejecutarlos aquí
+            // Por ejemplo, si usa jQuery plugins o eventos personalizados
+            if (typeof window.CHBSBookingForm !== 'undefined') {
+                // Reinicializar el formulario del plugin
+                window.CHBSBookingForm.init();
+            }
+            
+            // Trigger evento para que otros scripts sepan que el formulario está listo
+            $(document).trigger('met-booking-form-loaded');
+        },
+        
         // Mostrar typing indicator
         showTyping: function() {
             const typingHtml = `
@@ -341,7 +389,9 @@
         // Scroll al final
         scrollToBottom: function() {
             const messagesContainer = $('#met-chatbot-messages');
-            messagesContainer.scrollTop(messagesContainer[0].scrollHeight);
+            messagesContainer.animate({
+                scrollTop: messagesContainer[0].scrollHeight
+            }, 300);
         },
         
         // Mostrar diálogo de invitación

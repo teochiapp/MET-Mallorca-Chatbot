@@ -2,8 +2,8 @@
 /**
  * Plugin Name: MET Mallorca Chatbot
  * Plugin URI: https://metmallorca.com
- * Description: Asistente inteligente de reservas, presupuestos y verificación para MET Mallorca
- * Version: 1.0.0
+ * Description: Asistente inteligente de reservas con formulario embebido, presupuestos y verificación para MET Mallorca
+ * Version: 2.0.0
  * Author: MET Mallorca
  * Author URI: https://metmallorca.com
  * License: GPL v2 or later
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('MET_CHATBOT_VERSION', '1.0.0');
+define('MET_CHATBOT_VERSION', '2.0.0');
 define('MET_CHATBOT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('MET_CHATBOT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -24,6 +24,10 @@ define('MET_CHATBOT_PLUGIN_URL', plugin_dir_url(__FILE__));
  * Clase principal del plugin
  */
 class MET_Chatbot {
+    /**
+     * Instancia del generador de checkout
+     */
+    private $checkout_generator;
     
     /**
      * Constructor
@@ -48,7 +52,27 @@ class MET_Chatbot {
      */
     private function load_dependencies() {
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-handler.php';
-        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-flow.php';
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-controller.php';
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-checkout-generator.php';
+
+        // Registrar hooks de checkout cuando WooCommerce esté listo
+        if (did_action('woocommerce_init')) {
+            $this->register_checkout_hooks();
+        } else {
+            add_action('woocommerce_init', array($this, 'register_checkout_hooks'));
+        }
+    }
+
+    /**
+     * Inicializar hooks relacionados con el checkout
+     */
+    public function register_checkout_hooks() {
+        if ($this->checkout_generator instanceof MET_Checkout_Generator) {
+            return;
+        }
+
+        $this->checkout_generator = new MET_Checkout_Generator();
+        $this->checkout_generator->init_hooks();
     }
     
     /**
@@ -68,6 +92,14 @@ class MET_Chatbot {
             'met-chatbot-style',
             MET_CHATBOT_PLUGIN_URL . 'assets/css/chatbot.css',
             array('font-awesome'),
+            MET_CHATBOT_VERSION
+        );
+        
+        // CSS adicional para sistema de reservas
+        wp_enqueue_style(
+            'met-chatbot-booking-style',
+            MET_CHATBOT_PLUGIN_URL . 'assets/css/chatbot-booking.css',
+            array('met-chatbot-style'),
             MET_CHATBOT_VERSION
         );
         
@@ -104,8 +136,9 @@ class MET_Chatbot {
         $step = isset($_POST['step']) ? sanitize_text_field($_POST['step']) : 'welcome';
         $data = isset($_POST['data']) ? json_decode(stripslashes($_POST['data']), true) : array();
         
-        $conversation = new MET_Conversation_Flow();
-        $response = $conversation->process_message($message, $step, $data);
+        // Usar el nuevo controlador conversacional
+        $controller = new MET_Conversation_Controller();
+        $response = $controller->process_message($message, $step, $data);
         
         wp_send_json_success($response);
     }

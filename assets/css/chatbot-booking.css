@@ -1,0 +1,270 @@
+/**
+ * Estilos adicionales para el sistema de reservas del chatbot
+ * Complementa chatbot.css con estilos específicos para el flujo de booking
+ */
+
+/* Contenedor de resumen de reserva */
+.met-booking-summary {
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.met-booking-summary strong {
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Desglose de precio */
+.met-price-breakdown {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.met-price-breakdown strong {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.met-price-breakdown br {
+    line-height: 1.8;
+}
+
+/* Contenedor del botón de checkout */
+.met-checkout-link-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.met-checkout-link {
+    display: inline-block;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white !important;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.met-checkout-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.6);
+    color: white !important;
+    text-decoration: none;
+}
+
+.met-checkout-link i {
+    margin-right: 8px;
+}
+
+/* Botón de checkout en el mensaje del bot */
+.met-chatbot-message.bot .met-checkout-link {
+    margin-top: 10px;
+}
+
+/* Nota de seguridad */
+.met-checkout-note {
+    text-align: center;
+    margin-top: 10px;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* Placeholder mejorado para inputs */
+.met-chatbot-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Indicador de carga */
+.met-chatbot-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: met-spin 1s ease-in-out infinite;
+}
+
+@keyframes met-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mensaje de error */
+.met-error-message {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    color: #856404;
+}
+
+/* Mensaje de éxito */
+.met-success-message {
+    background: #d4edda;
+    border-left: 4px solid #28a745;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    color: #155724;
+}
+
+/* Botón de volver atrás */
+.met-back-button {
+    display: inline-block;
+    background: #6c757d;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.met-back-button:hover {
+    background: #5a6268;
+}
+
+.met-back-button i {
+    margin-right: 5px;
+}
+
+/* Código de reserva */
+.met-booking-code {
+    font-family: 'Courier New', monospace;
+    background: #e9ecef;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #495057;
+}
+
+/* Badges de estado */
+.met-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.met-status-badge.confirmed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.met-status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.met-status-badge.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .met-checkout-link {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .met-price-breakdown {
+        padding: 15px;
+        font-size: 13px;
+    }
+    
+    .met-booking-summary {
+        padding: 12px;
+        font-size: 13px;
+    }
+}
+
+/* Animación de entrada para mensajes importantes */
+@keyframes met-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.met-price-breakdown,
+.met-booking-summary,
+.met-checkout-link-container {
+    animation: met-slide-in 0.4s ease-out;
+}
+
+/* Tooltip de ayuda */
+.met-help-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    color: #007bff;
+    margin-left: 5px;
+}
+
+.met-help-tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+/* Indicador de paso actual */
+.met-step-indicator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.met-step-indicator .step {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dee2e6;
+    margin: 0 3px;
+}
+
+.met-step-indicator .step.active {
+    background: #007bff;
+}
+
+.met-step-indicator .step.completed {
+    background: #28a745;
+}

@@ -1,0 +1,538 @@
+<?php
+/**
+ * Generador de URLs de checkout de WooCommerce
+ * Crea enlaces directos al checkout con productos y datos prellenados
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class MET_Checkout_Generator {
+    
+    /**
+     * ID del producto de WooCommerce para traslados
+     * Este producto debe existir en tu tienda
+     */
+    private $transfer_product_id;
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        // Obtener ID del producto desde opciones o usar uno por defecto
+        $this->transfer_product_id = get_option('met_chatbot_transfer_product_id', 0);
+        
+        // Si no existe el producto, intentar crearlo automáticamente
+        if (!$this->transfer_product_id || !$this->product_exists($this->transfer_product_id)) {
+            $this->transfer_product_id = $this->create_transfer_product();
+        }
+    }
+    
+    /**
+     * Generar URL de checkout con todos los datos de la reserva
+     * 
+     * @param array $booking_data Datos de la reserva
+     * @param array $price_breakdown Desglose de precio
+     * @return string URL del checkout
+     */
+    public function generate_checkout_url($booking_data, $price_breakdown) {
+        if (!function_exists('WC')) {
+            return wc_get_checkout_url();
+        }
+
+        if (null === WC()->cart && function_exists('wc_load_cart')) {
+            wc_load_cart();
+        }
+
+        // Limpiar carrito actual
+        if (WC()->cart) {
+            WC()->cart->empty_cart();
+        }
+        
+        // Crear producto único para esta reserva
+        $product_id = $this->create_booking_product($booking_data, $price_breakdown);
+        
+        if (!$product_id) {
+            error_log('MET Chatbot: ERROR - No se pudo crear el producto de reserva');
+            return wc_get_checkout_url();
+        }
+        
+        error_log('MET Chatbot: Producto de reserva creado con ID: ' . $product_id);
+        
+        // Verificar el precio del producto antes de agregar al carrito
+        $product_obj = wc_get_product($product_id);
+        if ($product_obj) {
+            error_log('MET Chatbot: Precio del producto antes de agregar: €' . $product_obj->get_price());
+        }
+        
+        // Agregar el producto al carrito
+        if (WC()->cart) {
+            $cart_item_key = WC()->cart->add_to_cart($product_id, 1);
+            
+            if ($cart_item_key) {
+                error_log('MET Chatbot: Producto agregado al carrito con key: ' . $cart_item_key);
+                
+                // Verificar el precio en el carrito
+                $cart_item = WC()->cart->get_cart_item($cart_item_key);
+                if ($cart_item) {
+                    error_log('MET Chatbot: Precio en el carrito: €' . $cart_item['data']->get_price());
+                }
+                
+                error_log('MET Chatbot: Subtotal del carrito: ' . WC()->cart->get_subtotal());
+                error_log('MET Chatbot: Total del carrito: ' . WC()->cart->get_total(''));
+
+                // Guardar sesión y cookies del carrito antes de redirigir
+                WC()->cart->set_session();
+                WC()->cart->maybe_set_cart_cookies();
+                
+                // Dar un pequeño margen para que WooCommerce persista el carrito
+                if (function_exists('wp_sleep')) {
+                    wp_sleep(1);
+                }
+            } else {
+                error_log('MET Chatbot: ERROR - No se pudo agregar el producto al carrito');
+            }
+        }
+        
+        // Retornar URL del checkout directamente
+        return wc_get_checkout_url();
+    }
+    
+    /**
+     * Crear un producto único para esta reserva
+     */
+    private function create_booking_product($booking_data, $price_breakdown) {
+        // Obtener número de reserva autoincremental
+        $booking_number = $this->get_next_booking_number();
+        
+        // Crear título descriptivo
+        $title = sprintf(
+            'Traslado #%s - %s → %s',
+            $booking_number,
+            $booking_data['origin'],
+            $booking_data['destination']
+        );
+        
+        // Crear descripción detallada
+        $description = $this->generate_product_description($booking_data, $price_breakdown);
+        
+        // Crear el producto
+        $product = new WC_Product_Simple();
+        $product->set_name($title);
+        $product->set_slug('traslado-' . $booking_number . '-' . time());
+        $product->set_status('publish');
+        $product->set_catalog_visibility('hidden'); // Oculto del catálogo
+        $product->set_description($description);
+        $product->set_short_description('Servicio de traslado privado en Mallorca');
+        
+        // Establecer el precio calculado
+        $price = floatval($price_breakdown['total']);
+        $product->set_price($price);
+        $product->set_regular_price($price);
+        
+        $product->set_sold_individually(true);
+        $product->set_virtual(true);
+        $product->set_manage_stock(false);
+        $product->set_tax_status('none'); // Sin impuestos
+        
+        // Guardar el producto
+        $product_id = $product->save();
+        
+        if ($product_id) {
+            // Forzar actualización de precios en la base de datos
+            update_post_meta($product_id, '_price', $price);
+            update_post_meta($product_id, '_regular_price', $price);
+            update_post_meta($product_id, '_sale_price', '');
+            
+            // Guardar metadata adicional
+            update_post_meta($product_id, '_met_booking_number', $booking_number);
+            update_post_meta($product_id, '_met_booking_data', $booking_data);
+            update_post_meta($product_id, '_met_price_breakdown', $price_breakdown);
+            update_post_meta($product_id, '_met_created_at', current_time('mysql'));
+            
+            // Limpiar caché de WooCommerce
+            wc_delete_product_transients($product_id);
+            
+            error_log('MET Chatbot: Producto creado - ID: ' . $product_id . ', Precio: €' . $price);
+            error_log('MET Chatbot: Precio guardado en _price: ' . get_post_meta($product_id, '_price', true));
+        }
+        
+        return $product_id;
+    }
+    
+    /**
+     * Obtener el siguiente número de reserva
+     */
+    private function get_next_booking_number() {
+        $current_number = get_option('met_chatbot_last_booking_number', 0);
+        $next_number = $current_number + 1;
+        update_option('met_chatbot_last_booking_number', $next_number);
+        
+        // Formato: MET-2025-0001
+        return sprintf('MET-%s-%04d', date('Y'), $next_number);
+    }
+    
+    /**
+     * Generar descripción del producto
+     */
+    private function generate_product_description($booking_data, $price_breakdown) {
+        $description = '<h3>Detalles de la Reserva</h3>';
+        $description .= '<ul>';
+        $description .= '<li><strong>Origen:</strong> ' . esc_html($booking_data['origin']) . '</li>';
+        $description .= '<li><strong>Destino:</strong> ' . esc_html($booking_data['destination']) . '</li>';
+        
+        if (isset($booking_data['datetime'])) {
+            $description .= '<li><strong>Fecha y Hora:</strong> ' . esc_html($booking_data['datetime']) . '</li>';
+        }
+        
+        if (isset($booking_data['passengers'])) {
+            $description .= '<li><strong>Pasajeros:</strong> ' . esc_html($booking_data['passengers']) . '</li>';
+        }
+        
+        if (isset($booking_data['pet']) && $booking_data['pet'] !== 'no') {
+            $pet_labels = array(
+                'small_dog' => 'Perro pequeño',
+                'large_dog' => 'Perro grande',
+                'cat' => 'Gato'
+            );
+            $pet_label = isset($pet_labels[$booking_data['pet']]) ? $pet_labels[$booking_data['pet']] : $booking_data['pet'];
+            $description .= '<li><strong>Mascota:</strong> ' . esc_html($pet_label) . '</li>';
+        }
+        
+        if (isset($booking_data['flight_number']) && !empty($booking_data['flight_number'])) {
+            $description .= '<li><strong>Número de Vuelo:</strong> ' . esc_html($booking_data['flight_number']) . '</li>';
+        }
+        
+        $description .= '</ul>';
+        
+        // Desglose de precio
+        $description .= '<h3>Desglose del Precio</h3>';
+        $description .= '<ul>';
+        $description .= '<li>Precio base: €' . number_format($price_breakdown['base_price'], 2) . '</li>';
+        
+        if ($price_breakdown['vehicle_supplement'] > 0) {
+            $description .= '<li>Suplemento vehículo: €' . number_format($price_breakdown['vehicle_supplement'], 2) . '</li>';
+        }
+        
+        if ($price_breakdown['night_supplement'] > 0) {
+            $description .= '<li>Suplemento nocturno: €' . number_format($price_breakdown['night_supplement'], 2) . '</li>';
+        }
+        
+        if ($price_breakdown['extra_passengers'] > 0) {
+            $description .= '<li>Pasajeros extra: €' . number_format($price_breakdown['extra_passengers'], 2) . '</li>';
+        }
+        
+        if (!empty($price_breakdown['extras'])) {
+            foreach ($price_breakdown['extras'] as $extra => $price) {
+                $description .= '<li>' . ucfirst(str_replace('_', ' ', $extra)) . ': €' . number_format($price, 2) . '</li>';
+            }
+        }
+        
+        $description .= '<li><strong>TOTAL: €' . number_format($price_breakdown['total'], 2) . '</strong></li>';
+        $description .= '</ul>';
+        
+        return $description;
+    }
+    
+    /**
+     * Generar hash único para la reserva
+     */
+    private function generate_booking_hash($booking_data) {
+        $data_string = json_encode($booking_data) . time();
+        return substr(md5($data_string), 0, 16);
+    }
+    
+    /**
+     * Guardar datos de reserva en sesión de WooCommerce
+     */
+    private function save_booking_to_session($hash, $booking_data, $price_breakdown) {
+        // Asegurar que la sesión esté inicializada
+        if (!WC()->session) {
+            if (function_exists('WC') && class_exists('WC_Session_Handler')) {
+                WC()->initialize_session();
+            }
+        }
+        
+        if (!WC()->session) {
+            error_log('MET Chatbot: No se pudo inicializar la sesión de WooCommerce');
+            return;
+        }
+        
+        $session_data = array(
+            'booking_data' => $booking_data,
+            'price_breakdown' => $price_breakdown,
+            'timestamp' => time()
+        );
+        
+        WC()->session->set('met_booking_' . $hash, $session_data);
+        
+        // Forzar guardado de sesión
+        if (method_exists(WC()->session, 'save_data')) {
+            WC()->session->save_data();
+        }
+    }
+    
+    /**
+     * Recuperar datos de reserva desde sesión
+     */
+    public function get_booking_from_session($hash) {
+        if (!WC()->session) {
+            return null;
+        }
+        
+        $session_data = WC()->session->get('met_booking_' . $hash);
+        
+        // Verificar que no haya expirado (30 minutos)
+        if ($session_data && isset($session_data['timestamp'])) {
+            if (time() - $session_data['timestamp'] > 1800) {
+                WC()->session->set('met_booking_' . $hash, null);
+                return null;
+            }
+        }
+        
+        return $session_data;
+    }
+    
+    /**
+     * Verificar si un producto existe
+     */
+    private function product_exists($product_id) {
+        if (!$product_id) {
+            return false;
+        }
+        
+        $product = wc_get_product($product_id);
+        return $product && $product->exists();
+    }
+    
+    /**
+     * Crear producto de traslado automáticamente
+     */
+    private function create_transfer_product() {
+        if (!function_exists('wc_get_product')) {
+            return 0;
+        }
+        
+        // Verificar si ya existe un producto con este nombre
+        $existing = get_page_by_title('Servicio de Traslado', OBJECT, 'product');
+        if ($existing) {
+            update_option('met_chatbot_transfer_product_id', $existing->ID);
+            return $existing->ID;
+        }
+        
+        // Crear nuevo producto
+        $product = new WC_Product_Simple();
+        $product->set_name('Servicio de Traslado');
+        $product->set_slug('servicio-traslado-met');
+        $product->set_status('publish');
+        $product->set_catalog_visibility('hidden'); // Oculto del catálogo
+        $product->set_description('Servicio de traslado privado en Mallorca. El precio se calcula según la ruta, vehículo y extras seleccionados.');
+        $product->set_short_description('Traslado privado en Mallorca');
+        $product->set_price(0); // El precio se establece dinámicamente
+        $product->set_regular_price(0);
+        $product->set_sold_individually(true); // Solo 1 por pedido
+        $product->set_virtual(true); // Es un servicio
+        
+        $product_id = $product->save();
+        
+        if ($product_id) {
+            update_option('met_chatbot_transfer_product_id', $product_id);
+        }
+        
+        return $product_id;
+    }
+    
+    /**
+     * Generar HTML del botón de checkout
+     */
+    public function generate_checkout_button($booking_data, $price_breakdown) {
+        $checkout_url = $this->generate_checkout_url($booking_data, $price_breakdown);
+        
+        $html = '<div class="met-checkout-button-container">';
+        $html .= '<a href="' . esc_url($checkout_url) . '" class="met-checkout-button" target="_blank">';
+        $html .= '<i class="fas fa-shopping-cart"></i> ';
+        $html .= 'Ir al Checkout (€' . number_format($price_breakdown['total'], 2) . ')';
+        $html .= '</a>';
+        $html .= '<p class="met-checkout-note">';
+        $html .= '<small>Serás redirigido al checkout seguro de WooCommerce para completar el pago.</small>';
+        $html .= '</p>';
+        $html .= '</div>';
+        
+        return $html;
+    }
+    
+    /**
+     * Hook para modificar el precio del producto en el carrito
+     */
+    public function modify_cart_item_price($cart) {
+        if (is_admin() && !defined('DOING_AJAX')) {
+            return;
+        }
+        
+        if (did_action('woocommerce_before_calculate_totals') >= 2) {
+            return;
+        }
+        
+        error_log('MET Chatbot: modify_cart_item_price ejecutado');
+        error_log('Transfer Product ID: ' . $this->transfer_product_id);
+        
+        foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
+            error_log('Revisando item: ' . $cart_item['data']->get_name() . ' (ID: ' . $cart_item['product_id'] . ')');
+            
+            // Verificar si es nuestro producto de traslado
+            if (isset($cart_item['product_id']) && $cart_item['product_id'] == $this->transfer_product_id) {
+                error_log('Es nuestro producto de traslado');
+                
+                $custom_price = null;
+                
+                // Obtener precio personalizado desde los datos del item
+                if (isset($cart_item['met_custom_price']) && $cart_item['met_custom_price'] > 0) {
+                    $custom_price = floatval($cart_item['met_custom_price']);
+                    error_log('Precio encontrado en met_custom_price: ' . $custom_price);
+                }
+                // Si no está en los datos del item, buscar en sesión
+                elseif (isset($cart_item['met_booking_hash'])) {
+                    $hash = $cart_item['met_booking_hash'];
+                    error_log('Buscando en sesión con hash: ' . $hash);
+                    $session_data = $this->get_booking_from_session($hash);
+                    
+                    if ($session_data && isset($session_data['price_breakdown']['total'])) {
+                        $custom_price = floatval($session_data['price_breakdown']['total']);
+                        error_log('Precio encontrado en sesión: ' . $custom_price);
+                    } else {
+                        error_log('No se encontró precio en sesión');
+                    }
+                } else {
+                    error_log('No hay met_custom_price ni met_booking_hash');
+                }
+                
+                // Aplicar el precio si se encontró
+                if ($custom_price && $custom_price > 0) {
+                    $cart_item['data']->set_price($custom_price);
+                    error_log('Precio aplicado: ' . $custom_price);
+                } else {
+                    error_log('ERROR: No se pudo aplicar precio personalizado');
+                }
+            }
+        }
+    }
+    
+    /**
+     * Agregar metadata personalizada al item del pedido
+     */
+    public function add_order_item_meta($item, $cart_item_key, $values, $order) {
+        if (isset($values['met_booking_data'])) {
+            $booking_data = $values['met_booking_data'];
+            
+            // Agregar metadata visible
+            $item->add_meta_data('Origen', $booking_data['origin'], true);
+            $item->add_meta_data('Destino', $booking_data['destination'], true);
+            
+            if (isset($booking_data['datetime'])) {
+                $item->add_meta_data('Fecha y Hora', $booking_data['datetime'], true);
+            }
+            
+            if (isset($booking_data['passengers'])) {
+                $item->add_meta_data('Pasajeros', $booking_data['passengers'], true);
+            }
+            
+            if (isset($booking_data['pet']) && $booking_data['pet'] !== 'no') {
+                $pet_labels = array(
+                    'small_dog' => 'Perro pequeño',
+                    'large_dog' => 'Perro grande',
+                    'cat' => 'Gato'
+                );
+                $pet_label = isset($pet_labels[$booking_data['pet']]) ? $pet_labels[$booking_data['pet']] : $booking_data['pet'];
+                $item->add_meta_data('Mascota', $pet_label, true);
+            }
+            
+            if (isset($booking_data['flight_number']) && !empty($booking_data['flight_number'])) {
+                $item->add_meta_data('Número de Vuelo', $booking_data['flight_number'], true);
+            }
+            
+            // Guardar datos completos como metadata oculta
+            $item->add_meta_data('_met_booking_data', $booking_data, false);
+        }
+        
+        if (isset($values['met_price_breakdown'])) {
+            $item->add_meta_data('_met_price_breakdown', $values['met_price_breakdown'], false);
+        }
+    }
+    
+    /**
+     * Agregar datos de reserva al carrito desde URL
+     */
+    public function add_booking_to_cart($cart_item_data, $product_id) {
+        // Solo para nuestro producto de traslado
+        if ($product_id != $this->transfer_product_id) {
+            return $cart_item_data;
+        }
+        
+        // Verificar si hay un hash de reserva en la URL
+        if (isset($_GET['met_booking_hash'])) {
+            $hash = sanitize_text_field($_GET['met_booking_hash']);
+            $session_data = $this->get_booking_from_session($hash);
+            
+            if ($session_data) {
+                $cart_item_data['met_booking_data'] = $session_data['booking_data'];
+                $cart_item_data['met_price_breakdown'] = $session_data['price_breakdown'];
+                $cart_item_data['met_custom_price'] = $session_data['price_breakdown']['total'];
+                $cart_item_data['met_booking_hash'] = $hash;
+                $cart_item_data['unique_key'] = $hash;
+            }
+        }
+        
+        return $cart_item_data;
+    }
+    
+    /**
+     * Mostrar precio personalizado en el carrito
+     */
+    public function display_custom_price_in_cart($price, $cart_item, $cart_item_key) {
+        if (isset($cart_item['met_custom_price']) && $cart_item['met_custom_price'] > 0) {
+            return wc_price($cart_item['met_custom_price']);
+        }
+        return $price;
+    }
+    
+    /**
+     * Recuperar item del carrito desde sesión con precio personalizado
+     */
+    public function get_cart_item_from_session($cart_item, $values, $key) {
+        if (isset($values['met_custom_price']) && $values['met_custom_price'] > 0) {
+            $cart_item['met_custom_price'] = $values['met_custom_price'];
+            $cart_item['met_booking_data'] = isset($values['met_booking_data']) ? $values['met_booking_data'] : array();
+            $cart_item['met_price_breakdown'] = isset($values['met_price_breakdown']) ? $values['met_price_breakdown'] : array();
+            $cart_item['met_booking_hash'] = isset($values['met_booking_hash']) ? $values['met_booking_hash'] : '';
+            
+            // Establecer el precio inmediatamente
+            if (isset($cart_item['data'])) {
+                $cart_item['data']->set_price(floatval($values['met_custom_price']));
+            }
+        }
+        return $cart_item;
+    }
+    
+    /**
+     * Inicializar hooks de WooCommerce
+     */
+    public function init_hooks() {
+        // Modificar precio en el carrito (múltiples hooks para asegurar que funcione)
+        add_action('woocommerce_before_calculate_totals', array($this, 'modify_cart_item_price'), 10, 1);
+        add_action('woocommerce_cart_loaded_from_session', array($this, 'modify_cart_item_price'), 10, 1);
+        
+        // Agregar metadata al pedido
+        add_action('woocommerce_checkout_create_order_line_item', array($this, 'add_order_item_meta'), 10, 4);
+        
+        // Agregar datos al carrito desde URL
+        add_filter('woocommerce_add_cart_item_data', array($this, 'add_booking_to_cart'), 10, 2);
+        
+        // Mostrar precio personalizado en el carrito
+        add_filter('woocommerce_cart_item_price', array($this, 'display_custom_price_in_cart'), 10, 3);
+        add_filter('woocommerce_cart_item_subtotal', array($this, 'display_custom_price_in_cart'), 10, 3);
+        
+        // Hook adicional para asegurar que el precio se mantiene
+        add_filter('woocommerce_get_cart_item_from_session', array($this, 'get_cart_item_from_session'), 10, 3);
+    }
+}
