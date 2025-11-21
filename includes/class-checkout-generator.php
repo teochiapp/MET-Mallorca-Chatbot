@@ -128,6 +128,10 @@ class MET_Checkout_Generator {
         
         // Establecer el precio calculado
         $price = floatval($price_breakdown['total']);
+        
+        // Asegurar que el precio tenga exactamente 2 decimales
+        $price = round($price, 2);
+        
         $product->set_price($price);
         $product->set_regular_price($price);
         
@@ -140,10 +144,13 @@ class MET_Checkout_Generator {
         $product_id = $product->save();
         
         if ($product_id) {
-            // Forzar actualización de precios en la base de datos
-            update_post_meta($product_id, '_price', $price);
-            update_post_meta($product_id, '_regular_price', $price);
+            // Forzar actualización de precios en la base de datos con formato correcto
+            update_post_meta($product_id, '_price', wc_format_decimal($price));
+            update_post_meta($product_id, '_regular_price', wc_format_decimal($price));
             update_post_meta($product_id, '_sale_price', '');
+            
+            // Guardar precio como string para evitar problemas de conversión
+            update_post_meta($product_id, '_met_original_price', strval($price));
             
             // Guardar metadata adicional
             update_post_meta($product_id, '_met_booking_number', $booking_number);
@@ -154,7 +161,7 @@ class MET_Checkout_Generator {
             // Limpiar caché de WooCommerce
             wc_delete_product_transients($product_id);
             
-            error_log('MET Chatbot: Producto creado - ID: ' . $product_id . ', Precio: €' . $price);
+            error_log('MET Chatbot: Producto creado - ID: ' . $product_id . ', Precio: €' . wc_format_decimal($price));
             error_log('MET Chatbot: Precio guardado en _price: ' . get_post_meta($product_id, '_price', true));
         }
         
@@ -409,7 +416,12 @@ class MET_Checkout_Generator {
                 
                 // Aplicar el precio si se encontró
                 if ($custom_price && $custom_price > 0) {
+                    // Asegurar formato correcto del precio
+                    $custom_price = wc_format_decimal($custom_price, 2);
+                    
                     $cart_item['data']->set_price($custom_price);
+                    $cart_item['data']->set_regular_price($custom_price);
+                    
                     error_log('Precio aplicado: ' . $custom_price);
                 } else {
                     error_log('ERROR: No se pudo aplicar precio personalizado');
@@ -506,9 +518,11 @@ class MET_Checkout_Generator {
             $cart_item['met_price_breakdown'] = isset($values['met_price_breakdown']) ? $values['met_price_breakdown'] : array();
             $cart_item['met_booking_hash'] = isset($values['met_booking_hash']) ? $values['met_booking_hash'] : '';
             
-            // Establecer el precio inmediatamente
+            // Establecer el precio inmediatamente con formato correcto
             if (isset($cart_item['data'])) {
-                $cart_item['data']->set_price(floatval($values['met_custom_price']));
+                $formatted_price = wc_format_decimal(floatval($values['met_custom_price']), 2);
+                $cart_item['data']->set_price($formatted_price);
+                $cart_item['data']->set_regular_price($formatted_price);
             }
         }
         return $cart_item;
@@ -521,6 +535,10 @@ class MET_Checkout_Generator {
         // Modificar precio en el carrito (múltiples hooks para asegurar que funcione)
         add_action('woocommerce_before_calculate_totals', array($this, 'modify_cart_item_price'), 10, 1);
         add_action('woocommerce_cart_loaded_from_session', array($this, 'modify_cart_item_price'), 10, 1);
+        
+        // Hook adicional para asegurar precios antes del checkout
+        add_action('woocommerce_checkout_before_order_review', array($this, 'modify_cart_item_price'), 10);
+        add_action('woocommerce_before_checkout_form', array($this, 'modify_cart_item_price'), 10);
         
         // Agregar metadata al pedido
         add_action('woocommerce_checkout_create_order_line_item', array($this, 'add_order_item_meta'), 10, 4);

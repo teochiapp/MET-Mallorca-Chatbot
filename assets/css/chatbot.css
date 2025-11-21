@@ -19,6 +19,167 @@
     --met-shadow-dark: rgba(56, 80, 116, 0.2);
 }
 
+/* ========================================
+   LOCATION SEARCHER COMPONENT
+   ======================================== */
+
+.met-location-searcher {
+    width: 100%;
+    position: relative;
+    margin: 10px 0;
+}
+
+.met-location-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.met-location-input {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 2px solid var(--met-border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: var(--met-bg);
+    color: var(--met-text);
+}
+
+.met-location-input:focus {
+    outline: none;
+    border-color: var(--met-primary);
+    box-shadow: 0 0 0 3px rgba(232, 106, 28, 0.1);
+}
+
+.met-location-search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--met-text-light);
+    pointer-events: none;
+}
+
+.met-location-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--met-bg);
+    border: 2px solid var(--met-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.met-location-results {
+    padding: 4px;
+}
+
+.met-location-result-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    color: var(--met-text);
+}
+
+.met-location-result-item:hover,
+.met-location-result-item.active {
+    background: var(--met-bg-light);
+    color: var(--met-primary);
+}
+
+.met-location-no-results {
+    padding: 16px;
+    text-align: center;
+    color: var(--met-text-light);
+    font-size: 14px;
+}
+
+.met-location-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-primary-dark) 100%);
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.met-location-selected-text {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.met-location-clear {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.met-location-clear:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.met-location-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.met-location-dropdown::-webkit-scrollbar-track {
+    background: var(--met-bg-light);
+    border-radius: 3px;
+}
+
+.met-location-dropdown::-webkit-scrollbar-thumb {
+    background: var(--met-border);
+    border-radius: 3px;
+}
+
+.met-location-dropdown::-webkit-scrollbar-thumb:hover {
+    background: var(--met-text-light);
+}
+
+/* Location Searcher dentro del Chatbot */
+.met-chatbot-location-wrapper {
+    position: relative;
+    padding: 0;
+    margin-bottom: 12px;
+    background: var(--met-bg);
+}
+
+.met-chatbot-location-wrapper .met-location-searcher {
+    margin: 0;
+    width: 100%;
+}
+
+.met-chatbot-location-wrapper .met-location-input {
+    box-sizing: border-box;
+}
+
+.met-chatbot-location-wrapper .met-location-dropdown {
+    width: 100%;
+    max-height: 220px;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
 /* Widget contenedor */
 .met-chatbot-widget {
     position: fixed;

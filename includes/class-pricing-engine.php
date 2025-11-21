@@ -11,6 +11,11 @@ if (!defined('ABSPATH')) {
 class MET_Pricing_Engine {
     
     /**
+     * Precios por ubicación desde CSV
+     */
+    private $location_prices = array();
+    
+    /**
      * Configuración de precios base
      */
     private $config = array(
@@ -89,6 +94,142 @@ class MET_Pricing_Engine {
     public function __construct() {
         // Permitir filtrar la configuración desde el tema o plugins
         $this->config = apply_filters('met_pricing_config', $this->config);
+        
+        // Cargar precios desde JSON
+        $this->load_location_prices();
+    }
+    
+    /**
+     * Cargar precios de ubicaciones desde JSON
+     */
+    private function load_location_prices() {
+        $json_file = MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json';
+        
+        if (!file_exists($json_file)) {
+            return;
+        }
+        
+        $json_contents = file_get_contents($json_file);
+        if ($json_contents === false) {
+            return;
+        }
+        
+        $data = json_decode($json_contents, true);
+        if (!is_array($data)) {
+            return;
+        }
+
+        foreach ($data as $location => $prices) {
+            $location = $this->sanitize_location_label($location);
+
+            if ($location === '' || isset($this->location_prices[$location])) {
+                continue;
+            }
+
+            if (!is_array($prices)) {
+                continue;
+            }
+
+            $this->location_prices[$location] = array(
+                '1-4' => isset($prices['1-4']) ? floatval($prices['1-4']) : 0,
+                '5-8' => isset($prices['5-8']) ? floatval($prices['5-8']) : 0,
+                '9-12' => isset($prices['9-12']) ? floatval($prices['9-12']) : 0,
+                '13-16' => isset($prices['13-16']) ? floatval($prices['13-16']) : 0
+            );
+        }
+    }
+
+    /**
+     * Limpiar nombre de ubicación
+     */
+    private function sanitize_location_label($label) {
+        $label = trim((string) $label);
+        $label = preg_replace('/\s+/', ' ', $label);
+
+        // Normalizar comas y separadores
+        $label = preg_replace('/\s*,\s*/', ', ', $label);
+        $label = preg_replace('/\s*\/\s*/', ' / ', $label);
+
+        // Normalizar capitalización a título para coincidir con cálculos posteriores
+        $label = ucwords(strtolower($label));
+
+        return $label;
+    }
+
+    /**
+     * Obtener todas las ubicaciones disponibles
+     */
+    public function get_all_locations() {
+        $locations = array_keys($this->location_prices);
+
+        sort($locations, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $locations;
+    }
+    
+    /**
+     * Buscar ubicaciones que coincidan con el término de búsqueda
+     */
+    public function search_locations($search_term) {
+        $search_term = strtolower(trim($search_term));
+        $results = array();
+        
+        foreach ($this->location_prices as $location => $prices) {
+            if (stripos($location, $search_term) !== false) {
+                $results[] = $location;
+            }
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Obtener precio para una ubicación y cantidad de pasajeros
+     */
+    public function get_location_price($location, $passengers) {
+        // Intentar coincidencia exacta con el formato almacenado
+        $sanitized_location = $this->sanitize_location_label($location);
+
+        if (isset($this->location_prices[$sanitized_location])) {
+            return $this->get_price_by_passengers($this->location_prices[$sanitized_location], $passengers);
+        }
+
+        // Normalizar nombre de ubicación para tolerar variaciones menores
+        $normalized_location = $this->normalize_location_name($location);
+
+        if (isset($this->location_prices[$normalized_location])) {
+            return $this->get_price_by_passengers($this->location_prices[$normalized_location], $passengers);
+        }
+
+        // Buscar coincidencia parcial
+        foreach ($this->location_prices as $known_location => $prices) {
+            if (stripos($known_location, $normalized_location) !== false ||
+                stripos($normalized_location, $known_location) !== false) {
+                return $this->get_price_by_passengers($prices, $passengers);
+            }
+        }
+
+        return null;
+    }
+    
+    /**
+     * Obtener precio según número de pasajeros
+     */
+    private function get_price_by_passengers($prices, $passengers) {
+        $passengers = intval($passengers);
+        
+        if ($passengers >= 1 && $passengers <= 4) {
+            return $prices['1-4'];
+        } elseif ($passengers >= 5 && $passengers <= 8) {
+            return $prices['5-8'];
+        } elseif ($passengers >= 9 && $passengers <= 12) {
+            return $prices['9-12'];
+        } elseif ($passengers >= 13 && $passengers <= 16) {
+            return $prices['13-16'];
+        }
+        
+        // Para más de 16 pasajeros, usar el precio más alto + suplemento
+        return $prices['13-16'] + (($passengers - 16) * 10);
     }
     
     /**
@@ -107,16 +248,35 @@ class MET_Pricing_Engine {
             'total' => 0
         );
         
-        // 1. Calcular precio base por distancia
-        $distance = $this->calculate_distance($booking_data);
-        $breakdown['base_price'] = $this->get_distance_rate($distance);
-        $breakdown['distance_km'] = $distance;
+        $passengers = isset($booking_data['passengers']) ? intval($booking_data['passengers']) : 1;
+        
+        // 1. Intentar obtener precio desde CSV por ubicación
+        $location = isset($booking_data['destination']) ? $booking_data['destination'] : '';
+        $location_price = $this->get_location_price($location, $passengers);
+        
+        if ($location_price !== null) {
+            // Usar precio de la tabla CSV
+            $breakdown['base_price'] = $location_price;
+            $breakdown['pricing_method'] = 'location_based';
+            $breakdown['location'] = $location;
+        } else {
+            // Fallback al método anterior (por distancia)
+            $distance = $this->calculate_distance($booking_data);
+            $breakdown['base_price'] = $this->get_distance_rate($distance);
+            $breakdown['distance_km'] = $distance;
+            $breakdown['pricing_method'] = 'distance_based';
+        }
         
         // 2. Determinar vehículo necesario según pasajeros
-        $passengers = isset($booking_data['passengers']) ? intval($booking_data['passengers']) : 1;
         $vehicle_type = $this->determine_vehicle_type($passengers);
         $breakdown['vehicle_type'] = $vehicle_type;
-        $breakdown['vehicle_supplement'] = $this->config['vehicle_supplements'][$vehicle_type];
+        
+        // Solo aplicar suplemento de vehículo si usamos pricing por distancia
+        if ($breakdown['pricing_method'] === 'distance_based') {
+            $breakdown['vehicle_supplement'] = $this->config['vehicle_supplements'][$vehicle_type];
+        } else {
+            $breakdown['vehicle_supplement'] = 0; // Ya incluido en precio base
+        }
         
         // 3. Suplemento nocturno
         if ($this->is_night_time($booking_data)) {
@@ -325,7 +485,12 @@ class MET_Pricing_Engine {
         $html .= '<strong>💰 Desglose del precio:</strong><br><br>';
         
         // Precio base
-        $html .= '📏 Distancia: ~' . $breakdown['distance_km'] . ' km<br>';
+        if (isset($breakdown['location'])) {
+            $html .= '📍 Ubicación: ' . $breakdown['location'] . '<br>';
+        }
+        if (isset($breakdown['distance_km'])) {
+            $html .= '📏 Distancia: ~' . $breakdown['distance_km'] . ' km<br>';
+        }
         $html .= '💵 Precio base: €' . number_format($breakdown['base_price'], 2) . '<br>';
         
         // Vehículo

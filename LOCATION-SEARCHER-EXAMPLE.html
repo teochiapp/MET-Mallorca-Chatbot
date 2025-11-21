@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Searcher - Ejemplo de Uso</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos del chatbot (incluye estilos del location searcher) -->
+    <link rel="stylesheet" href="assets/css/chatbot.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #E86A1C;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+        }
+        
+        .demo-section h2 {
+            color: #385074;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 50px;
+        }
+        
+        .result-box.has-result {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            font-size: 18px;
+            color: #E86A1C;
+            font-weight: 600;
+        }
+        
+        .code-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        
+        .code-example code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🔍 Location Searcher Component</h1>
+        <p class="subtitle">Componente de búsqueda de ubicaciones con dropdown interactivo</p>
+        
+        <!-- Demo 1: Búsqueda de Origen -->
+        <div class="demo-section">
+            <h2>📍 Selecciona Ubicación de Origen</h2>
+            <div id="origin-searcher"></div>
+            <div id="origin-result" class="result-box">
+                <div class="result-label">Ubicación seleccionada:</div>
+                <div class="result-value">Ninguna</div>
+            </div>
+        </div>
+        
+        <!-- Demo 2: Búsqueda de Destino -->
+        <div class="demo-section">
+            <h2>🎯 Selecciona Ubicación de Destino</h2>
+            <div id="destination-searcher"></div>
+            <div id="destination-result" class="result-box">
+                <div class="result-label">Ubicación seleccionada:</div>
+                <div class="result-value">Ninguna</div>
+            </div>
+        </div>
+        
+        <!-- Ejemplo de Código -->
+        <div class="demo-section">
+            <h2>💻 Ejemplo de Código</h2>
+            <div class="code-example">
+                <code>
+// 1. Inicializar el componente con ubicaciones
+MetLocationSearcher.init([
+    'Palma', 'Alcudia', 'Magaluf', 'Santa Ponsa',
+    'Cala Millor', 'Puerto Pollensa', ...
+]);
+
+// 2. Crear el HTML del buscador
+const searcherHtml = MetLocationSearcher.createSearcher(
+    'Buscar ubicación...', // placeholder
+    'my-location-input'    // ID del input
+);
+
+// 3. Insertar en el DOM
+$('#my-container').html(searcherHtml);
+
+// 4. Escuchar evento de selección
+$('#my-container').on('location-selected', function(e, location) {
+    console.log('Ubicación seleccionada:', location);
+    // Tu código aquí...
+});
+
+// 5. Escuchar evento de limpieza
+$('#my-container').on('location-cleared', function() {
+    console.log('Selección limpiada');
+    // Tu código aquí...
+});
+                </code>
+            </div>
+        </div>
+        
+        <!-- Características -->
+        <div class="demo-section">
+            <h2>✨ Características</h2>
+            <ul>
+                <li>✅ Búsqueda en tiempo real con debounce</li>
+                <li>✅ Navegación con teclado (↑ ↓ Enter Escape)</li>
+                <li>✅ Dropdown con scroll automático</li>
+                <li>✅ Highlight en hover y navegación</li>
+                <li>✅ Chip de selección con botón para limpiar</li>
+                <li>✅ Eventos personalizados para integración</li>
+                <li>✅ Responsive y accesible</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Location Searcher Component -->
+    <script src="assets/js/location-searcher.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Ubicaciones de ejemplo (en producción, se cargan desde el servidor)
+            const locations = [
+                'Alaro', 'Alcudia', 'Algaida', 'Alqueria Blanca', 'Andratx',
+                'Arenal', 'Ariany', 'Arta', 'Aucanada', 'Bahia Azul',
+                'Bahia Grande', 'Banyalbufar', 'Bendinat', 'Betlem', 'Biniali',
+                'Biniamar', 'Binissalem', 'Buger', 'Bunyola', 'Caimari',
+                'Cala Agulla', 'Cala Barca', 'Cala Bona', 'Cala Dor', 'Cala Ferrera',
+                'Cala Figuera', 'Cala Fornells', 'Cala Llamps', 'Cala Llombards',
+                'Cala Major', 'Cala Mandia', 'Cala Marsal', 'Cala Mesquida',
+                'Cala Millor', 'Cala Mondrago', 'Cala Moreia', 'Cala Morlanda',
+                'Cala Murada', 'Cala Pi', 'Cala Ratjada', 'Cala San Vicente',
+                'Cala Santany', 'Cala Serena', 'Cala Vinyes', 'Calas de Mallorca',
+                'Calonge', 'Calvia', 'Camp de Mar', 'Campanet', 'Campos',
+                'Can Pastilla', 'Can Picafort', 'Canyamel', 'Capdella', 'Capdepera',
+                'Cas Catala', 'Cas Congos', 'Colonia Sant Jordi', 'Colonia Sant Pere',
+                'Consell', 'Costa de La Calma', 'Costa de Los Pinos', 'Costa den Blanes',
+                'Costix', 'Deia', 'El Toro', 'Els Garrovers', 'Esporlas',
+                'Estallencs', 'Felanitx', 'Font de Sa Cala', 'Formentor', 'Fornalutx',
+                'Illetas', 'Inca', 'La Rapita / Sa Rapita', 'Lloseta', 'Llubi',
+                'Lluc', 'Lluc Alcari', 'Llucmajor', 'Magalluf', 'Mal Pas',
+                'Manacor', 'Mancor del Vall', 'Maria sde La Salud', 'Muro', 'Paguera',
+                'Palma', 'Palma Nova', 'Palmanyola', 'Petra', 'Playa de Muro',
+                'Playa de Palma', 'Playa Romantica', 'Porreras', 'Port Adriano',
+                'Port de Soller / Soller', 'Portals Nous', 'Portals Vells', 'Porto Colom',
+                'Porto Cristo', 'Porto Cristo Novo', 'Portol', 'Puerto de Alcudia',
+                'Puerto de Andraitx', 'Puerto Pollessa', 'S\'Estanyol', 'S\'Horta',
+                'S\'Illot', 'Sa Cabaneta', 'Sa Coma', 'Sa Planera', 'Sa Rapita / La Rapita',
+                'San Agustin', 'San Lorenzo', 'Sant Joan', 'Sant Telm', 'Santa Maria',
+                'Santa Ponsa', 'Santany', 'Selva', 'Sencelles', 'Ses Salines',
+                'SINEU', 'Soller / Port de Soller', 'SON CARRIO', 'Son Daviu',
+                'Son Gual ( Urbanizacion )', 'Son Macia', 'Son Serra Marina',
+                'Son servera', 'Son Vida', 'Valldemossa', 'Vallgornera'
+            ];
+            
+            // Inicializar el componente
+            MetLocationSearcher.init(locations);
+            
+            // Demo 1: Origen
+            const originHtml = MetLocationSearcher.createSearcher(
+                'Buscar ubicación de origen...',
+                'origin-input'
+            );
+            $('#origin-searcher').html(originHtml);
+            
+            $('#origin-searcher').on('location-selected', function(e, location) {
+                $('#origin-result').addClass('has-result');
+                $('#origin-result .result-value').text(location);
+            });
+            
+            $('#origin-searcher').on('location-cleared', function() {
+                $('#origin-result').removeClass('has-result');
+                $('#origin-result .result-value').text('Ninguna');
+            });
+            
+            // Demo 2: Destino
+            const destinationHtml = MetLocationSearcher.createSearcher(
+                'Buscar ubicación de destino...',
+                'destination-input'
+            );
+            $('#destination-searcher').html(destinationHtml);
+            
+            $('#destination-searcher').on('location-selected', function(e, location) {
+                $('#destination-result').addClass('has-result');
+                $('#destination-result .result-value').text(location);
+            });
+            
+            $('#destination-searcher').on('location-cleared', function() {
+                $('#destination-result').removeClass('has-result');
+                $('#destination-result .result-value').text('Ninguna');
+            });
+        });
+    </script>
+</body>
+</html>

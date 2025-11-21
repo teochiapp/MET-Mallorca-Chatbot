@@ -57,18 +57,17 @@ class MET_Conversation_Steps_Welcome {
             );
         }
         
-        // Flujo de punto a punto
+        // Flujo de punto a punto - Usar buscador inteligente
         if ($message === 'point_to_point') {
             return array(
                 'message' => '📍 <strong>Traslado Punto a Punto</strong><br><br>' .
-                            'Perfecto. ¿Desde qué ubicación en Mallorca te recogemos?<br><br>' .
-                            '<em>Escribe la ciudad, hotel o dirección de origen:</em>',
-                'nextStep' => 'origin',
+                            'Perfecto. Busca y selecciona tu ubicación de origen:',
+                'nextStep' => 'origin_text',
                 'options' => array(),
                 'data' => $data,
-                'inputType' => 'text',
+                'inputType' => 'location',
                 'showBackButton' => true,
-                'placeholder' => 'Ej: Hotel Maricel, Palma'
+                'placeholder' => 'Buscar ubicación de origen...'
             );
         }
         

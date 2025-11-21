@@ -20,108 +20,61 @@ class MET_Conversation_Steps_Location {
      * Step: Origen
      */
     public function step_origin($message, $data) {
-        // Si seleccionó "custom_origin", pedir texto
+        // Si seleccionó "custom_origin", mostrar buscador de ubicaciones
         if ($message === 'custom_origin') {
             return array(
                 'message' => '📍 <strong>Ubicación de Origen</strong><br><br>' .
-                            'Escribe el nombre de tu hotel, dirección o ubicación de recogida:',
+                            'Busca y selecciona tu ubicación de recogida:',
                 'nextStep' => 'origin_text',
                 'options' => array(),
                 'data' => $data,
-                'inputType' => 'text',
+                'inputType' => 'location',
                 'showBackButton' => true,
-                'placeholder' => 'Ej: Hotel Son Caliu, Palmanova'
+                'placeholder' => 'Buscar ubicación de origen...'
             );
         }
         
         // Guardar origen
         $data['origin'] = $message;
         
-        // Determinar opciones de destino según el origen
-        $is_airport_origin = $this->is_airport($message);
-        
-        if ($is_airport_origin) {
-            // Si viene del aeropuerto, mostrar destinos populares
-            return array(
-                'message' => '📍 <strong>¿Cuál es tu destino?</strong><br><br>' .
-                            'Selecciona una zona o escribe tu destino:',
-                'nextStep' => 'destination',
-                'options' => $this->get_popular_destinations(),
-                'data' => $data,
-                'showBackButton' => true
-            );
-        } else {
-            // Si viene de un hotel, el destino principal es el aeropuerto
-            return array(
-                'message' => '📍 <strong>¿Cuál es tu destino?</strong>',
-                'nextStep' => 'destination',
-                'options' => array(
-                    array(
-                        'text' => '<i class="fas fa-plane"></i> Aeropuerto de Palma (PMI)',
-                        'value' => 'Aeropuerto de Palma'
-                    ),
-                    array(
-                        'text' => '<i class="fas fa-map-marker-alt"></i> Otra ubicación',
-                        'value' => 'custom_destination'
-                    )
-                ),
-                'data' => $data,
-                'showBackButton' => true
-            );
-        }
-    }
-    
-    /**
-     * Step: Origen como texto libre
-     */
-    public function step_origin_text($message, $data) {
-        // Validar ubicación
-        $validation = $this->validator->validate_location($message);
-        
-        if (!$validation['valid']) {
-            return array(
-                'message' => $validation['error'] . '<br><br>Por favor, intenta de nuevo:',
-                'nextStep' => 'origin_text',
-                'options' => array(),
-                'data' => $data,
-                'inputType' => 'text',
-                'showBackButton' => true
-            );
-        }
-        
-        $data['origin'] = $validation['location'];
-        
-        // Continuar al destino
+        // Siempre mostrar buscador inteligente para destino (120+ ubicaciones)
         return array(
             'message' => '📍 <strong>¿Cuál es tu destino?</strong><br><br>' .
-                        'Escribe la ubicación de destino:',
+                        'Busca y selecciona tu ubicación de destino:',
             'nextStep' => 'destination_text',
             'options' => array(),
             'data' => $data,
-            'inputType' => 'text',
+            'inputType' => 'location',
             'showBackButton' => true,
-            'placeholder' => 'Ej: Aeropuerto de Palma'
+            'placeholder' => 'Buscar ubicación de destino...'
+        );
+    }
+    
+    /**
+     * Step: Origen como texto libre (desde buscador)
+     */
+    public function step_origin_text($message, $data) {
+        // El mensaje ya viene validado del buscador, solo guardarlo
+        $data['origin'] = $message;
+        
+        // Continuar al destino con buscador
+        return array(
+            'message' => '📍 <strong>¿Cuál es tu destino?</strong><br><br>' .
+                        'Busca y selecciona tu ubicación de destino:',
+            'nextStep' => 'destination_text',
+            'options' => array(),
+            'data' => $data,
+            'inputType' => 'location',
+            'showBackButton' => true,
+            'placeholder' => 'Buscar ubicación de destino...'
         );
     }
     
     /**
      * Step: Destino
+     * NOTA: Este step ya no se usa, se va directo a destination_text con el buscador
      */
     public function step_destination($message, $data) {
-        // Si seleccionó "custom_destination", pedir texto
-        if ($message === 'custom_destination') {
-            return array(
-                'message' => '📍 <strong>Ubicación de Destino</strong><br><br>' .
-                            'Escribe el nombre de tu hotel, dirección o ubicación de destino:',
-                'nextStep' => 'destination_text',
-                'options' => array(),
-                'data' => $data,
-                'inputType' => 'text',
-                'showBackButton' => true,
-                'placeholder' => 'Ej: Cala Millor, Hotel Hipotels'
-            );
-        }
-        
         // Guardar destino
         $data['destination'] = $message;
         
@@ -130,24 +83,11 @@ class MET_Conversation_Steps_Location {
     }
     
     /**
-     * Step: Destino como texto libre
+     * Step: Destino como texto libre (desde buscador)
      */
     public function step_destination_text($message, $data) {
-        // Validar ubicación
-        $validation = $this->validator->validate_location($message);
-        
-        if (!$validation['valid']) {
-            return array(
-                'message' => $validation['error'] . '<br><br>Por favor, intenta de nuevo:',
-                'nextStep' => 'destination_text',
-                'options' => array(),
-                'data' => $data,
-                'inputType' => 'text',
-                'showBackButton' => true
-            );
-        }
-        
-        $data['destination'] = $validation['location'];
+        // El mensaje ya viene validado del buscador, solo guardarlo
+        $data['destination'] = $message;
         
         // Continuar a fecha
         return $this->ask_for_date($data);
@@ -181,19 +121,11 @@ class MET_Conversation_Steps_Location {
     }
     
     /**
-     * Obtener destinos populares desde el aeropuerto
+     * MÉTODO DEPRECADO: Ya no se usan listas de destinos populares
+     * Ahora siempre se usa el buscador inteligente para las 120+ ubicaciones
      */
     private function get_popular_destinations() {
-        return array(
-            array('text' => '🏖️ Palma', 'value' => 'Palma'),
-            array('text' => '🏖️ Palma Nova', 'value' => 'Palma Nova'),
-            array('text' => '🏖️ Magaluf', 'value' => 'Magaluf'),
-            array('text' => '🏖️ Santa Ponsa', 'value' => 'Santa Ponsa'),
-            array('text' => '🏖️ Alcudia', 'value' => 'Alcudia'),
-            array('text' => '🏖️ Puerto Pollensa', 'value' => 'Puerto Pollensa'),
-            array('text' => '🏖️ Cala Millor', 'value' => 'Cala Millor'),
-            array('text' => '🏖️ Cala D\'or', 'value' => 'Cala D\'or'),
-            array('text' => '<i class="fas fa-map-marker-alt"></i> Otra ubicación...', 'value' => 'custom_destination')
-        );
+        // Método mantenido por compatibilidad pero ya no se usa
+        return array();
     }
 }

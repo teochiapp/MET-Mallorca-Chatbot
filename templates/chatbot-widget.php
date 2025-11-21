@@ -58,6 +58,11 @@ if (!defined('ABSPATH')) {
                 <!-- Los botones de opciones se cargarán aquí -->
             </div>
             
+            <!-- Location Searcher Container -->
+            <div id="met-chatbot-location-container" class="met-chatbot-location-wrapper" style="display: none;">
+                <!-- El buscador de ubicaciones se cargará aquí -->
+            </div>
+            
             <div id="met-chatbot-text-input" class="met-chatbot-text-input" style="display: none;">
                 <textarea id="met-chatbot-input" class="met-chatbot-input" placeholder="Escribe tu mensaje..." rows="2"></textarea>
                 <button id="met-chatbot-send" class="met-chatbot-send" aria-label="Enviar mensaje">

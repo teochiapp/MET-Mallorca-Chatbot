@@ -174,6 +174,10 @@
                 if (data.options && data.options.length > 0) {
                     this.showOptions(data.options);
                     this.hideTextInput();
+                } else if (data.inputType === 'location') {
+                    // Mostrar buscador de ubicaciones
+                    this.showLocationSearcher(data.placeholder || 'Buscar ubicación...');
+                    this.hideOptions();
                 } else if (data.inputType) {
                     this.showTextInput(data.inputType);
                     this.hideOptions();
@@ -384,6 +388,57 @@
         hideTextInput: function() {
             $('#met-chatbot-text-input').hide();
             $('#met-chatbot-input').val('');
+        },
+        
+        // Mostrar buscador de ubicaciones
+        showLocationSearcher: function(placeholder) {
+            const self = this;
+            
+            // Ocultar otros inputs
+            this.hideTextInput();
+            this.hideOptions();
+            
+            // Obtener contenedor
+            const $container = $('#met-chatbot-location-container');
+            
+            // Limpiar contenedor
+            $container.empty();
+            
+            // Generar HTML del buscador
+            const searcherHtml = window.MetLocationSearcher.createSearcher(
+                placeholder || 'Buscar ubicación...', 
+                'met-location-input-chat'
+            );
+            $container.html(searcherHtml);
+            
+            // Cargar ubicaciones si no están cargadas
+            if (window.MetLocationSearcher.locations.length === 0) {
+                window.MetLocationSearcher.loadLocations(function() {
+                    $container.show();
+                    // Enfocar el input después de cargar
+                    setTimeout(function() {
+                        $('#met-location-input-chat').focus();
+                    }, 100);
+                });
+            } else {
+                $container.show();
+                // Enfocar el input
+                setTimeout(function() {
+                    $('#met-location-input-chat').focus();
+                }, 100);
+            }
+            
+            // Manejar selección de ubicación
+            $container.off('location-selected').on('location-selected', function(e, location) {
+                // Agregar mensaje del usuario
+                self.addMessage('user', location);
+                
+                // Ocultar buscador
+                $container.hide().empty();
+                
+                // Enviar al servidor
+                self.sendMessage(location, self.state.currentStep, self.state.conversationData);
+            });
         },
         
         // Scroll al final
