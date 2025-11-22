@@ -221,6 +221,44 @@ class MET_Conversation_Steps_Summary {
         $html .= '<strong>👥 Pasajeros:</strong> ' . $data['passengers'] . '<br>';
         $html .= '<strong>🚗 Vehículo:</strong> ' . $this->get_vehicle_name($price_breakdown['vehicle_type']) . '<br><br>';
         
+        // Opciones extras (si existen)
+        if (isset($data['extras']) && is_array($data['extras'])) {
+            $has_extras = false;
+            $extras_html = '<strong>🎁 Opciones Extras:</strong><br>';
+            
+            // Extras informativos (gratis)
+            if (!empty($data['extras']['equipaje_de_mano']) && $data['extras']['equipaje_de_mano'] > 0) {
+                $extras_html .= '🎒 Equipaje de mano: ' . $data['extras']['equipaje_de_mano'] . '<br>';
+                $has_extras = true;
+            }
+            if (!empty($data['extras']['valijas']) && $data['extras']['valijas'] > 0) {
+                $extras_html .= '🧳 Valijas: ' . $data['extras']['valijas'] . '<br>';
+                $has_extras = true;
+            }
+            if (!empty($data['extras']['alzadores']) && $data['extras']['alzadores'] > 0) {
+                $extras_html .= '🪑 Alzadores: ' . $data['extras']['alzadores'] . '<br>';
+                $has_extras = true;
+            }
+            if (!empty($data['extras']['sillas_bebe']) && $data['extras']['sillas_bebe'] > 0) {
+                $extras_html .= '👶 Sillas de bebé: ' . $data['extras']['sillas_bebe'] . '<br>';
+                $has_extras = true;
+            }
+            
+            // Extras con costo
+            if (!empty($data['extras']['bolsa_golf']['cantidad']) && $data['extras']['bolsa_golf']['cantidad'] > 0) {
+                $extras_html .= '⛳ Bolsa de Golf: ' . $data['extras']['bolsa_golf']['cantidad'] . '<br>';
+                $has_extras = true;
+            }
+            if (!empty($data['extras']['bicicleta']['cantidad']) && $data['extras']['bicicleta']['cantidad'] > 0) {
+                $extras_html .= '🚴 Bicicleta: ' . $data['extras']['bicicleta']['cantidad'] . '<br>';
+                $has_extras = true;
+            }
+            
+            if ($has_extras) {
+                $html .= $extras_html . '<br>';
+            }
+        }
+        
         $html .= '</div>';
         
         return $html;

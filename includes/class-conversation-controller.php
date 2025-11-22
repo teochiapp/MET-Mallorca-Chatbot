@@ -16,6 +16,7 @@ class MET_Conversation_Controller {
     private $welcome_steps;
     private $location_steps;
     private $details_steps;
+    private $extras_steps;
     private $summary_steps;
     
     /**
@@ -28,7 +29,7 @@ class MET_Conversation_Controller {
      */
     private $valid_states = array(
         'welcome', 'route_type', 'origin', 'origin_text', 'destination', 'destination_text',
-        'date', 'time', 'passengers', 'pet', 'flight_number', 'summary', 'confirm',
+        'date', 'time', 'passengers', 'pet', 'flight_number', 'extras', 'summary', 'confirm',
         'modify_choice', 'verify_booking_code', 'end'
     );
     
@@ -47,12 +48,14 @@ class MET_Conversation_Controller {
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-welcome.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-location.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-details.php';
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-extras.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-summary.php';
         
         $this->validator = new MET_Booking_Validator();
         $this->welcome_steps = new MET_Conversation_Steps_Welcome();
         $this->location_steps = new MET_Conversation_Steps_Location();
         $this->details_steps = new MET_Conversation_Steps_Details();
+        $this->extras_steps = new MET_Conversation_Steps_Extras();
         $this->summary_steps = new MET_Conversation_Steps_Summary();
     }
     
@@ -137,6 +140,11 @@ class MET_Conversation_Controller {
             }
         }
         
+        // Módulo de extras
+        if ($step === 'extras') {
+            return $this->extras_steps->step_extras($message, $data);
+        }
+        
         // Módulo de resumen
         if (in_array($step, array('summary', 'confirm', 'modify_choice'))) {
             // Para el paso summary, si el mensaje está vacío, es un auto-avance
@@ -188,7 +196,8 @@ class MET_Conversation_Controller {
             'date' => 'destination',
             'time' => 'date',
             'passengers' => 'time',
-            'summary' => 'passengers',
+            'extras' => 'passengers',
+            'summary' => 'extras',
             'confirm' => 'summary',
             'modify_choice' => 'summary'
         );

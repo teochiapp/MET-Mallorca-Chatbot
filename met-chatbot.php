@@ -108,6 +108,14 @@ class MET_Chatbot {
             MET_CHATBOT_VERSION
         );
         
+        // CSS para selector de extras
+        wp_enqueue_style(
+            'met-extras-selector-style',
+            MET_CHATBOT_PLUGIN_URL . 'assets/css/extras-selector.css',
+            array('met-chatbot-style'),
+            MET_CHATBOT_VERSION
+        );
+        
         // JavaScript del location searcher
         wp_enqueue_script(
             'met-location-searcher',
@@ -117,11 +125,20 @@ class MET_Chatbot {
             true
         );
         
+        // JavaScript del extras selector
+        wp_enqueue_script(
+            'met-extras-selector',
+            MET_CHATBOT_PLUGIN_URL . 'assets/js/extras-selector.js',
+            array('jquery'),
+            MET_CHATBOT_VERSION,
+            true
+        );
+        
         // JavaScript del chatbot
         wp_enqueue_script(
             'met-chatbot-script',
             MET_CHATBOT_PLUGIN_URL . 'assets/js/chatbot.js',
-            array('jquery', 'met-location-searcher'),
+            array('jquery', 'met-location-searcher', 'met-extras-selector'),
             MET_CHATBOT_VERSION,
             true
         );
@@ -146,8 +163,17 @@ class MET_Chatbot {
     public function handle_message() {
         check_ajax_referer('met_chatbot_nonce', 'nonce');
         
-        $message = isset($_POST['message']) ? sanitize_text_field($_POST['message']) : '';
         $step = isset($_POST['step']) ? sanitize_text_field($_POST['step']) : 'welcome';
+        
+        // Para la mayoría de los pasos, tratamos el mensaje como texto plano.
+        // Para el paso 'extras', necesitamos el JSON crudo que envía el frontend
+        // (no se debe pasar por sanitize_text_field porque rompe la estructura JSON).
+        if ($step === 'extras') {
+            $message = isset($_POST['message']) ? wp_unslash($_POST['message']) : '';
+        } else {
+            $message = isset($_POST['message']) ? sanitize_text_field($_POST['message']) : '';
+        }
+
         $data = isset($_POST['data']) ? json_decode(stripslashes($_POST['data']), true) : array();
         
         // Usar el nuevo controlador conversacional

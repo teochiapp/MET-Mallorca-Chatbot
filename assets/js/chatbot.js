@@ -178,6 +178,10 @@
                     // Mostrar buscador de ubicaciones
                     this.showLocationSearcher(data.placeholder || 'Buscar ubicación...');
                     this.hideOptions();
+                } else if (data.inputType === 'extras_form') {
+                    // Mostrar formulario de extras
+                    this.showExtrasForm(data.extrasConfig || {});
+                    this.hideOptions();
                 } else if (data.inputType) {
                     this.showTextInput(data.inputType);
                     this.hideOptions();
@@ -439,6 +443,69 @@
                 // Enviar al servidor
                 self.sendMessage(location, self.state.currentStep, self.state.conversationData);
             });
+        },
+        
+        // Mostrar formulario de extras
+        showExtrasForm: function(extrasConfig) {
+            const self = this;
+            
+            // Ocultar otros inputs
+            this.hideTextInput();
+            this.hideOptions();
+            
+            // Crear el formulario
+            const formHtml = window.MetExtrasSelector.createForm(extrasConfig);
+            
+            // Agregar como mensaje del bot
+            const messagesContainer = $('#met-chatbot-messages');
+            const messageHtml = `
+                <div class="met-message bot met-extras-message">
+                    <div class="met-message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="met-message-content">
+                        ${formHtml}
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.append(messageHtml);
+            this.scrollToBottom();
+            
+            // Manejar confirmación de extras
+            $(document).off('extras-selected').on('extras-selected', function(e, extrasData) {
+                // Agregar resumen visual de lo seleccionado
+                const summary = self.buildExtrasSummary(JSON.parse(extrasData), extrasConfig);
+                self.addMessage('user', summary);
+                
+                // Enviar al servidor
+                self.sendMessage(extrasData, self.state.currentStep, self.state.conversationData);
+            });
+        },
+        
+        // Construir resumen visual de extras seleccionados
+        buildExtrasSummary: function(extrasData, extrasConfig) {
+            let summary = '<strong>Opciones extras seleccionadas:</strong><br>';
+            let hasSelection = false;
+            
+            Object.keys(extrasData).forEach(key => {
+                const quantity = extrasData[key];
+                if (quantity > 0 && extrasConfig[key]) {
+                    const config = extrasConfig[key];
+                    summary += `${config.icon} ${config.label}: ${quantity}`;
+                    if (config.price > 0) {
+                        summary += ` (€${(quantity * config.price).toFixed(2)})`;
+                    }
+                    summary += '<br>';
+                    hasSelection = true;
+                }
+            });
+            
+            if (!hasSelection) {
+                summary = 'Sin opciones extras';
+            }
+            
+            return summary;
         },
         
         // Scroll al final

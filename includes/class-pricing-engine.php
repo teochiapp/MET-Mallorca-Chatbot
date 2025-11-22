@@ -465,11 +465,23 @@ class MET_Pricing_Engine {
             }
         }
         
-        // Otros extras (si se agregan en el futuro)
+        // Opciones extras del nuevo sistema (bolsa golf, bicicleta, etc.)
         if (isset($booking_data['extras']) && is_array($booking_data['extras'])) {
-            foreach ($booking_data['extras'] as $extra) {
-                if (isset($this->config['extras'][$extra])) {
-                    $extras_cost[$extra] = $this->config['extras'][$extra];
+            // Si tiene total_extras, es el nuevo formato
+            if (isset($booking_data['extras']['total_extras'])) {
+                // Procesar extras con costo
+                if (isset($booking_data['extras']['bolsa_golf']) && is_array($booking_data['extras']['bolsa_golf'])) {
+                    $extras_cost['bolsa_golf'] = $booking_data['extras']['bolsa_golf']['subtotal'];
+                }
+                if (isset($booking_data['extras']['bicicleta']) && is_array($booking_data['extras']['bicicleta'])) {
+                    $extras_cost['bicicleta'] = $booking_data['extras']['bicicleta']['subtotal'];
+                }
+            } else {
+                // Formato antiguo: array simple de extras
+                foreach ($booking_data['extras'] as $extra) {
+                    if (isset($this->config['extras'][$extra])) {
+                        $extras_cost[$extra] = $this->config['extras'][$extra];
+                    }
                 }
             }
         }
@@ -524,7 +536,9 @@ class MET_Pricing_Engine {
                     'child_seat' => '👶 Silla infantil',
                     'booster_seat' => '🪑 Elevador',
                     'luggage_extra' => '🧳 Equipaje extra',
-                    'meet_greet' => '👋 Meet & Greet'
+                    'meet_greet' => '👋 Meet & Greet',
+                    'bolsa_golf' => '⛳ Bolsa de Golf',
+                    'bicicleta' => '🚴 Bicicleta'
                 );
                 $label = isset($extra_labels[$extra_name]) ? $extra_labels[$extra_name] : ucfirst($extra_name);
                 $html .= $label . ': +€' . number_format($extra_cost, 2) . '<br>';

@@ -127,8 +127,10 @@ class MET_Conversation_Steps_Details {
         $data['pet'] = 'no';
         $data['flight_number'] = '';
         
-        // Ir directo al resumen (sin preguntar por mascota ni vuelo)
-        return $this->go_to_summary($data);
+        // Ir al paso de opciones extras
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-extras.php';
+        $extras_steps = new MET_Conversation_Steps_Extras();
+        return $extras_steps->step_extras('', $data);
     }
     
     /**

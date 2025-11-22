@@ -158,6 +158,37 @@ class MET_Checkout_Generator {
             update_post_meta($product_id, '_met_price_breakdown', $price_breakdown);
             update_post_meta($product_id, '_met_created_at', current_time('mysql'));
             
+            // Guardar opciones extras como metadatos individuales (para visualización en WooCommerce)
+            if (isset($booking_data['extras']) && is_array($booking_data['extras'])) {
+                $extras = $booking_data['extras'];
+                
+                // Extras informativos (gratis)
+                update_post_meta($product_id, '_extra_equipaje_mano', isset($extras['equipaje_de_mano']) ? intval($extras['equipaje_de_mano']) : 0);
+                update_post_meta($product_id, '_extra_valijas', isset($extras['valijas']) ? intval($extras['valijas']) : 0);
+                update_post_meta($product_id, '_extra_alzadores', isset($extras['alzadores']) ? intval($extras['alzadores']) : 0);
+                update_post_meta($product_id, '_extra_sillas_bebe', isset($extras['sillas_bebe']) ? intval($extras['sillas_bebe']) : 0);
+                
+                // Extras con costo
+                if (isset($extras['bolsa_golf']) && is_array($extras['bolsa_golf'])) {
+                    update_post_meta($product_id, '_extra_bolsa_golf_cantidad', intval($extras['bolsa_golf']['cantidad']));
+                    update_post_meta($product_id, '_extra_bolsa_golf_subtotal', floatval($extras['bolsa_golf']['subtotal']));
+                } else {
+                    update_post_meta($product_id, '_extra_bolsa_golf_cantidad', 0);
+                    update_post_meta($product_id, '_extra_bolsa_golf_subtotal', 0);
+                }
+                
+                if (isset($extras['bicicleta']) && is_array($extras['bicicleta'])) {
+                    update_post_meta($product_id, '_extra_bicicleta_cantidad', intval($extras['bicicleta']['cantidad']));
+                    update_post_meta($product_id, '_extra_bicicleta_subtotal', floatval($extras['bicicleta']['subtotal']));
+                } else {
+                    update_post_meta($product_id, '_extra_bicicleta_cantidad', 0);
+                    update_post_meta($product_id, '_extra_bicicleta_subtotal', 0);
+                }
+                
+                // Total de extras
+                update_post_meta($product_id, '_extra_total', isset($extras['total_extras']) ? floatval($extras['total_extras']) : 0);
+            }
+            
             // Limpiar caché de WooCommerce
             wc_delete_product_transients($product_id);
             
