@@ -104,10 +104,7 @@ class MET_Checkout_Generator {
      * Obtener la URL de checkout a la que debe redirigir el chatbot
      */
     private function get_checkout_redirect_url() {
-        $configured_url = get_option(
-            'met_chatbot_checkout_url',
-            'https://metmallorca.com/es/checkout/'
-        );
+        $configured_url = get_option('met_chatbot_checkout_url', '');
 
         $custom_url = apply_filters('met_chatbot_checkout_redirect_url', $configured_url);
 
@@ -116,10 +113,18 @@ class MET_Checkout_Generator {
         }
 
         if (function_exists('wc_get_checkout_url')) {
-            return wc_get_checkout_url();
+            $checkout_url = wc_get_checkout_url();
+
+            if (!empty($checkout_url)) {
+                return esc_url_raw($checkout_url);
+            }
         }
 
-        return home_url('/');
+        if (function_exists('wc_get_cart_url')) {
+            return esc_url_raw(wc_get_cart_url());
+        }
+
+        return esc_url_raw(home_url('/'));
     }
     
     /**
