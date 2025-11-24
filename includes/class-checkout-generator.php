@@ -39,7 +39,7 @@ class MET_Checkout_Generator {
      */
     public function generate_checkout_url($booking_data, $price_breakdown) {
         if (!function_exists('WC')) {
-            return wc_get_checkout_url();
+            return $this->get_checkout_redirect_url();
         }
 
         if (null === WC()->cart && function_exists('wc_load_cart')) {
@@ -56,7 +56,7 @@ class MET_Checkout_Generator {
         
         if (!$product_id) {
             error_log('MET Chatbot: ERROR - No se pudo crear el producto de reserva');
-            return wc_get_checkout_url();
+            return $this->get_checkout_redirect_url();
         }
         
         error_log('MET Chatbot: Producto de reserva creado con ID: ' . $product_id);
@@ -97,7 +97,29 @@ class MET_Checkout_Generator {
         }
         
         // Retornar URL del checkout directamente
-        return wc_get_checkout_url();
+        return $this->get_checkout_redirect_url();
+    }
+
+    /**
+     * Obtener la URL de checkout a la que debe redirigir el chatbot
+     */
+    private function get_checkout_redirect_url() {
+        $configured_url = get_option(
+            'met_chatbot_checkout_url',
+            'https://metmallorca.com/es/checkout/'
+        );
+
+        $custom_url = apply_filters('met_chatbot_checkout_redirect_url', $configured_url);
+
+        if (!empty($custom_url)) {
+            return esc_url_raw($custom_url);
+        }
+
+        if (function_exists('wc_get_checkout_url')) {
+            return wc_get_checkout_url();
+        }
+
+        return home_url('/');
     }
     
     /**
