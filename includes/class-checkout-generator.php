@@ -104,7 +104,10 @@ class MET_Checkout_Generator {
      * Obtener la URL de checkout a la que debe redirigir el chatbot
      */
     private function get_checkout_redirect_url() {
-        $configured_url = get_option('met_chatbot_checkout_url', '');
+        $configured_url = get_option(
+            'met_chatbot_checkout_url',
+            'https://metmallorca.com/es/checkout/'
+        );
 
         $custom_url = apply_filters('met_chatbot_checkout_redirect_url', $configured_url);
 
