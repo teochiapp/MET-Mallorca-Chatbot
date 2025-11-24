@@ -201,19 +201,69 @@ class MET_Chatbot {
     /**
      * Obtener ubicaciones disponibles
      */
-    public function get_locations() {
-        check_ajax_referer('met_chatbot_nonce', 'nonce');
-        
-        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-pricing-engine.php';
-        $pricing_engine = new MET_Pricing_Engine();
-        $locations = $pricing_engine->get_all_locations();
-        
-        // Enviar respuesta con el formato esperado por el JavaScript
-        wp_send_json_success(array(
-            'locations' => $locations,
-            'total' => count($locations)
-        ));
+public function get_locations() {
+    check_ajax_referer('met_chatbot_nonce', 'nonce');
+    
+    // Capturar logs de error
+    ob_start();
+    
+    // Inicializar array de depuración
+    $debug = [
+        'messages' => [],
+        'file_path' => MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json',
+        'file_exists' => file_exists(MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json'),
+        'is_readable' => is_readable(MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json'),
+        'file_size' => file_exists(MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json') ? filesize(MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json') : 0,
+    ];
+    
+    $debug['messages'][] = 'Iniciando carga de ubicaciones...';
+    
+    // Leer el JSON directamente para verificar su contenido
+    $json_file = MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json';
+    $json_contents = file_get_contents($json_file);
+    $raw_data = json_decode($json_contents, true);
+    
+    $debug['json_decode_error'] = json_last_error_msg();
+    $debug['raw_data_count'] = is_array($raw_data) ? count($raw_data) : 0;
+    $debug['raw_data_keys'] = is_array($raw_data) ? array_slice(array_keys($raw_data), 0, 5) : [];
+    
+    require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-pricing-engine.php';
+    $pricing_engine = new MET_Pricing_Engine();
+    
+    // Forzar la recarga de las ubicaciones
+    $reflection = new ReflectionClass($pricing_engine);
+    $property = $reflection->getProperty('location_prices');
+    $property->setAccessible(true);
+    $current_prices = $property->getValue($pricing_engine);
+    
+    $debug['location_prices_count'] = is_array($current_prices) ? count($current_prices) : 0;
+    $debug['location_prices_keys'] = is_array($current_prices) ? array_slice(array_keys($current_prices), 0, 5) : [];
+    $debug['messages'][] = 'Estado de location_prices: ' . (empty($current_prices) ? 'vacío' : count($current_prices) . ' elementos');
+    
+    // Obtener las ubicaciones
+    $locations = $pricing_engine->get_all_locations();
+    
+    // Obtener información de depuración adicional
+    $debug['location_count'] = count($locations);
+    $debug['first_five_locations'] = array_slice($locations, 0, 5);
+    
+    // Incluir información de la ruta para depuración
+    $debug['plugin_dir'] = MET_CHATBOT_PLUGIN_DIR;
+    $debug['full_path'] = realpath($json_file);
+    
+    // Capturar cualquier salida de error
+    $error_output = ob_get_clean();
+    if (!empty($error_output)) {
+        $debug['error_output'] = $error_output;
     }
+    
+    // Devolver la respuesta con información de depuración
+    wp_send_json_success([
+        'locations' => $locations,
+        'total' => count($locations),
+        'debug' => $debug
+    ]);
+}
 
     /**
      * Registrar rutas REST personalizadas

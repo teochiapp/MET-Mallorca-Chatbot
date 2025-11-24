@@ -267,13 +267,21 @@
          */
         loadLocations: function(callback) {
             const self = this;
+            console.log('MetLocationSearcher: Iniciando carga de ubicaciones...');
 
             if (typeof metChatbot === 'undefined' || !metChatbot.ajaxUrl) {
-                console.warn('MetLocationSearcher: metChatbot no está disponible aún. Se reintentará al inicializar.');
+                const errorMsg = 'MetLocationSearcher: metChatbot no está disponible. Verifica que el script se cargue correctamente.';
+                console.error(errorMsg, {
+                    metChatbotDefined: typeof metChatbot !== 'undefined',
+                    ajaxUrl: metChatbot ? metChatbot.ajaxUrl : 'no definido',
+                    nonce: metChatbot ? (metChatbot.nonce ? 'definido' : 'no definido') : 'no aplicable'
+                });
                 if (callback) callback(self.locations);
                 return;
             }
 
+            console.log('MetLocationSearcher: Solicitando ubicaciones a', metChatbot.ajaxUrl);
+            
             $.ajax({
                 url: metChatbot.ajaxUrl,
                 method: 'POST',
@@ -281,21 +289,59 @@
                     action: 'met_get_locations',
                     nonce: metChatbot.nonce
                 },
+                dataType: 'json',
                 success: function(response) {
-                    console.log('MetLocationSearcher: respuesta recibida', response);
+                    console.group('MetLocationSearcher: Respuesta del servidor');
+                    console.log('Respuesta completa:', response);
                     
-                    if (response && response.success && response.data && Array.isArray(response.data.locations)) {
-                        self.locations = response.data.locations;
-                        console.log('MetLocationSearcher: ' + self.locations.length + ' ubicaciones cargadas');
-                        if (callback) callback(self.locations);
+                    if (response && response.success) {
+                        console.log('Estado: Éxito');
+                        console.log('Datos recibidos:', response.data);
+                        
+                        if (response.data && Array.isArray(response.data.locations)) {
+                            self.locations = response.data.locations;
+                            console.log('Ubicaciones cargadas:', self.locations.length);
+                            console.log('Primeras 5 ubicaciones:', self.locations.slice(0, 5));
+                            
+                            // Mostrar mensaje de depuración si existe
+                            if (response.data.debug) {
+                                console.log('Mensaje de depuración:', response.data.debug);
+                            }
+                            
+                            if (self.locations.length === 0) {
+                                console.warn('ADVERTENCIA: Se recibió un array de ubicaciones vacío');
+                            }
+                            
+                            if (callback) callback(self.locations);
+                        } else {
+                            console.error('ERROR: La propiedad data.locations no es un array o no existe', {
+                                data: response.data,
+                                locationsIsArray: response.data ? Array.isArray(response.data.locations) : 'data es nulo'
+                            });
+                            if (callback) callback(self.locations);
+                        }
                     } else {
-                        console.warn('MetLocationSearcher: respuesta inválida al cargar ubicaciones', response);
+                        console.error('ERROR: La respuesta no indica éxito', {
+                            response: response,
+                            success: response ? response.success : 'respuesta nula',
+                            data: response ? response.data : 'no disponible'
+                        });
                         if (callback) callback(self.locations);
                     }
+                    console.groupEnd();
                 },
                 error: function(xhr, status, error) {
-                    console.error('MetLocationSearcher: error al cargar ubicaciones', status, error);
+                    console.group('MetLocationSearcher: Error en la petición AJAX');
+                    console.error('Estado:', status);
+                    console.error('Error:', error);
+                    console.error('Respuesta del servidor:', xhr.responseText);
+                    console.error('Estado de la petición:', xhr.status, xhr.statusText);
+                    console.groupEnd();
+                    
                     if (callback) callback(self.locations);
+                },
+                complete: function(xhr, status) {
+                    console.log('MetLocationSearcher: Petición completada con estado:', status);
                 }
             });
         }

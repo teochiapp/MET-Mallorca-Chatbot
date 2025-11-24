@@ -15,6 +15,7 @@ class MET_Checkout_Generator {
      * Este producto debe existir en tu tienda
      */
     private $transfer_product_id;
+    private $default_image_url = 'https://i0.wp.com/metmallorca.com/wp-content/uploads/2024/10/Banner-home2-e1730723844783.png?fit=1437%2C708&ssl=1';
     
     /**
      * Constructor
@@ -157,6 +158,12 @@ class MET_Checkout_Generator {
             update_post_meta($product_id, '_met_booking_data', $booking_data);
             update_post_meta($product_id, '_met_price_breakdown', $price_breakdown);
             update_post_meta($product_id, '_met_created_at', current_time('mysql'));
+
+            // Asociar imagen predeterminada
+            $image_id = $this->get_default_booking_image_id();
+            if ($image_id) {
+                set_post_thumbnail($product_id, $image_id);
+            }
             
             // Guardar opciones extras como metadatos individuales (para visualización en WooCommerce)
             if (isset($booking_data['extras']) && is_array($booking_data['extras'])) {
@@ -197,6 +204,53 @@ class MET_Checkout_Generator {
         }
         
         return $product_id;
+    }
+
+    /**
+     * Obtener (o descargar) la imagen predeterminada para las reservas
+     */
+    private function get_default_booking_image_id() {
+        $option_key = 'met_chatbot_default_booking_image_id';
+        $attachment_id = get_option($option_key, 0);
+
+        if ($attachment_id && get_post($attachment_id)) {
+            return $attachment_id;
+        }
+
+        $attachment_id = $this->download_default_booking_image();
+        if ($attachment_id) {
+            update_option($option_key, $attachment_id);
+        }
+
+        return $attachment_id;
+    }
+
+    /**
+     * Descargar la imagen y guardarla como adjunto
+     */
+    private function download_default_booking_image() {
+        if (empty($this->default_image_url)) {
+            return 0;
+        }
+
+        if (!function_exists('media_sideload_image')) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+        }
+        if (!function_exists('download_url')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        if (!function_exists('wp_generate_attachment_metadata')) {
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        $result = media_sideload_image($this->default_image_url, 0, 'MET Mallorca Transfers', 'id');
+
+        if (is_wp_error($result)) {
+            error_log('MET Chatbot: No se pudo descargar la imagen predeterminada - ' . $result->get_error_message());
+            return 0;
+        }
+
+        return intval($result);
     }
     
     /**

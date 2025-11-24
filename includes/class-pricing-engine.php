@@ -105,38 +105,115 @@ class MET_Pricing_Engine {
     private function load_location_prices() {
         $json_file = MET_CHATBOT_PLUGIN_DIR . 'precios_locations_data.json';
         
+        // Inicializar location_prices como array vacío
+        $this->location_prices = array();
+        
+        // Verificar si el archivo existe
         if (!file_exists($json_file)) {
-            return;
+            error_log('MET DEBUG: El archivo JSON no existe: ' . $json_file);
+            return false;
         }
         
+        // Verificar permisos del archivo
+        if (!is_readable($json_file)) {
+            error_log('MET DEBUG: El archivo JSON no es legible: ' . $json_file);
+            return false;
+        }
+        
+        // Leer el contenido del archivo
         $json_contents = file_get_contents($json_file);
         if ($json_contents === false) {
-            return;
+            error_log('MET DEBUG: No se pudo leer el contenido del archivo JSON');
+            return false;
         }
         
+        // Verificar si el JSON está vacío
+        if (empty($json_contents)) {
+            error_log('MET DEBUG: El archivo JSON está vacío');
+            return false;
+        }
+        
+        // Limpiar el contenido - eliminar BOM y caracteres extraños
+        $json_contents = trim($json_contents);
+        $json_contents = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $json_contents);
+        
+        // Intentar decodificar el JSON con diferentes opciones
         $data = json_decode($json_contents, true);
+        
+        // Verificar errores de decodificación
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('MET DEBUG: Error JSON - Código: ' . json_last_error() . ', Mensaje: ' . json_last_error_msg());
+            error_log('MET DEBUG: Primeros 200 caracteres del JSON: ' . substr($json_contents, 0, 200));
+            
+            // Intentar修复常见的JSON问题
+            $json_contents = str_replace("'", '"', $json_contents); // Reemplazar comillas simples
+            $json_contents = preg_replace('/,\s*}/', '}', $json_contents); // Eliminar comas finales
+            $json_contents = preg_replace('/,\s*]/', ']', $json_contents); // Eliminar comas finales en arrays
+            
+            $data = json_decode($json_contents, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log('MET DEBUG: Error JSON después de limpieza - Código: ' . json_last_error() . ', Mensaje: ' . json_last_error_msg());
+                return false;
+            }
+        }
+        
+        // Verificar si los datos son un array
         if (!is_array($data)) {
-            return;
+            error_log('MET DEBUG: Los datos JSON no son un array, tipo: ' . gettype($data));
+            return false;
         }
-
-        foreach ($data as $location => $prices) {
-            $location = $this->sanitize_location_label($location);
-
-            if ($location === '' || isset($this->location_prices[$location])) {
+        
+        // Verificar si hay datos
+        if (empty($data)) {
+            error_log('MET DEBUG: El array JSON está vacío');
+            return false;
+        }
+        
+        // Contador para depuración
+        $processed = 0;
+        $skipped = 0;
+        $debug_info = array();
+        
+        // Procesar cada ubicación
+        foreach ($data as $original_location => $prices) {
+            $location = $this->sanitize_location_label($original_location);
+            
+            if ($location === '') {
+                $skipped++;
+                $debug_info[] = "Ubicación vacía después de sanitizar: $original_location";
                 continue;
             }
-
+            
+            if (isset($this->location_prices[$location])) {
+                $skipped++;
+                $debug_info[] = "Ubicación duplicada: $location";
+                continue;
+            }
+            
             if (!is_array($prices)) {
+                $skipped++;
+                $debug_info[] = "Precios no es un array para: $location";
                 continue;
             }
-
-            $this->location_prices[$location] = array(
-                '1-4' => isset($prices['1-4']) ? floatval($prices['1-4']) : 0,
-                '5-8' => isset($prices['5-8']) ? floatval($prices['5-8']) : 0,
-                '9-12' => isset($prices['9-12']) ? floatval($prices['9-12']) : 0,
-                '13-16' => isset($prices['13-16']) ? floatval($prices['13-16']) : 0
-            );
+            
+            // Si llegamos aquí, la ubicación es válida
+            $this->location_prices[$location] = $prices;
+            $processed++;
+            
+            // Registrar las primeras 5 ubicaciones para depuración
+            if ($processed <= 5) {
+                $debug_info[] = "Ubicación procesada: $location";
+            }
         }
+        
+        // Log de depuración
+        error_log('MET DEBUG: Total procesadas: ' . $processed . ', Total omitidas: ' . $skipped);
+        error_log('MET DEBUG: Total en location_prices: ' . count($this->location_prices));
+        if (!empty($debug_info)) {
+            error_log('MET DEBUG: ' . implode(' | ', $debug_info));
+        }
+        
+        return true;
     }
 
     /**
@@ -160,9 +237,32 @@ class MET_Pricing_Engine {
      * Obtener todas las ubicaciones disponibles
      */
     public function get_all_locations() {
+        // Depuración: Verificar si location_prices está vacío
+        if (empty($this->location_prices)) {
+            error_log('MET DEBUG: location_prices está vacío en get_all_locations()');
+            error_log('MET DEBUG: Tipo de location_prices: ' . gettype($this->location_prices));
+            error_log('MET DEBUG: Contenido de location_prices: ' . print_r($this->location_prices, true));
+        } else {
+            error_log('MET DEBUG: location_prices tiene ' . count($this->location_prices) . ' elementos');
+            error_log('MET DEBUG: Primeras 5 claves: ' . json_encode(array_slice(array_keys($this->location_prices), 0, 5)));
+        }
+        
         $locations = array_keys($this->location_prices);
+        error_log('MET DEBUG: Número de ubicaciones encontradas: ' . count($locations));
+        
+        if (empty($locations)) {
+            error_log('MET DEBUG: No se encontraron claves en location_prices');
+        } else {
+            error_log('MET DEBUG: Ejemplo de ubicaciones: ' . json_encode(array_slice($locations, 0, 5)));
+        }
 
         sort($locations, SORT_NATURAL | SORT_FLAG_CASE);
+        
+        // Depuración adicional para verificar el resultado final
+        error_log('MET DEBUG: get_all_locations() devolviendo ' . count($locations) . ' ubicaciones');
+        if (!empty($locations)) {
+            error_log('MET DEBUG: Ejemplo de ubicaciones ordenadas: ' . json_encode(array_slice($locations, 0, 5)));
+        }
 
         return $locations;
     }
