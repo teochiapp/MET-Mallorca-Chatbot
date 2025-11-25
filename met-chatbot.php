@@ -47,6 +47,8 @@ class MET_Chatbot {
         add_action('wp_ajax_nopriv_met_verify_booking', array($this, 'verify_booking'));
         add_action('wp_ajax_met_get_locations', array($this, 'get_locations'));
         add_action('wp_ajax_nopriv_met_get_locations', array($this, 'get_locations'));
+        add_action('wp_ajax_met_get_time_slots', array($this, 'get_time_slots'));
+        add_action('wp_ajax_nopriv_met_get_time_slots', array($this, 'get_time_slots'));
 
         // REST API routes
         add_action('rest_api_init', array($this, 'register_rest_routes'));
@@ -125,6 +127,15 @@ class MET_Chatbot {
             true
         );
         
+        // JavaScript del time searcher
+        wp_enqueue_script(
+            'met-time-searcher',
+            MET_CHATBOT_PLUGIN_URL . 'assets/js/time-searcher.js',
+            array('jquery'),
+            MET_CHATBOT_VERSION,
+            true
+        );
+        
         // JavaScript del extras selector
         wp_enqueue_script(
             'met-extras-selector',
@@ -138,7 +149,7 @@ class MET_Chatbot {
         wp_enqueue_script(
             'met-chatbot-script',
             MET_CHATBOT_PLUGIN_URL . 'assets/js/chatbot.js',
-            array('jquery', 'met-location-searcher', 'met-extras-selector'),
+            array('jquery', 'met-location-searcher', 'met-time-searcher', 'met-extras-selector'),
             MET_CHATBOT_VERSION,
             true
         );
@@ -201,8 +212,8 @@ class MET_Chatbot {
     /**
      * Obtener ubicaciones disponibles
      */
-public function get_locations() {
-    check_ajax_referer('met_chatbot_nonce', 'nonce');
+    public function get_locations() {
+        check_ajax_referer('met_chatbot_nonce', 'nonce');
     
     // Capturar logs de error
     ob_start();
@@ -258,12 +269,49 @@ public function get_locations() {
     }
     
     // Devolver la respuesta con información de depuración
-    wp_send_json_success([
-        'locations' => $locations,
-        'total' => count($locations),
-        'debug' => $debug
-    ]);
-}
+        wp_send_json_success([
+            'locations' => $locations,
+            'total' => count($locations),
+            'debug' => $debug
+        ]);
+    }
+
+    /**
+     * Obtener horarios disponibles en intervalos de 30 minutos
+     */
+    public function get_time_slots() {
+        check_ajax_referer('met_chatbot_nonce', 'nonce');
+
+        $time_slots = array();
+        $file_path = MET_CHATBOT_PLUGIN_DIR . 'time_slots_data.json';
+
+        if (file_exists($file_path) && is_readable($file_path)) {
+            $json_contents = file_get_contents($file_path);
+            $decoded = json_decode($json_contents, true);
+
+            if (is_array($decoded)) {
+                foreach ($decoded as $slot) {
+                    $slot = trim((string) $slot);
+                    if (preg_match('/^\d{2}:\d{2}$/', $slot)) {
+                        $time_slots[] = $slot;
+                    }
+                }
+            }
+        }
+
+        if (empty($time_slots)) {
+            for ($hour = 0; $hour < 24; $hour++) {
+                foreach (array(0, 30) as $minute) {
+                    $time_slots[] = sprintf('%02d:%02d', $hour, $minute);
+                }
+            }
+        }
+
+        wp_send_json_success(array(
+            'time_slots' => $time_slots,
+            'total' => count($time_slots)
+        ));
+    }
 
     /**
      * Registrar rutas REST personalizadas

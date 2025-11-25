@@ -178,6 +178,10 @@
                     // Mostrar buscador de ubicaciones
                     this.showLocationSearcher(data.placeholder || 'Buscar ubicación...');
                     this.hideOptions();
+                } else if (data.inputType === 'time_searcher') {
+                    // Mostrar buscador de horarios
+                    this.showTimeSearcher(data.placeholder || 'Buscar horario (ej: 14:30)');
+                    this.hideOptions();
                 } else if (data.inputType === 'extras_form') {
                     // Mostrar formulario de extras
                     this.showExtrasForm(data.extrasConfig || {});
@@ -371,6 +375,8 @@
         // Mostrar input de texto
         showTextInput: function(type) {
             const input = $('#met-chatbot-input');
+            $('#met-chatbot-location-container').hide().empty();
+            $('#met-chatbot-time-container').hide().empty();
             
             // Configurar placeholder según tipo
             if (type === 'number') {
@@ -401,6 +407,7 @@
             // Ocultar otros inputs
             this.hideTextInput();
             this.hideOptions();
+            $('#met-chatbot-time-container').hide().empty();
             
             // Obtener contenedor
             const $container = $('#met-chatbot-location-container');
@@ -442,6 +449,37 @@
                 
                 // Enviar al servidor
                 self.sendMessage(location, self.state.currentStep, self.state.conversationData);
+            });
+        },
+
+        // Mostrar buscador de horarios
+        showTimeSearcher: function(placeholder) {
+            const self = this;
+
+            this.hideTextInput();
+            this.hideOptions();
+            $('#met-chatbot-location-container').hide().empty();
+
+            const $container = $('#met-chatbot-time-container');
+            $container.empty();
+
+            const searcherHtml = window.MetTimeSearcher.createSearcher(
+                placeholder || 'Buscar horario (ej: 14:30)',
+                'met-time-input-chat'
+            );
+            $container.html(searcherHtml);
+
+            window.MetTimeSearcher.loadTimeSlots(function() {
+                $container.show();
+                setTimeout(function() {
+                    $('#met-time-input-chat').focus();
+                }, 100);
+            });
+
+            $container.off('time-selected').on('time-selected', function(e, time) {
+                self.addMessage('user', time);
+                $container.hide().empty();
+                self.sendMessage(time, self.state.currentStep, self.state.conversationData);
             });
         },
         

@@ -40,14 +40,14 @@ class MET_Conversation_Steps_Details {
         // Continuar a hora
         return array(
             'message' => '🕐 <strong>¿A qué hora necesitas el traslado?</strong><br><br>' .
-                        'Escribe la hora en formato <strong>HH:MM</strong> (24 horas)<br><br>' .
-                        '<em>Ejemplo: 14:30</em>',
+                        'Selecciona una hora disponible (intervalos de 30 minutos).<br>' .
+                        '<em>Ejemplo: 14:00, 14:30, 15:00…</em>',
             'nextStep' => 'time',
             'options' => array(),
             'data' => $data,
-            'inputType' => 'text',
+            'inputType' => 'time_searcher',
             'showBackButton' => true,
-            'placeholder' => 'HH:MM'
+            'placeholder' => 'Buscar horario (ej: 14:30)'
         );
     }
     

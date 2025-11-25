@@ -24,8 +24,8 @@ class MET_Conversation_Steps_Welcome {
                     'value' => 'airport'
                 ),
                 array(
-                    'text' => '<i class="fas fa-map-marked-alt"></i> Punto a Punto en Mallorca',
-                    'value' => 'point_to_point'
+                    'text' => '<i class="fas fa-car"></i> Punto → Aeropuerto (PMI)',
+                    'value' => 'point_to_airport'
                 ),
                 array(
                     'text' => '<i class="fas fa-search"></i> Verificar mi reserva',
@@ -57,10 +57,10 @@ class MET_Conversation_Steps_Welcome {
             );
         }
         
-        // Flujo de punto a punto - Usar buscador inteligente
-        if ($message === 'point_to_point') {
+        // Flujo de punto → aeropuerto - Usar buscador inteligente
+        if ($message === 'point_to_airport') {
             return array(
-                'message' => '📍 <strong>Traslado Punto a Punto</strong><br><br>' .
+                'message' => '🚗 <strong>Traslado hacia el Aeropuerto</strong><br><br>' .
                             'Perfecto. Busca y selecciona tu ubicación de origen:',
                 'nextStep' => 'origin_text',
                 'options' => array(),
@@ -71,23 +71,18 @@ class MET_Conversation_Steps_Welcome {
             );
         }
         
-        // Flujo de aeropuerto (por defecto)
+        // Flujo de aeropuerto (por defecto) - evitar paso redundante
+        $data['origin'] = 'Aeropuerto de Palma';
+
         return array(
-            'message' => '✈️ <strong>Traslado desde/hacia Aeropuerto</strong><br><br>' .
-                        '¿Desde dónde te recogemos?',
-            'nextStep' => 'origin',
-            'options' => array(
-                array(
-                    'text' => '<i class="fas fa-plane"></i> Aeropuerto de Palma (PMI)',
-                    'value' => 'Aeropuerto de Palma'
-                ),
-                array(
-                    'text' => '<i class="fas fa-hotel"></i> Hotel / Alojamiento',
-                    'value' => 'custom_origin'
-                )
-            ),
+            'message' => '✈️ <strong>Traslado desde el Aeropuerto</strong><br><br>' .
+                        'Perfecto, ¿a qué destino te llevamos?',
+            'nextStep' => 'destination_text',
+            'options' => array(),
             'data' => $data,
-            'showBackButton' => true
+            'inputType' => 'location',
+            'showBackButton' => true,
+            'placeholder' => 'Buscar destino...'
         );
     }
 }

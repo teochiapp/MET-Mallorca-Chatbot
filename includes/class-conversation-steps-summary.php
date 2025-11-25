@@ -162,7 +162,7 @@ class MET_Conversation_Steps_Summary {
                     'message' => '📍 <strong>Modificar Ubicaciones</strong><br><br>¿Desde dónde te recogemos?',
                     'nextStep' => 'origin',
                     'options' => array(
-                        array('text' => '<i class="fas fa-plane"></i> Aeropuerto de Palma (PMI)', 'value' => 'Aeropuerto de Palma'),
+                        array('text' => '<i class="fas fa-plane"></i> Aeropuerto', 'value' => 'Aeropuerto de Palma'),
                         array('text' => '<i class="fas fa-hotel"></i> Hotel / Alojamiento', 'value' => 'custom_origin')
                     ),
                     'data' => $data,

@@ -99,6 +99,13 @@ class MET_Booking_Validator {
             );
         }
         
+        if ($minute % 30 !== 0) {
+            return array(
+                'valid' => false,
+                'error' => '❌ Solo aceptamos horarios cada 30 minutos (ej: 14:00, 14:30).'
+            );
+        }
+
         // Formatear con ceros a la izquierda
         $formatted = sprintf('%02d:%02d', $hour, $minute);
         

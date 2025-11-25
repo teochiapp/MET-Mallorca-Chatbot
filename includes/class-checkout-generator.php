@@ -16,6 +16,8 @@ class MET_Checkout_Generator {
      */
     private $transfer_product_id;
     private $default_image_url = 'https://i0.wp.com/metmallorca.com/wp-content/uploads/2024/10/Banner-home2-e1730723844783.png?fit=1437%2C708&ssl=1';
+    private $production_checkout_url = 'https://metmallorca.com/es/finalizar-compra/';
+    private $default_image_source_option = 'met_chatbot_default_booking_image_source';
     
     /**
      * Constructor
@@ -104,9 +106,15 @@ class MET_Checkout_Generator {
      * Obtener la URL de checkout a la que debe redirigir el chatbot
      */
     private function get_checkout_redirect_url() {
+        $default_checkout_url = $this->get_dynamic_checkout_url();
+
+        if (empty($default_checkout_url) && !empty($this->production_checkout_url)) {
+            $default_checkout_url = $this->production_checkout_url;
+        }
+
         $configured_url = get_option(
             'met_chatbot_checkout_url',
-            'https://metmallorca.com/es/checkout/'
+            $default_checkout_url
         );
 
         $custom_url = apply_filters('met_chatbot_checkout_redirect_url', $configured_url);
@@ -115,19 +123,63 @@ class MET_Checkout_Generator {
             return esc_url_raw($custom_url);
         }
 
+        if (!empty($default_checkout_url)) {
+            return esc_url_raw($default_checkout_url);
+        }
+
+        if (function_exists('wc_get_cart_url')) {
+            $cart_url = wc_get_cart_url();
+            if (!empty($cart_url)) {
+                return esc_url_raw($cart_url);
+            }
+        }
+
+        return esc_url_raw(home_url('/'));
+    }
+
+    /**
+     * Detectar dinámicamente la URL del checkout de WooCommerce
+     */
+    private function get_dynamic_checkout_url() {
         if (function_exists('wc_get_checkout_url')) {
             $checkout_url = wc_get_checkout_url();
 
             if (!empty($checkout_url)) {
-                return esc_url_raw($checkout_url);
+                return $checkout_url;
             }
         }
 
-        if (function_exists('wc_get_cart_url')) {
-            return esc_url_raw(wc_get_cart_url());
+        $checkout_page_id = null;
+
+        if (function_exists('wc_get_page_id')) {
+            $checkout_page_id = wc_get_page_id('checkout');
         }
 
-        return esc_url_raw(home_url('/'));
+        if (!$checkout_page_id) {
+            $checkout_page_id = get_option('woocommerce_checkout_page_id');
+        }
+
+        if ($checkout_page_id) {
+            $permalink = get_permalink($checkout_page_id);
+
+            if (!empty($permalink)) {
+                return $permalink;
+            }
+        }
+
+        if (function_exists('wc_get_page_permalink')) {
+            $page_permalink = wc_get_page_permalink('checkout');
+
+            if (!empty($page_permalink)) {
+                return $page_permalink;
+            }
+        }
+
+        if (!empty($this->production_checkout_url)) {
+            return esc_url_raw($this->production_checkout_url);
+        }
+
+        return trailingslashit(site_url('/checkout/'));
     }
     
     /**
@@ -241,18 +293,31 @@ class MET_Checkout_Generator {
      */
     private function get_default_booking_image_id() {
         $option_key = 'met_chatbot_default_booking_image_id';
+        $stored_source = get_option($this->default_image_source_option, '');
         $attachment_id = get_option($option_key, 0);
 
-        if ($attachment_id && get_post($attachment_id)) {
+        $attachment_exists = $attachment_id && get_post($attachment_id);
+        $needs_refresh = empty($stored_source) || $stored_source !== $this->default_image_url;
+
+        if ($attachment_exists && !$needs_refresh) {
             return $attachment_id;
         }
 
-        $attachment_id = $this->download_default_booking_image();
-        if ($attachment_id) {
-            update_option($option_key, $attachment_id);
+        $new_attachment_id = $this->download_default_booking_image();
+        if ($new_attachment_id) {
+            update_option($option_key, $new_attachment_id);
+            update_option($this->default_image_source_option, $this->default_image_url);
+            return $new_attachment_id;
         }
 
-        return $attachment_id;
+        if ($attachment_exists) {
+            return $attachment_id;
+        }
+
+        delete_option($option_key);
+        delete_option($this->default_image_source_option);
+
+        return 0;
     }
 
     /**

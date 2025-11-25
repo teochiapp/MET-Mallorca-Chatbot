@@ -62,6 +62,11 @@ if (!defined('ABSPATH')) {
             <div id="met-chatbot-location-container" class="met-chatbot-location-wrapper" style="display: none;">
                 <!-- El buscador de ubicaciones se cargará aquí -->
             </div>
+
+            <!-- Time Searcher Container -->
+            <div id="met-chatbot-time-container" class="met-chatbot-time-wrapper" style="display: none;">
+                <!-- El buscador de horarios se cargará aquí -->
+            </div>
             
             <div id="met-chatbot-text-input" class="met-chatbot-text-input" style="display: none;">
                 <textarea id="met-chatbot-input" class="met-chatbot-input" placeholder="Escribe tu mensaje..." rows="2"></textarea>

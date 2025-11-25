@@ -23,18 +23,21 @@
    LOCATION SEARCHER COMPONENT
    ======================================== */
 
-.met-location-searcher {
+.met-location-searcher,
+.met-time-searcher {
     width: 100%;
     position: relative;
     margin: 10px 0;
 }
 
-.met-location-input-wrapper {
+.met-location-input-wrapper,
+.met-time-input-wrapper {
     position: relative;
     width: 100%;
 }
 
-.met-location-input {
+.met-location-input,
+.met-time-input {
     width: 100%;
     padding: 12px 40px 12px 16px;
     border: 2px solid var(--met-border);
@@ -46,13 +49,15 @@
     color: var(--met-text);
 }
 
-.met-location-input:focus {
+.met-location-input:focus,
+.met-time-input:focus {
     outline: none;
     border-color: var(--met-primary);
     box-shadow: 0 0 0 3px rgba(232, 106, 28, 0.1);
 }
 
-.met-location-search-icon {
+.met-location-search-icon,
+.met-time-search-icon {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -61,7 +66,8 @@
     pointer-events: none;
 }
 
-.met-location-dropdown {
+.met-location-dropdown,
+.met-time-dropdown {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -75,11 +81,13 @@
     z-index: 1000;
 }
 
-.met-location-results {
+.met-location-results,
+.met-time-results {
     padding: 4px;
 }
 
-.met-location-result-item {
+.met-location-result-item,
+.met-time-result-item {
     padding: 12px 16px;
     cursor: pointer;
     border-radius: 6px;
@@ -89,19 +97,23 @@
 }
 
 .met-location-result-item:hover,
-.met-location-result-item.active {
+.met-location-result-item.active,
+.met-time-result-item:hover,
+.met-time-result-item.active {
     background: var(--met-bg-light);
     color: var(--met-primary);
 }
 
-.met-location-no-results {
+.met-location-no-results,
+.met-time-no-results {
     padding: 16px;
     text-align: center;
     color: var(--met-text-light);
     font-size: 14px;
 }
 
-.met-location-selected {
+.met-location-selected,
+.met-time-selected {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -113,12 +125,14 @@
     font-weight: 500;
 }
 
-.met-location-selected-text {
+.met-location-selected-text,
+.met-time-selected-text {
     flex: 1;
     margin-right: 10px;
 }
 
-.met-location-clear {
+.met-location-clear,
+.met-time-clear {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
@@ -133,47 +147,75 @@
     flex-shrink: 0;
 }
 
-.met-location-clear:hover {
+.met-location-clear:hover,
+.met-time-clear:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
 
-.met-location-dropdown::-webkit-scrollbar {
+.met-location-dropdown::-webkit-scrollbar,
+.met-time-dropdown::-webkit-scrollbar {
     width: 6px;
 }
 
-.met-location-dropdown::-webkit-scrollbar-track {
+.met-location-dropdown::-webkit-scrollbar-track,
+.met-time-dropdown::-webkit-scrollbar-track {
     background: var(--met-bg-light);
     border-radius: 3px;
 }
 
-.met-location-dropdown::-webkit-scrollbar-thumb {
+.met-location-dropdown::-webkit-scrollbar-thumb,
+.met-time-dropdown::-webkit-scrollbar-thumb {
     background: var(--met-border);
     border-radius: 3px;
 }
 
-.met-location-dropdown::-webkit-scrollbar-thumb:hover {
+.met-location-dropdown::-webkit-scrollbar-thumb:hover,
+.met-time-dropdown::-webkit-scrollbar-thumb:hover {
     background: var(--met-text-light);
 }
 
 /* Location Searcher dentro del Chatbot */
-.met-chatbot-location-wrapper {
+.met-chatbot-location-wrapper,
+.met-chatbot-time-wrapper {
     position: relative;
     padding: 0;
     margin-bottom: 12px;
     background: var(--met-bg);
+    width: 100%;
 }
 
-.met-chatbot-location-wrapper .met-location-searcher {
+.met-chatbot-location-wrapper .met-location-searcher,
+.met-chatbot-time-wrapper .met-time-searcher {
     margin: 0;
     width: 100%;
 }
 
-.met-chatbot-location-wrapper .met-location-input {
+/* Time Searcher (reuse styles) */
+.met-time-searcher {
+    width: 100%;
+    position: relative;
+    margin: 10px 0;
+}
+
+.met-chatbot-location-wrapper,
+.met-chatbot-time-wrapper {
+    width: 100%;
+}
+
+.met-chatbot-location-wrapper .met-location-input,
+.met-chatbot-time-wrapper .met-time-input {
     box-sizing: border-box;
 }
 
 .met-chatbot-location-wrapper .met-location-dropdown {
+    width: 100%;
+    max-height: 220px;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.met-chatbot-time-wrapper .met-time-dropdown {
     width: 100%;
     max-height: 220px;
     box-sizing: border-box;

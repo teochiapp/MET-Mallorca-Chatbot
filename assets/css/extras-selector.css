@@ -7,13 +7,13 @@
     flex-direction: column;
     gap: 8px;
     padding: 10px;
-    background: #f8f9fa;
+    background: var(--met-bg-light);
     border-radius: 12px;
     max-width: 100%;
 }
 
 .met-extra-item {
-    background: white;
+    background: var(--met-bg);
     border-radius: 10px;
     padding: 8px 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -42,16 +42,16 @@
 .met-extra-label {
     flex: 1;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--met-text);
     font-size: 13px;
 }
 
 .met-extra-price {
     font-size: 12px;
-    color: #0066cc;
+    color: var(--met-secondary);
     font-weight: 600;
     padding: 3px 8px;
-    background: #e3f2fd;
+    background: var(--met-bg-light);
     border-radius: 20px;
 }
 
@@ -69,9 +69,9 @@
 .met-counter-btn {
     width: 30px;
     height: 30px;
-    border: 2px solid #0066cc;
-    background: white;
-    color: #0066cc;
+    border: 2px solid var(--met-secondary);
+    background: var(--met-bg);
+    color: var(--met-secondary);
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -82,8 +82,8 @@
 }
 
 .met-counter-btn:hover {
-    background: #0066cc;
-    color: white;
+    background: var(--met-secondary);
+    color: var(--met-bg);
     transform: scale(1.1);
 }
 
@@ -101,30 +101,33 @@
     text-align: center;
     font-size: 16px;
     font-weight: 600;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--met-border);
     border-radius: 8px;
-    background: #f8f9fa;
-    color: #2c3e50;
+    background: var(--met-bg-light);
+    color: var(--met-text);
 }
 
 .met-counter-input:focus {
     outline: none;
-    border-color: #0066cc;
-    background: white;
+    border-color: var(--met-secondary);
+    background: var(--met-bg);
 }
 
 .met-extras-total {
     margin-top: 10px;
     padding: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 10px;
+    background: var(--met-bg);
+    border: 1px solid var(--met-border);
+    border-radius: 12px;
     text-align: center;
-    color: white;
+    color: var(--met-text);
     font-size: 18px;
+    box-shadow: 0 10px 25px var(--met-shadow);
 }
 
 .met-extras-total strong {
     display: block;
+    color: var(--met-primary);
 }
 
 #met-extras-total-amount {
@@ -141,7 +144,7 @@
 }
 
 .met-extras-confirm {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--met-primary) 0%, var(--met-secondary) 100%);
     color: white;
     border: none;
     padding: 10px 24px;

@@ -36,6 +36,11 @@ class MET_Conversation_Steps_Location {
         
         // Guardar origen
         $data['origin'] = $message;
+
+        if (isset($data['route_type']) && $data['route_type'] === 'point_to_airport') {
+            $data['destination'] = 'Aeropuerto de Palma';
+            return $this->ask_for_date($data);
+        }
         
         // Siempre mostrar buscador inteligente para destino (120+ ubicaciones)
         return array(
@@ -56,6 +61,11 @@ class MET_Conversation_Steps_Location {
     public function step_origin_text($message, $data) {
         // El mensaje ya viene validado del buscador, solo guardarlo
         $data['origin'] = $message;
+
+        if (isset($data['route_type']) && $data['route_type'] === 'point_to_airport') {
+            $data['destination'] = 'Aeropuerto de Palma';
+            return $this->ask_for_date($data);
+        }
         
         // Continuar al destino con buscador
         return array(

@@ -5,8 +5,8 @@
 
 /* Contenedor de resumen de reserva */
 .met-booking-summary {
-    background: #f8f9fa;
-    border-left: 4px solid #007bff;
+    background: var(--met-bg-light);
+    border-left: 4px solid var(--met-primary);
     padding: 15px;
     margin: 10px 0;
     border-radius: 4px;
@@ -15,25 +15,27 @@
 }
 
 .met-booking-summary strong {
-    color: #333;
+    color: var(--met-text);
     display: block;
     margin-bottom: 5px;
 }
 
 /* Desglose de precio */
 .met-price-breakdown {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: var(--met-bg);
+    color: var(--met-text);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
     margin: 15px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--met-border);
+    box-shadow: 0 10px 25px var(--met-shadow);
 }
 
 .met-price-breakdown strong {
     font-size: 16px;
     display: block;
     margin-bottom: 10px;
+    color: var(--met-primary);
 }
 
 .met-price-breakdown br {
