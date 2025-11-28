@@ -12,6 +12,13 @@
         
         // Estado actual
         currentValues: {},
+
+        translate: function(key, fallback) {
+            if (window.MetTranslations && typeof window.MetTranslations.t === 'function') {
+                return window.MetTranslations.t(key);
+            }
+            return fallback || key;
+        },
         
         /**
          * Crear el formulario de extras
@@ -34,14 +41,16 @@
             });
             
             // Total dinámico
+            const totalLabel = this.translate('extras_total', 'Total extras');
             html += '<div class="met-extras-total">';
-            html += '<strong>💰 Total extras: <span id="met-extras-total-amount">€0.00</span></strong>';
+            html += `<strong>💰 ${totalLabel}: <span id="met-extras-total-amount">€0.00</span></strong>`;
             html += '</div>';
             
             // Botón confirmar
+            const confirmLabel = this.translate('extras_confirm', 'Confirmar opciones');
             html += '<div class="met-extras-actions">';
             html += '<button type="button" class="met-extras-confirm" id="met-extras-confirm-btn">';
-            html += '<i class="fas fa-check"></i> Confirmar opciones';
+            html += `<i class="fas fa-check"></i> ${confirmLabel}`;
             html += '</button>';
             html += '</div>';
             

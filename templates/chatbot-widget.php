@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
     <!-- Diálogo flotante de invitación -->
     <div id="met-chatbot-invitation" class="met-chatbot-invitation" style="display: none;">
         <div class="met-chatbot-invitation-content">
-            <div class="met-chatbot-invitation-text">
+            <div class="met-chatbot-invitation-text" id="met-invitation-text">
                 ¿Te ayudo con tu reserva?
             </div>
             <div class="met-chatbot-invitation-close">
@@ -33,18 +33,37 @@ if (!defined('ABSPATH')) {
     <div id="met-chatbot-window" class="met-chatbot-window">
         <!-- Header -->
         <div class="met-chatbot-header">
-            <div class="met-chatbot-header-content">
-                <div class="met-chatbot-avatar">
-                    <i class="fas fa-robot"></i>
+            <div class="met-chatbot-header-top">
+                <div class="met-chatbot-header-content">
+                    <div class="met-chatbot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="met-chatbot-header-text">
+                        <h3 id="met-chatbot-title">Asistente MET Mallorca</h3>
+                        <span class="met-chatbot-status"><i class="fas fa-circle"></i> <span id="met-chatbot-status-text">En línea</span></span>
+                    </div>
                 </div>
-                <div class="met-chatbot-header-text">
-                    <h3>Asistente MET Mallorca</h3>
-                    <span class="met-chatbot-status"><i class="fas fa-circle"></i> En línea</span>
+                <button id="met-chatbot-minimize" class="met-chatbot-minimize" aria-label="Minimizar chat">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <!-- Selector de idioma en fila separada -->
+            <div class="met-language-selector-wrapper">
+                <div class="met-language-selector">
+                    <button class="met-lang-btn active" data-lang="es" title="Español">
+                        <span class="met-flag">🇪🇸</span>
+                        <span class="met-lang-label">ES</span>
+                    </button>
+                    <button class="met-lang-btn" data-lang="en" title="English">
+                        <span class="met-flag">🇬🇧</span>
+                        <span class="met-lang-label">EN</span>
+                    </button>
+                    <button class="met-lang-btn" data-lang="de" title="Deutsch">
+                        <span class="met-flag">🇩🇪</span>
+                        <span class="met-lang-label">DE</span>
+                    </button>
                 </div>
             </div>
-            <button id="met-chatbot-minimize" class="met-chatbot-minimize" aria-label="Minimizar chat">
-                <i class="fas fa-chevron-down"></i>
-            </button>
         </div>
         
         <!-- Mensajes -->
@@ -78,7 +97,7 @@ if (!defined('ABSPATH')) {
         
         <!-- Footer con RGPD -->
         <div class="met-chatbot-footer">
-            <small>Al continuar aceptas la <a href="<?php echo home_url('/politica-de-privacidad/'); ?>" target="_blank">Política de Privacidad</a></small>
+            <small><span id="met-footer-privacy-text">Al continuar aceptas la</span> <a href="<?php echo home_url('/politica-de-privacidad/'); ?>" target="_blank" id="met-footer-privacy-link">Política de Privacidad</a></small>
         </div>
     </div>
 </div>

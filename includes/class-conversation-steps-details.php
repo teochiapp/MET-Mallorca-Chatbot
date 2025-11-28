@@ -10,22 +10,27 @@ if (!defined('ABSPATH')) {
 class MET_Conversation_Steps_Details {
     
     private $validator;
+    private $translations;
     
     public function __construct() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-validator.php';
         $this->validator = new MET_Booking_Validator();
+        $this->translations = new MET_Translations();
     }
     
     /**
      * Step: Fecha
      */
     public function step_date($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Validar fecha
         $validation = $this->validator->validate_date($message);
         
         if (!$validation['valid']) {
             return array(
-                'message' => $validation['error'] . '<br><br>Por favor, intenta de nuevo:',
+                'message' => $validation['error'] . '<br><br>' . MET_Translations::t('date_error_retry'),
                 'nextStep' => 'date',
                 'options' => array(),
                 'data' => $data,
@@ -39,9 +44,9 @@ class MET_Conversation_Steps_Details {
         
         // Continuar a hora
         return array(
-            'message' => '🕐 <strong>¿A qué hora necesitas el traslado?</strong><br><br>' .
-                        'Selecciona una hora disponible (intervalos de 30 minutos).<br>' .
-                        '<em>Ejemplo: 14:00, 14:30, 15:00…</em>',
+            'message' => '🕐 <strong>' . MET_Translations::t('time_title') . '</strong><br><br>' .
+                        MET_Translations::t('time_message') . '<br>' .
+                        '<em>' . MET_Translations::t('time_example') . '</em>',
             'nextStep' => 'time',
             'options' => array(),
             'data' => $data,
@@ -55,12 +60,14 @@ class MET_Conversation_Steps_Details {
      * Step: Hora
      */
     public function step_time($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Validar hora
         $validation = $this->validator->validate_time($message);
         
         if (!$validation['valid']) {
             return array(
-                'message' => $validation['error'] . '<br><br>Por favor, intenta de nuevo:',
+                'message' => $validation['error'] . '<br><br>' . MET_Translations::t('time_error_retry'),
                 'nextStep' => 'time',
                 'options' => array(),
                 'data' => $data,
@@ -75,14 +82,14 @@ class MET_Conversation_Steps_Details {
         
         // Continuar a pasajeros
         return array(
-            'message' => '👥 <strong>¿Cuántas personas viajan?</strong><br><br>' .
-                        'Escribe el número de pasajeros:',
+            'message' => '👥 <strong>' . MET_Translations::t('passengers_title') . '</strong><br><br>' .
+                        MET_Translations::t('passengers_question'),
             'nextStep' => 'passengers',
             'options' => array(),
             'data' => $data,
             'inputType' => 'number',
             'showBackButton' => true,
-            'placeholder' => 'Ej: 4'
+            'placeholder' => MET_Translations::t('passengers_example')
         );
     }
     
@@ -90,12 +97,14 @@ class MET_Conversation_Steps_Details {
      * Step: Pasajeros
      */
     public function step_passengers($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Validar pasajeros
         $validation = $this->validator->validate_passengers($message);
         
         if (!$validation['valid']) {
             return array(
-                'message' => $validation['error'] . '<br><br>Por favor, intenta de nuevo:',
+                'message' => $validation['error'] . '<br><br>' . MET_Translations::t('passengers_error_retry'),
                 'nextStep' => 'passengers',
                 'options' => array(),
                 'data' => $data,
@@ -109,14 +118,14 @@ class MET_Conversation_Steps_Details {
         // Si son más de 20 personas, derivar a presupuesto personalizado
         if ($data['passengers'] > 20) {
             return array(
-                'message' => '👥 <strong>Grupo Grande</strong><br><br>' .
-                            'Para grupos de más de 20 personas, te recomendamos solicitar un presupuesto personalizado.<br><br>' .
-                            'Por favor, contacta con nosotros en:<br>' .
+                'message' => '👥 <strong>' . MET_Translations::t('passengers_large_group') . '</strong><br><br>' .
+                            MET_Translations::t('passengers_large_message') . '<br><br>' .
+                            MET_Translations::t('passengers_contact') . '<br>' .
                             '📞 <a href="tel:+34971123456">+34 971 123 456</a><br>' .
                             '📧 <a href="mailto:reservas@metmallorca.com">reservas@metmallorca.com</a>',
                 'nextStep' => 'end',
                 'options' => array(
-                    array('text' => '🔄 Empezar nueva reserva', 'value' => 'restart')
+                    array('text' => '🔄 ' . MET_Translations::t('modify_start_over'), 'value' => 'restart')
                 ),
                 'data' => $data,
                 'showBackButton' => false

@@ -10,21 +10,26 @@ if (!defined('ABSPATH')) {
 class MET_Conversation_Steps_Location {
     
     private $validator;
+    private $translations;
     
     public function __construct() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-validator.php';
         $this->validator = new MET_Booking_Validator();
+        $this->translations = new MET_Translations();
     }
     
     /**
      * Step: Origen
      */
     public function step_origin($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Si seleccionó "custom_origin", mostrar buscador de ubicaciones
         if ($message === 'custom_origin') {
             return array(
-                'message' => '📍 <strong>Ubicación de Origen</strong><br><br>' .
-                            'Busca y selecciona tu ubicación de recogida:',
+                'message' => '📍 <strong>' . MET_Translations::t('location_origin_title') . '</strong><br><br>' .
+                            MET_Translations::t('location_origin_question'),
                 'nextStep' => 'origin_text',
                 'options' => array(),
                 'data' => $data,
@@ -44,8 +49,8 @@ class MET_Conversation_Steps_Location {
         
         // Siempre mostrar buscador inteligente para destino (120+ ubicaciones)
         return array(
-            'message' => '📍 <strong>¿Cuál es tu destino?</strong><br><br>' .
-                        'Busca y selecciona tu ubicación de destino:',
+            'message' => '📍 <strong>' . MET_Translations::t('location_destination_title') . '</strong><br><br>' .
+                        MET_Translations::t('location_destination_question'),
             'nextStep' => 'destination_text',
             'options' => array(),
             'data' => $data,
@@ -69,8 +74,8 @@ class MET_Conversation_Steps_Location {
         
         // Continuar al destino con buscador
         return array(
-            'message' => '📍 <strong>¿Cuál es tu destino?</strong><br><br>' .
-                        'Busca y selecciona tu ubicación de destino:',
+            'message' => '📍 <strong>' . MET_Translations::t('location_destination_title') . '</strong><br><br>' .
+                        MET_Translations::t('location_destination_question'),
             'nextStep' => 'destination_text',
             'options' => array(),
             'data' => $data,
@@ -107,10 +112,12 @@ class MET_Conversation_Steps_Location {
      * Preguntar por la fecha
      */
     private function ask_for_date($data) {
+        MET_Translations::init_from_data($data);
+        
         return array(
-            'message' => '📅 <strong>¿Qué día necesitas el traslado?</strong><br><br>' .
-                        'Escribe la fecha en formato <strong>DD/MM/YYYY</strong><br><br>' .
-                        '<em>Ejemplo: 25/12/2025</em>',
+            'message' => '📅 <strong>' . MET_Translations::t('date_title') . '</strong><br><br>' .
+                        MET_Translations::t('date_format') . '<br><br>' .
+                        '<em>' . MET_Translations::t('date_example') . '</em>',
             'nextStep' => 'date',
             'options' => array(),
             'data' => $data,

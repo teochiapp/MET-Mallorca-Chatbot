@@ -11,19 +11,24 @@ class MET_Conversation_Steps_Summary {
     
     private $pricing_engine;
     private $checkout_generator;
+    private $translations;
     
     public function __construct() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-pricing-engine.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-checkout-generator.php';
         
         $this->pricing_engine = new MET_Pricing_Engine();
         $this->checkout_generator = new MET_Checkout_Generator();
+        $this->translations = new MET_Translations();
     }
     
     /**
      * Step: Resumen y cálculo de precio
      */
     public function step_summary($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Validar que tengamos todos los datos necesarios
         $required_fields = array('origin', 'destination', 'date', 'time', 'passengers');
         $missing_fields = array();
@@ -36,12 +41,11 @@ class MET_Conversation_Steps_Summary {
         
         if (!empty($missing_fields)) {
             return array(
-                'message' => '❌ <strong>Error:</strong> Faltan datos necesarios para calcular el precio.<br><br>' .
-                            'Campos faltantes: ' . implode(', ', $missing_fields) . '<br><br>' .
-                            'Por favor, reinicia la conversación.',
+                'message' => '❌ <strong>' . MET_Translations::t('summary_error_missing') . '</strong><br><br>' .
+                            MET_Translations::t('summary_error_fields') . ': ' . implode(', ', $missing_fields) . '<br><br>',
                 'nextStep' => 'welcome',
                 'options' => array(
-                    array('text' => '🔄 Reiniciar', 'value' => 'restart')
+                    array('text' => '🔄 ' . MET_Translations::t('btn_restart'), 'value' => 'restart')
                 ),
                 'data' => array()
             );
@@ -52,12 +56,11 @@ class MET_Conversation_Steps_Summary {
             $price_breakdown = $this->pricing_engine->calculate_price($data);
         } catch (Exception $e) {
             return array(
-                'message' => '❌ <strong>Error al calcular el precio:</strong><br><br>' .
-                            $e->getMessage() . '<br><br>' .
-                            'Por favor, intenta de nuevo.',
+                'message' => '❌ <strong>' . MET_Translations::t('summary_error_calculate') . ':</strong><br><br>' .
+                            $e->getMessage() . '<br><br>',
                 'nextStep' => 'welcome',
                 'options' => array(
-                    array('text' => '🔄 Reiniciar', 'value' => 'restart')
+                    array('text' => '🔄 ' . MET_Translations::t('btn_restart'), 'value' => 'restart')
                 ),
                 'data' => array()
             );
@@ -72,21 +75,21 @@ class MET_Conversation_Steps_Summary {
         // Generar desglose de precio
         $price_html = $this->pricing_engine->format_price_breakdown($price_breakdown);
         
-        $message = '✅ <strong>Resumen de tu Reserva</strong><br><br>' .
+        $message = '✅ <strong>' . MET_Translations::t('summary_title') . '</strong><br><br>' .
                    $summary_html . '<br>' .
                    $price_html . '<br><br>' .
-                   '¿Todo correcto?';
+                   MET_Translations::t('summary_question');
         
         return array(
             'message' => $message,
             'nextStep' => 'confirm',
             'options' => array(
                 array(
-                    'text' => '<i class="fas fa-check-circle"></i> Sí, continuar al checkout',
+                    'text' => MET_Translations::t('summary_continue_checkout'),
                     'value' => 'confirm'
                 ),
                 array(
-                    'text' => '<i class="fas fa-edit"></i> Modificar datos',
+                    'text' => MET_Translations::t('summary_modify_data'),
                     'value' => 'modify'
                 )
             ),
@@ -99,15 +102,17 @@ class MET_Conversation_Steps_Summary {
      * Step: Confirmación
      */
     public function step_confirm($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         if ($message === 'modify') {
             return array(
-                'message' => '✏️ <strong>¿Qué deseas modificar?</strong>',
+                'message' => '✏️ <strong>' . MET_Translations::t('modify_title') . '</strong>',
                 'nextStep' => 'modify_choice',
                 'options' => array(
-                    array('text' => '📍 Origen/Destino', 'value' => 'locations'),
-                    array('text' => '📅 Fecha/Hora', 'value' => 'datetime'),
-                    array('text' => '👥 Pasajeros', 'value' => 'passengers'),
-                    array('text' => '🔄 Empezar de nuevo', 'value' => 'restart')
+                    array('text' => '📍 ' . MET_Translations::t('modify_locations'), 'value' => 'locations'),
+                    array('text' => '📅 ' . MET_Translations::t('modify_datetime'), 'value' => 'datetime'),
+                    array('text' => '👥 ' . MET_Translations::t('modify_passengers'), 'value' => 'passengers'),
+                    array('text' => '🔄 ' . MET_Translations::t('modify_start_over'), 'value' => 'restart')
                 ),
                 'data' => $data,
                 'showBackButton' => true
@@ -117,10 +122,10 @@ class MET_Conversation_Steps_Summary {
         // Generar URL de checkout
         if (!isset($data['price_breakdown'])) {
             return array(
-                'message' => '❌ Error: No se pudo calcular el precio. Por favor, intenta de nuevo.',
+                'message' => '❌ ' . MET_Translations::t('summary_error_calculate'),
                 'nextStep' => 'welcome',
                 'options' => array(
-                    array('text' => '🔄 Empezar de nuevo', 'value' => 'restart')
+                    array('text' => '🔄 ' . MET_Translations::t('modify_start_over'), 'value' => 'restart')
                 ),
                 'data' => array()
             );
@@ -128,21 +133,21 @@ class MET_Conversation_Steps_Summary {
         
         $checkout_url = $this->checkout_generator->generate_checkout_url($data, $data['price_breakdown']);
         
-        $message = '🎉 <strong>¡Perfecto!</strong><br><br>' .
-                   'Tu reserva está lista. Haz clic en el botón de abajo para ir al checkout seguro y completar el pago.<br><br>' .
+        $message = '🎉 <strong>' . MET_Translations::t('confirm_perfect') . '</strong><br><br>' .
+                   MET_Translations::t('confirm_message') . '<br><br>' .
                    '<div class="met-checkout-link-container">' .
                    '<a href="' . esc_url($checkout_url) . '" class="met-checkout-link" target="_blank">' .
-                   '<i class="fas fa-shopping-cart"></i> Ir al Checkout (€' . number_format($data['price_breakdown']['total'], 2) . ')' .
+                   '<i class="fas fa-shopping-cart"></i> ' . MET_Translations::t('confirm_checkout_button') . ' (€' . number_format($data['price_breakdown']['total'], 2) . ')' .
                    '</a>' .
                    '</div><br>' .
-                   '<small>💳 Pago seguro con Redsys/Getnet a través de WooCommerce</small><br>' .
-                   '<small>🔒 Tus datos están protegidos</small>';
+                   '<small>💳 ' . MET_Translations::t('confirm_payment_secure') . '</small><br>' .
+                   '<small>🔒 ' . MET_Translations::t('confirm_data_protected') . '</small>';
         
         return array(
             'message' => $message,
             'nextStep' => 'end',
             'options' => array(
-                array('text' => '🔄 Hacer otra reserva', 'value' => 'restart')
+                array('text' => '🔄 ' . MET_Translations::t('confirm_another_booking'), 'value' => 'restart')
             ),
             'data' => $data,
             'showBackButton' => false,
@@ -154,16 +159,18 @@ class MET_Conversation_Steps_Summary {
      * Step: Elección de modificación
      */
     public function step_modify_choice($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         switch ($message) {
             case 'locations':
                 // Volver a origen
                 unset($data['origin'], $data['destination']);
                 return array(
-                    'message' => '📍 <strong>Modificar Ubicaciones</strong><br><br>¿Desde dónde te recogemos?',
+                    'message' => '📍 <strong>' . MET_Translations::t('modify_locations_title') . '</strong><br><br>' . MET_Translations::t('modify_locations_question'),
                     'nextStep' => 'origin',
                     'options' => array(
-                        array('text' => '<i class="fas fa-plane"></i> Aeropuerto', 'value' => 'Aeropuerto de Palma'),
-                        array('text' => '<i class="fas fa-hotel"></i> Hotel / Alojamiento', 'value' => 'custom_origin')
+                        array('text' => MET_Translations::t('location_airport'), 'value' => 'Aeropuerto de Palma'),
+                        array('text' => MET_Translations::t('location_hotel'), 'value' => 'custom_origin')
                     ),
                     'data' => $data,
                     'showBackButton' => true
@@ -173,7 +180,7 @@ class MET_Conversation_Steps_Summary {
                 // Volver a fecha
                 unset($data['date'], $data['time'], $data['datetime']);
                 return array(
-                    'message' => '📅 <strong>Modificar Fecha y Hora</strong><br><br>¿Qué día necesitas el traslado?<br><br><em>Formato: DD/MM/YYYY</em>',
+                    'message' => '📅 <strong>' . MET_Translations::t('modify_datetime_title') . '</strong><br><br>' . MET_Translations::t('modify_datetime_question') . '<br><br><em>' . MET_Translations::t('date_format') . '</em>',
                     'nextStep' => 'date',
                     'options' => array(),
                     'data' => $data,
@@ -186,7 +193,7 @@ class MET_Conversation_Steps_Summary {
                 // Volver a pasajeros
                 unset($data['passengers']);
                 return array(
-                    'message' => '👥 <strong>Modificar Pasajeros</strong><br><br>¿Cuántas personas viajan?',
+                    'message' => '👥 <strong>' . MET_Translations::t('modify_passengers_title') . '</strong><br><br>' . MET_Translations::t('modify_passengers_question'),
                     'nextStep' => 'passengers',
                     'options' => array(),
                     'data' => $data,
@@ -207,24 +214,26 @@ class MET_Conversation_Steps_Summary {
      * Generar HTML del resumen
      */
     private function generate_summary_html($data, $price_breakdown) {
+        MET_Translations::init_from_data($data);
+        
         $html = '<div class="met-booking-summary">';
         
         // Ruta
-        $html .= '<strong>📍 Ruta:</strong><br>';
+        $html .= '<strong>📍 ' . MET_Translations::t('summary_route') . ':</strong><br>';
         $html .= $data['origin'] . ' <i class="fas fa-arrow-right"></i> ' . $data['destination'] . '<br><br>';
         
         // Fecha y hora
-        $html .= '<strong>📅 Fecha y Hora:</strong><br>';
+        $html .= '<strong>📅 ' . MET_Translations::t('summary_datetime') . ':</strong><br>';
         $html .= $data['datetime'] . '<br><br>';
         
         // Pasajeros y vehículo
-        $html .= '<strong>👥 Pasajeros:</strong> ' . $data['passengers'] . '<br>';
-        $html .= '<strong>🚗 Vehículo:</strong> ' . $this->get_vehicle_name($price_breakdown['vehicle_type']) . '<br><br>';
+        $html .= '<strong>👥 ' . MET_Translations::t('summary_passengers') . ':</strong> ' . $data['passengers'] . '<br>';
+        $html .= '<strong>🚗 ' . MET_Translations::t('summary_vehicle') . ':</strong> ' . $this->get_vehicle_name($price_breakdown['vehicle_type']) . '<br><br>';
         
         // Opciones extras (si existen)
         if (isset($data['extras']) && is_array($data['extras'])) {
             $has_extras = false;
-            $extras_html = '<strong>🎁 Opciones Extras:</strong><br>';
+            $extras_html = '<strong>🎁 ' . MET_Translations::t('summary_extras') . ':</strong><br>';
             
             // Extras informativos (gratis)
             if (!empty($data['extras']['equipaje_de_mano']) && $data['extras']['equipaje_de_mano'] > 0) {
@@ -268,14 +277,15 @@ class MET_Conversation_Steps_Summary {
      * Obtener nombre del vehículo
      */
     private function get_vehicle_name($vehicle_type) {
-        $names = array(
-            'standard' => 'Vehículo Estándar (1-4 pax)',
-            'van' => 'Van (5-8 pax)',
-            'minibus' => 'Minibus (9-16 pax)',
-            'bus' => 'Bus (17-20 pax)'
-        );
+        $key = 'vehicle_' . $vehicle_type;
+        $translated = MET_Translations::t($key);
         
-        return isset($names[$vehicle_type]) ? $names[$vehicle_type] : 'Vehículo';
+        // Si no hay traducción, devolver el tipo con formato
+        if ($translated === $key) {
+            return ucfirst($vehicle_type);
+        }
+        
+        return $translated;
     }
     
     /**

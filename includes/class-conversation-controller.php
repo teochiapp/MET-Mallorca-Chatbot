@@ -44,6 +44,7 @@ class MET_Conversation_Controller {
      * Cargar todos los módulos
      */
     private function load_modules() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-validator.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-welcome.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-steps-location.php';
@@ -71,11 +72,16 @@ class MET_Conversation_Controller {
         // Sanitizar entrada
         $message = trim($message);
         $step = sanitize_text_field($step);
+        $current_language = isset($data['language']) ? sanitize_text_field($data['language']) : null;
         
         // Validar estado
         if (!in_array($step, $this->valid_states)) {
             $step = 'welcome';
             $data = array();
+        }
+
+        if ($current_language && empty($data['language'])) {
+            $data['language'] = $current_language;
         }
         
         // Comandos especiales globales
@@ -96,7 +102,7 @@ class MET_Conversation_Controller {
         
         // Comando: Reiniciar
         if (in_array($message_lower, array('reiniciar', 'empezar de nuevo', 'restart', 'reset'))) {
-            return $this->welcome_steps->step_welcome();
+            return $this->welcome_steps->step_welcome('', $data);
         }
         
         // Comando: Volver atrás
@@ -119,7 +125,7 @@ class MET_Conversation_Controller {
         // Módulo de bienvenida
         if (in_array($step, array('welcome', 'route_type'))) {
             if ($step === 'welcome') {
-                return $this->welcome_steps->step_welcome();
+                return $this->welcome_steps->step_welcome($message, $data);
             }
             return $this->welcome_steps->step_route_type($message, $data);
         }
@@ -174,12 +180,12 @@ class MET_Conversation_Controller {
                 'options' => array(
                     array('text' => '🔄 Nueva reserva', 'value' => 'restart')
                 ),
-                'data' => array()
+                'data' => $data
             );
         }
         
         // Fallback: volver al inicio
-        return $this->welcome_steps->step_welcome();
+        return $this->welcome_steps->step_welcome('', $data);
     }
     
     /**

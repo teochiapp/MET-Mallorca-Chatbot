@@ -8,6 +8,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
+
 class MET_Pricing_Engine {
     
     /**
@@ -594,25 +596,25 @@ class MET_Pricing_Engine {
      */
     public function format_price_breakdown($breakdown) {
         $html = '<div class="met-price-breakdown">';
-        $html .= '<strong>💰 Desglose del precio:</strong><br><br>';
+        $html .= '<strong>💰 ' . MET_Translations::t('price_breakdown_title') . ':</strong><br><br>';
         
         // Precio base
         if (isset($breakdown['location'])) {
-            $html .= '📍 Ubicación: ' . $breakdown['location'] . '<br>';
+            $html .= '📍 ' . MET_Translations::t('price_location') . ': ' . $breakdown['location'] . '<br>';
         }
         if (isset($breakdown['distance_km'])) {
-            $html .= '📏 Distancia: ~' . $breakdown['distance_km'] . ' km<br>';
+            $html .= '📏 ' . MET_Translations::t('price_distance') . ': ~' . $breakdown['distance_km'] . ' ' . MET_Translations::t('price_distance_unit') . '<br>';
         }
-        $html .= '💵 Precio base: €' . number_format($breakdown['base_price'], 2) . '<br>';
+        $html .= '💵 ' . MET_Translations::t('price_base') . ': €' . number_format($breakdown['base_price'], 2) . '<br>';
         
         // Vehículo
         $vehicle_names = array(
-            'standard' => 'Vehículo estándar (1-4 pax)',
-            'van' => 'Van (5-8 pax)',
-            'minibus' => 'Minibus (9-16 pax)',
-            'bus' => 'Bus (17-20 pax)'
+            'standard' => MET_Translations::t('vehicle_standard'),
+            'van' => MET_Translations::t('vehicle_van'),
+            'minibus' => MET_Translations::t('vehicle_minibus'),
+            'bus' => MET_Translations::t('vehicle_bus')
         );
-        $html .= '🚗 Vehículo: ' . $vehicle_names[$breakdown['vehicle_type']];
+        $html .= '🚗 ' . MET_Translations::t('price_vehicle') . ': ' . $vehicle_names[$breakdown['vehicle_type']];
         if ($breakdown['vehicle_supplement'] > 0) {
             $html .= ' (+€' . number_format($breakdown['vehicle_supplement'], 2) . ')';
         }
@@ -620,25 +622,25 @@ class MET_Pricing_Engine {
         
         // Suplemento nocturno
         if ($breakdown['night_supplement'] > 0) {
-            $html .= '🌙 Suplemento nocturno: +€' . number_format($breakdown['night_supplement'], 2) . '<br>';
+            $html .= '🌙 ' . MET_Translations::t('price_night_supplement') . ': +€' . number_format($breakdown['night_supplement'], 2) . '<br>';
         }
         
         // Pasajeros extra
         if ($breakdown['passenger_supplement'] > 0) {
-            $html .= '👥 Pasajeros extra: +€' . number_format($breakdown['passenger_supplement'], 2) . '<br>';
+            $html .= '👥 ' . MET_Translations::t('price_passenger_supplement') . ': +€' . number_format($breakdown['passenger_supplement'], 2) . '<br>';
         }
         
         // Extras
         if (!empty($breakdown['extras'])) {
             foreach ($breakdown['extras'] as $extra_name => $extra_cost) {
                 $extra_labels = array(
-                    'pet' => '🐾 Mascota',
-                    'child_seat' => '👶 Silla infantil',
-                    'booster_seat' => '🪑 Elevador',
-                    'luggage_extra' => '🧳 Equipaje extra',
-                    'meet_greet' => '👋 Meet & Greet',
-                    'bolsa_golf' => '⛳ Bolsa de Golf',
-                    'bicicleta' => '🚴 Bicicleta'
+                    'pet' => MET_Translations::t('price_extra_pet'),
+                    'child_seat' => MET_Translations::t('price_extra_child_seat'),
+                    'booster_seat' => MET_Translations::t('price_extra_booster_seat'),
+                    'luggage_extra' => MET_Translations::t('price_extra_luggage_extra'),
+                    'meet_greet' => MET_Translations::t('price_extra_meet_greet'),
+                    'bolsa_golf' => MET_Translations::t('price_extra_bolsa_golf'),
+                    'bicicleta' => MET_Translations::t('price_extra_bicicleta')
                 );
                 $label = isset($extra_labels[$extra_name]) ? $extra_labels[$extra_name] : ucfirst($extra_name);
                 $html .= $label . ': +€' . number_format($extra_cost, 2) . '<br>';
@@ -646,7 +648,7 @@ class MET_Pricing_Engine {
         }
         
         $html .= '<br>';
-        $html .= '<strong style="font-size: 1.2em;">💳 TOTAL: €' . number_format($breakdown['total'], 2) . '</strong>';
+        $html .= '<strong style="font-size: 1.2em;">💳 ' . MET_Translations::t('price_total') . ': €' . number_format($breakdown['total'], 2) . '</strong>';
         $html .= '</div>';
         
         return $html;

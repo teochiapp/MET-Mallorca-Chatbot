@@ -9,30 +9,40 @@ if (!defined('ABSPATH')) {
 
 class MET_Conversation_Steps_Welcome {
     
+    private $translations;
+    
+    public function __construct() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
+        $this->translations = new MET_Translations();
+    }
+    
     /**
      * Step: Bienvenida inicial
      */
-    public function step_welcome() {
+    public function step_welcome($message = '', $data = array()) {
+        // Inicializar idioma desde datos
+        MET_Translations::init_from_data($data);
+        
         return array(
-            'message' => '👋 <strong>¡Bienvenido a MET Mallorca!</strong><br><br>' .
-                        'Soy tu asistente de reservas. Te ayudaré a calcular el precio de tu traslado y generar tu reserva en menos de 2 minutos.<br><br>' .
-                        '¿Qué tipo de traslado necesitas?',
+            'message' => '👋 <strong>' . MET_Translations::t('welcome_title') . '</strong><br><br>' .
+                        MET_Translations::t('welcome_message') . '<br><br>' .
+                        MET_Translations::t('welcome_question'),
             'nextStep' => 'route_type',
             'options' => array(
                 array(
-                    'text' => '<i class="fas fa-plane"></i> Aeropuerto ↔ Destino',
+                    'text' => MET_Translations::t('option_airport'),
                     'value' => 'airport'
                 ),
                 array(
-                    'text' => '<i class="fas fa-car"></i> Punto → Aeropuerto (PMI)',
+                    'text' => MET_Translations::t('option_point_to_airport'),
                     'value' => 'point_to_airport'
                 ),
                 array(
-                    'text' => '<i class="fas fa-search"></i> Verificar mi reserva',
+                    'text' => MET_Translations::t('option_verify'),
                     'value' => 'verify'
                 )
             ),
-            'data' => array(),
+            'data' => $data,
             'showBackButton' => false
         );
     }
@@ -41,14 +51,17 @@ class MET_Conversation_Steps_Welcome {
      * Step: Tipo de ruta seleccionado
      */
     public function step_route_type($message, $data) {
+        // Inicializar idioma desde datos
+        MET_Translations::init_from_data($data);
+        
         $data['route_type'] = $message;
         
         // Flujo de verificación
         if ($message === 'verify') {
             return array(
-                'message' => '🔍 <strong>Verificar Reserva</strong><br><br>' .
-                            'Por favor, escribe tu <strong>número de reserva</strong> y tu <strong>email</strong> separados por coma.<br><br>' .
-                            '<em>Ejemplo: MET-123456, email@ejemplo.com</em>',
+                'message' => '🔍 <strong>' . MET_Translations::t('verify_title') . '</strong><br><br>' .
+                            MET_Translations::t('verify_message') . '<br><br>' .
+                            '<em>' . MET_Translations::t('verify_example') . '</em>',
                 'nextStep' => 'verify_booking_code',
                 'options' => array(),
                 'data' => $data,
@@ -60,8 +73,8 @@ class MET_Conversation_Steps_Welcome {
         // Flujo de punto → aeropuerto - Usar buscador inteligente
         if ($message === 'point_to_airport') {
             return array(
-                'message' => '🚗 <strong>Traslado hacia el Aeropuerto</strong><br><br>' .
-                            'Perfecto. Busca y selecciona tu ubicación de origen:',
+                'message' => '🚗 <strong>' . MET_Translations::t('route_point_title') . '</strong><br><br>' .
+                            MET_Translations::t('route_point_question'),
                 'nextStep' => 'origin_text',
                 'options' => array(),
                 'data' => $data,
@@ -75,8 +88,8 @@ class MET_Conversation_Steps_Welcome {
         $data['origin'] = 'Aeropuerto de Palma';
 
         return array(
-            'message' => '✈️ <strong>Traslado desde el Aeropuerto</strong><br><br>' .
-                        'Perfecto, ¿a qué destino te llevamos?',
+            'message' => '✈️ <strong>' . MET_Translations::t('route_airport_title') . '</strong><br><br>' .
+                        MET_Translations::t('route_airport_question'),
             'nextStep' => 'destination_text',
             'options' => array(),
             'data' => $data,

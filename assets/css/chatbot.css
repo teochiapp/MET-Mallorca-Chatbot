@@ -208,17 +208,20 @@
     box-sizing: border-box;
 }
 
-.met-chatbot-location-wrapper .met-location-dropdown {
-    width: 100%;
-    max-height: 220px;
-    box-sizing: border-box;
-    z-index: 5;
-}
-
+.met-chatbot-location-wrapper .met-location-dropdown,
 .met-chatbot-time-wrapper .met-time-dropdown {
     width: 100%;
-    max-height: 220px;
+    max-height: 300px;
     box-sizing: border-box;
+}
+
+.met-chatbot-location-wrapper .met-location-searcher,
+.met-chatbot-time-wrapper .met-time-searcher {
+    margin: 4px 0 14px;
+}
+
+.met-chatbot-location-wrapper .met-location-dropdown,
+.met-chatbot-time-wrapper .met-time-dropdown {
     z-index: 5;
 }
 
@@ -367,9 +370,9 @@
     position: absolute;
     bottom: 80px;
     right: 0;
-    width: 380px;
+    width: 420px;
     max-width: calc(100vw - 40px);
-    height: 600px;
+    height: 650px;
     max-height: calc(100vh - 120px);
     background: var(--met-bg);
     border-radius: 16px;
@@ -399,17 +402,23 @@
 .met-chatbot-header {
     background: linear-gradient(135deg, var(--met-secondary) 0%, var(--met-primary) 100%);
     color: white;
-    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.met-chatbot-header-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 24px 12px 24px;
 }
 
 .met-chatbot-header-content {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex: 1;
 }
 
 .met-chatbot-avatar {
@@ -827,6 +836,73 @@
     max-width: 100%;
 }
 
+/* ========================================
+   LANGUAGE SELECTOR
+   ======================================== */
+
+
+.met-language-selector-wrapper {
+    padding: 0 20px 12px 20px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.met-language-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 6px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.met-lang-btn {
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 9px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 52px;
+}
+
+.met-lang-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.met-lang-btn.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.met-flag {
+    font-size: 20px;
+    line-height: 1;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.met-lang-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: white;
+    opacity: 0.85;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .met-chatbot-widget {
@@ -853,5 +929,24 @@
     .met-booking-link {
         display: block;
         text-align: center;
+    }
+    
+    /* Ajustar selector de idioma en móvil */
+    .met-language-selector {
+        gap: 5px;
+        padding: 4px;
+    }
+    
+    .met-lang-btn {
+        padding: 5px 7px;
+        min-width: 48px;
+    }
+    
+    .met-flag {
+        font-size: 18px;
+    }
+    
+    .met-lang-label {
+        font-size: 8px;
     }
 }

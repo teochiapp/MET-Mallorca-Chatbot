@@ -10,15 +10,28 @@
         state: {
             isOpen: false,
             currentStep: 'welcome',
-            conversationData: {},
+            conversationData: {
+                language: (window.MetTranslations && window.MetTranslations.getLanguage && window.MetTranslations.getLanguage()) || 'es'
+            },
             messages: []
         },
         
         // Inicializar
         init: function() {
+            this.syncLanguageWithTranslations();
             this.bindEvents();
+            this.updateUILanguage();
             this.startConversation();
             this.showInvitation();
+        },
+
+        syncLanguageWithTranslations: function() {
+            if (window.MetTranslations && typeof window.MetTranslations.getLanguage === 'function') {
+                const lang = window.MetTranslations.getLanguage();
+                this.state.conversationData.language = lang || 'es';
+                $('.met-lang-btn').removeClass('active');
+                $(`.met-lang-btn[data-lang="${this.state.conversationData.language}"]`).addClass('active');
+            }
         },
         
         // Eventos
@@ -78,6 +91,17 @@
                     self.handleOptionClick(value, text);
                 }
             });
+            
+            // Selector de idioma
+            $(document).on('click', '.met-lang-btn', function() {
+                const lang = $(this).data('lang');
+                self.changeLanguage(lang);
+            });
+            
+            // Escuchar cambios de idioma
+            $(document).on('met-language-changed', function(e, lang) {
+                self.updateUILanguage();
+            });
         },
         
         // Toggle chatbot
@@ -92,7 +116,7 @@
         
         // Iniciar conversación
         startConversation: function() {
-            this.sendMessage('', 'welcome', {});
+            this.sendMessage('', 'welcome', this.state.conversationData);
         },
         
         // Manejar clic en opción
@@ -125,6 +149,14 @@
         // Enviar mensaje al servidor
         sendMessage: function(message, step, data) {
             const self = this;
+            const payloadData = Object.assign({}, data);
+
+            // Asegurar idioma
+            if (!payloadData.language && window.MetTranslations) {
+                payloadData.language = window.MetTranslations.getLanguage();
+            }
+
+            this.state.conversationData = payloadData;
             
             // Mostrar typing indicator
             this.showTyping();
@@ -137,7 +169,7 @@
                     nonce: metChatbot.nonce,
                     message: message,
                     step: step,
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(payloadData)
                 },
                 success: function(response) {
                     self.hideTyping();
@@ -159,7 +191,12 @@
         handleResponse: function(data) {
             // Actualizar estado
             this.state.currentStep = data.nextStep;
-            this.state.conversationData = data.data || {};
+            const previousLang = this.state.conversationData.language;
+            const newData = data.data || {};
+            if (previousLang && !newData.language) {
+                newData.language = previousLang;
+            }
+            this.state.conversationData = newData;
             
             // Si es un formulario embebido, manejarlo de forma especial
             if (data.showForm) {
@@ -523,7 +560,10 @@
         
         // Construir resumen visual de extras seleccionados
         buildExtrasSummary: function(extrasData, extrasConfig) {
-            let summary = '<strong>Opciones extras seleccionadas:</strong><br>';
+            const t = window.MetTranslations && typeof window.MetTranslations.t === 'function'
+                ? window.MetTranslations.t.bind(window.MetTranslations)
+                : (key) => key;
+            let summary = `<strong>${t('extras_selected_summary') || 'Opciones extras seleccionadas'}</strong><br>`;
             let hasSelection = false;
             
             Object.keys(extrasData).forEach(key => {
@@ -540,7 +580,7 @@
             });
             
             if (!hasSelection) {
-                summary = 'Sin opciones extras';
+                summary = t('extras_none') || 'Sin opciones extras';
             }
             
             return summary;
@@ -585,6 +625,57 @@
                 invitation.hide();
                 invitation.removeClass('hiding');
             }, 300);
+        },
+        
+        // Cambiar idioma
+        changeLanguage: function(lang) {
+            if (window.MetTranslations && window.MetTranslations.setLanguage(lang)) {
+                // Actualizar botones activos
+                $('.met-lang-btn').removeClass('active');
+                $('.met-lang-btn[data-lang="' + lang + '"]').addClass('active');
+                
+                // Guardar idioma en datos de conversación
+                this.state.conversationData.language = lang;
+                
+                // Actualizar UI inmediatamente
+                this.updateUILanguage();
+                
+                // Limpiar mensajes y reiniciar conversación
+                $('#met-chatbot-messages').empty();
+                this.state.messages = [];
+                this.state.currentStep = 'welcome';
+                
+                // Reiniciar conversación en el nuevo idioma
+                this.startConversation();
+            }
+        },
+        
+        // Actualizar textos de la UI según idioma
+        updateUILanguage: function() {
+            if (!window.MetTranslations) return;
+            
+            const t = window.MetTranslations.t.bind(window.MetTranslations);
+            
+            // Header
+            $('#met-chatbot-title').text(t('assistant_title'));
+            $('#met-chatbot-status-text').text(t('status_online'));
+            
+            // Invitación
+            $('#met-invitation-text').text(t('invitation_text'));
+            
+            // Footer
+            $('#met-footer-privacy-text').text(t('footer_privacy'));
+            $('#met-footer-privacy-link').text(t('footer_privacy_link'));
+            
+            // Placeholder del input (si está visible)
+            const $input = $('#met-chatbot-input');
+            if ($input.is(':visible')) {
+                const currentPlaceholder = $input.attr('placeholder');
+                // Actualizar solo si es un placeholder conocido
+                if (currentPlaceholder) {
+                    $input.attr('placeholder', t('placeholder_message'));
+                }
+            }
         }
     };
     

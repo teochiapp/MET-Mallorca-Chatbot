@@ -118,6 +118,15 @@ class MET_Chatbot {
             MET_CHATBOT_VERSION
         );
         
+        // JavaScript de traducciones (debe cargarse primero)
+        wp_enqueue_script(
+            'met-translations',
+            MET_CHATBOT_PLUGIN_URL . 'assets/js/translations.js',
+            array('jquery'),
+            MET_CHATBOT_VERSION,
+            true
+        );
+        
         // JavaScript del location searcher
         wp_enqueue_script(
             'met-location-searcher',
@@ -149,7 +158,7 @@ class MET_Chatbot {
         wp_enqueue_script(
             'met-chatbot-script',
             MET_CHATBOT_PLUGIN_URL . 'assets/js/chatbot.js',
-            array('jquery', 'met-location-searcher', 'met-time-searcher', 'met-extras-selector'),
+            array('jquery', 'met-translations', 'met-location-searcher', 'met-time-searcher', 'met-extras-selector'),
             MET_CHATBOT_VERSION,
             true
         );

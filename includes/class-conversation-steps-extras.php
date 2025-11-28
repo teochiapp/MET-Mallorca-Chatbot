@@ -9,45 +9,46 @@ if (!defined('ABSPATH')) {
 
 class MET_Conversation_Steps_Extras {
     
+    private $translations;
+    
+    public function __construct() {
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
+        $this->translations = new MET_Translations();
+    }
+    
     /**
      * Configuración de extras disponibles
      */
     private $extras_config = array(
         'equipaje_de_mano' => array(
-            'label' => 'Equipaje de mano',
+            'label_key' => 'extras_hand_luggage',
             'price' => 0,
-            'icon' => '🎒',
-            'info' => 'Gratis'
+            'icon' => '🎒'
         ),
         'valijas' => array(
-            'label' => 'Valijas',
+            'label_key' => 'extras_suitcases',
             'price' => 0,
-            'icon' => '🧳',
-            'info' => 'Gratis'
+            'icon' => '🧳'
         ),
         'alzadores' => array(
-            'label' => 'Alzadores',
+            'label_key' => 'extras_booster_seats',
             'price' => 0,
-            'icon' => '🪑',
-            'info' => 'Gratis'
+            'icon' => '🪑'
         ),
         'sillas_bebe' => array(
-            'label' => 'Sillas de bebé',
+            'label_key' => 'extras_baby_seats',
             'price' => 0,
-            'icon' => '👶',
-            'info' => 'Gratis'
+            'icon' => '👶'
         ),
         'bolsa_golf' => array(
-            'label' => 'Bolsa de Golf',
+            'label_key' => 'extras_golf_bag',
             'price' => 3,
-            'icon' => '⛳',
-            'info' => '€3 c/u'
+            'icon' => '⛳'
         ),
         'bicicleta' => array(
-            'label' => 'Bicicleta',
+            'label_key' => 'extras_bicycle',
             'price' => 6,
-            'icon' => '🚴',
-            'info' => '€6 c/u'
+            'icon' => '🚴'
         )
     );
     
@@ -55,6 +56,8 @@ class MET_Conversation_Steps_Extras {
      * Step: Opciones Extras
      */
     public function step_extras($message, $data) {
+        MET_Translations::init_from_data($data);
+        
         // Si es la primera vez (sin mensaje del usuario y sin extras previos), mostrar el formulario de extras
         if ($message === '' && !isset($data['extras'])) {
             return $this->show_extras_form($data);
@@ -90,8 +93,10 @@ class MET_Conversation_Steps_Extras {
      * Mostrar formulario de opciones extras
      */
     private function show_extras_form($data) {
-        $message = '🎁 <strong>Opciones Extras</strong><br><br>' .
-                  'Selecciona las opciones adicionales que necesites para tu viaje:';
+        MET_Translations::init_from_data($data);
+        
+        $message = '🎁 <strong>' . MET_Translations::t('extras_title') . '</strong><br><br>' .
+                  MET_Translations::t('extras_message');
         
         return array(
             'message' => $message,
@@ -100,7 +105,7 @@ class MET_Conversation_Steps_Extras {
             'data' => $data,
             'inputType' => 'extras_form',
             'showBackButton' => true,
-            'extrasConfig' => $this->extras_config
+            'extrasConfig' => $this->get_translated_extras_config($data)
         );
     }
     
@@ -142,27 +147,18 @@ class MET_Conversation_Steps_Extras {
      * Construir resumen de extras seleccionados
      */
     private function build_extras_summary($extras) {
-        $message = '✅ <strong>Opciones extras confirmadas</strong><br><br>';
+        $message = '✅ <strong>' . MET_Translations::t('extras_selected_summary') . '</strong><br><br>';
         
         $has_extras = false;
         
         // Extras gratuitos
         $free_items = array();
-        if (!empty($extras['equipaje_de_mano']) && $extras['equipaje_de_mano'] > 0) {
-            $free_items[] = '🎒 Equipaje de mano: ' . $extras['equipaje_de_mano'];
-            $has_extras = true;
-        }
-        if (!empty($extras['valijas']) && $extras['valijas'] > 0) {
-            $free_items[] = '🧳 Valijas: ' . $extras['valijas'];
-            $has_extras = true;
-        }
-        if (!empty($extras['alzadores']) && $extras['alzadores'] > 0) {
-            $free_items[] = '🪑 Alzadores: ' . $extras['alzadores'];
-            $has_extras = true;
-        }
-        if (!empty($extras['sillas_bebe']) && $extras['sillas_bebe'] > 0) {
-            $free_items[] = '👶 Sillas de bebé: ' . $extras['sillas_bebe'];
-            $has_extras = true;
+        $free_keys = array('equipaje_de_mano', 'valijas', 'alzadores', 'sillas_bebe');
+        foreach ($free_keys as $key) {
+            if (!empty($extras[$key]) && $extras[$key] > 0) {
+                $free_items[] = $this->format_extra_summary_line($key, $extras[$key]);
+                $has_extras = true;
+            }
         }
         
         if (!empty($free_items)) {
@@ -170,33 +166,34 @@ class MET_Conversation_Steps_Extras {
         }
         
         // Extras con costo
-        $paid_items = array();
-        if (!empty($extras['bolsa_golf']['cantidad']) && $extras['bolsa_golf']['cantidad'] > 0) {
-            $paid_items[] = '⛳ Bolsa de Golf: ' . $extras['bolsa_golf']['cantidad'] . 
-                          ' (€' . number_format($extras['bolsa_golf']['subtotal'], 2) . ')';
-            $has_extras = true;
-        }
-        if (!empty($extras['bicicleta']['cantidad']) && $extras['bicicleta']['cantidad'] > 0) {
-            $paid_items[] = '🚴 Bicicleta: ' . $extras['bicicleta']['cantidad'] . 
-                          ' (€' . number_format($extras['bicicleta']['subtotal'], 2) . ')';
-            $has_extras = true;
+        $paid_items = array('bolsa_golf', 'bicicleta');
+        $paid_lines = array();
+        foreach ($paid_items as $key) {
+            if (!empty($extras[$key]['cantidad']) && $extras[$key]['cantidad'] > 0) {
+                $paid_lines[] = $this->format_extra_summary_line(
+                    $key,
+                    $extras[$key]['cantidad'],
+                    $extras[$key]['subtotal']
+                );
+                $has_extras = true;
+            }
         }
         
-        if (!empty($paid_items)) {
-            $message .= implode('<br>', $paid_items) . '<br><br>';
+        if (!empty($paid_lines)) {
+            $message .= implode('<br>', $paid_lines) . '<br><br>';
         }
         
         // Total
-        if ($extras['total_extras'] > 0) {
-            $message .= '<strong>💰 Total extras: €' . number_format($extras['total_extras'], 2) . '</strong><br><br>';
+        if (!empty($extras['total_extras']) && $extras['total_extras'] > 0) {
+            $message .= '<strong>💰 ' . MET_Translations::t('extras_total') . ': €' . number_format($extras['total_extras'], 2) . '</strong><br><br>';
         }
         
         if (!$has_extras) {
-            $message = '✅ <strong>Sin opciones extras</strong><br><br>' .
-                      'Continuaremos sin servicios adicionales.<br><br>';
+            $message = '✅ <strong>' . MET_Translations::t('extras_none') . '</strong><br><br>' .
+                      MET_Translations::t('extras_none_message') . '<br><br>';
         }
         
-        $message .= 'Continuemos con el resumen de tu reserva...';
+        $message .= MET_Translations::t('extras_continue');
         
         return $message;
     }
@@ -206,5 +203,49 @@ class MET_Conversation_Steps_Extras {
      */
     public function get_extras_config() {
         return $this->extras_config;
+    }
+
+    /**
+     * Obtener configuración traducida para el frontend
+     */
+    private function get_translated_extras_config($data) {
+        MET_Translations::init_from_data($data);
+        $config = array();
+
+        foreach ($this->extras_config as $key => $extra) {
+            $label = MET_Translations::t($extra['label_key']);
+            if ($extra['price'] > 0) {
+                $info = '€' . $extra['price'] . ' ' . MET_Translations::t('extras_each');
+            } else {
+                $info = '<span class="met-extras-free">' . MET_Translations::t('extras_free') . '</span>';
+            }
+
+            $config[$key] = array(
+                'label' => $label,
+                'price' => $extra['price'],
+                'icon' => $extra['icon'],
+                'info' => $info
+            );
+        }
+
+        return $config;
+    }
+
+    /**
+     * Formatear línea de resumen
+     */
+    private function format_extra_summary_line($key, $quantity, $subtotal = null) {
+        $label = isset($this->extras_config[$key]['label_key'])
+            ? MET_Translations::t($this->extras_config[$key]['label_key'])
+            : ucfirst($key);
+        $icon = isset($this->extras_config[$key]['icon']) ? $this->extras_config[$key]['icon'] : '•';
+
+        $line = $icon . ' ' . $label . ': ' . $quantity;
+
+        if (!is_null($subtotal)) {
+            $line .= ' (€' . number_format($subtotal, 2) . ')';
+        }
+
+        return $line;
     }
 }
