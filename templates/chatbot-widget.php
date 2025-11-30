@@ -52,15 +52,15 @@ if (!defined('ABSPATH')) {
                 <div class="met-language-selector">
                     <button class="met-lang-btn active" data-lang="es" title="Español">
                         <span class="met-flag met-flag-es" aria-hidden="true"></span>
-                        <span class="met-lang-label">ES</span>
+                        <span class="met-lang-label">Español</span>
                     </button>
                     <button class="met-lang-btn" data-lang="en" title="English">
                         <span class="met-flag met-flag-en" aria-hidden="true"></span>
-                        <span class="met-lang-label">EN</span>
+                        <span class="met-lang-label">English</span>
                     </button>
                     <button class="met-lang-btn" data-lang="de" title="Deutsch">
                         <span class="met-flag met-flag-de" aria-hidden="true"></span>
-                        <span class="met-lang-label">DE</span>
+                        <span class="met-lang-label">Deutsch</span>
                     </button>
                 </div>
             </div>
