@@ -888,10 +888,31 @@
 }
 
 .met-flag {
-    font-size: 20px;
-    line-height: 1;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    display: inline-block;
+    width: 22px;
+    height: 16px;
+    border-radius: 3px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.met-flag-es {
+    background-image: linear-gradient(#AA151B 0 25%, #F1BF00 25% 75%, #AA151B 75% 100%);
+}
+
+.met-flag-de {
+    background-image: linear-gradient(#000000 0 33%, #DD0000 33% 66%, #FFCE00 66% 100%);
+}
+
+.met-flag-en {
+    background-image:
+        linear-gradient(90deg, transparent 45%, #FFFFFF 45% 55%, transparent 55%),
+        linear-gradient(transparent 45%, #FFFFFF 45% 55%, transparent 55%),
+        linear-gradient(135deg, #CE1124 25%, transparent 25%),
+        linear-gradient(-135deg, #CE1124 25%, transparent 25%),
+        #00247D;
+    background-size: cover;
 }
 
 .met-lang-label {
