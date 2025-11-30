@@ -189,12 +189,37 @@ class MET_Checkout_Generator {
         // Obtener número de reserva autoincremental
         $booking_number = $this->get_next_booking_number();
         
-        // Crear título descriptivo
+        // Crear título descriptivo según el tipo de ruta
+        $route_label = 'Traslado';
+        $route_type = isset($booking_data['route_type']) ? $booking_data['route_type'] : '';
+
+        switch ($route_type) {
+            case 'point_to_airport':
+                $route_label = 'Traslado Punto → Aeropuerto';
+                break;
+            case 'airport':
+                $route_label = 'Traslado Aeropuerto → Punto';
+                break;
+            default:
+                $route_label = 'Traslado Privado';
+                break;
+        }
+
+        $origin = !empty($booking_data['origin']) ? $booking_data['origin'] : __('Origen sin definir', 'met-chatbot');
+        $destination = !empty($booking_data['destination']) ? $booking_data['destination'] : __('Destino sin definir', 'met-chatbot');
+
+        $datetime_label = '';
+        if (!empty($booking_data['datetime'])) {
+            $datetime_label = ' - ' . $booking_data['datetime'];
+        }
+
         $title = sprintf(
-            'Traslado #%s - %s → %s',
+            '%s #%s%s (%s → %s)',
+            $route_label,
             $booking_number,
-            $booking_data['origin'],
-            $booking_data['destination']
+            $datetime_label,
+            $origin,
+            $destination
         );
         
         // Crear descripción detallada

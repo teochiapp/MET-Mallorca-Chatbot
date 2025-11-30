@@ -13,6 +13,7 @@ class MET_Conversation_Steps_Welcome {
     
     public function __construct() {
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-translations.php';
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-verifier.php';
         $this->translations = new MET_Translations();
     }
     

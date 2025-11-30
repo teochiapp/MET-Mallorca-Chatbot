@@ -28,6 +28,11 @@ class MET_Chatbot {
      * Instancia del generador de checkout
      */
     private $checkout_generator;
+
+    /**
+     * Instancia del verificador de reservas
+     */
+    private $booking_verifier;
     
     /**
      * Constructor
@@ -39,6 +44,7 @@ class MET_Chatbot {
         // Hooks de WordPress
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_footer', array($this, 'render_chatbot'));
+        add_action('init', array($this, 'init_booking_verifier'));
         
         // AJAX handlers
         add_action('wp_ajax_met_chatbot_message', array($this, 'handle_message'));
@@ -49,9 +55,22 @@ class MET_Chatbot {
         add_action('wp_ajax_nopriv_met_get_locations', array($this, 'get_locations'));
         add_action('wp_ajax_met_get_time_slots', array($this, 'get_time_slots'));
         add_action('wp_ajax_nopriv_met_get_time_slots', array($this, 'get_time_slots'));
+        add_action('wp_ajax_met_verify_booking_inline', array($this, 'verify_booking_inline'));
+        add_action('wp_ajax_nopriv_met_verify_booking_inline', array($this, 'verify_booking_inline'));
 
         // REST API routes
         add_action('rest_api_init', array($this, 'register_rest_routes'));
+    }
+
+    /**
+     * Inicializar verificador de reservas
+     */
+    public function init_booking_verifier() {
+        if ($this->booking_verifier instanceof MET_Booking_Verifier) {
+            return;
+        }
+
+        $this->booking_verifier = new MET_Booking_Verifier();
     }
     
     /**
@@ -61,6 +80,9 @@ class MET_Chatbot {
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-handler.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-conversation-controller.php';
         require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-checkout-generator.php';
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-verifier.php';
+
+        $this->booking_verifier = new MET_Booking_Verifier();
 
         // Registrar hooks de checkout cuando WooCommerce esté listo
         if (did_action('woocommerce_init')) {
@@ -216,6 +238,28 @@ class MET_Chatbot {
         $result = $booking_handler->verify_booking($booking_code, $email);
         
         wp_send_json_success($result);
+    }
+
+    /**
+     * Verificar reserva solo por código (para formulario inline)
+     */
+    public function verify_booking_inline() {
+        check_ajax_referer('met_chatbot_nonce', 'nonce');
+
+        $booking_code = isset($_POST['booking_code']) ? sanitize_text_field($_POST['booking_code']) : '';
+        $result = MET_Booking_Verifier::verify_code_data($booking_code);
+
+        if (!empty($result['verified'])) {
+            $html = MET_Booking_Verifier::render_success_message($result['order']);
+        } else {
+            $html = MET_Booking_Verifier::render_error_message($result['message']);
+        }
+
+        wp_send_json_success(array(
+            'verified' => !empty($result['verified']),
+            'html' => $html,
+            'order' => !empty($result['order']) ? $result['order'] : null,
+        ));
     }
     
     /**

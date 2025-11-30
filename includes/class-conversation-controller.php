@@ -30,7 +30,7 @@ class MET_Conversation_Controller {
     private $valid_states = array(
         'welcome', 'route_type', 'origin', 'origin_text', 'destination', 'destination_text',
         'date', 'time', 'passengers', 'pet', 'flight_number', 'extras', 'summary', 'confirm',
-        'modify_choice', 'verify_booking_code', 'end'
+        'modify_choice', 'verify_booking_code', 'verify_result', 'end'
     );
     
     /**
@@ -169,6 +169,17 @@ class MET_Conversation_Controller {
             return $this->handle_booking_verification($message, $data);
         }
         
+        // Resultado de verificación (para manejar opciones post-verificación)
+        if ($step === 'verify_result') {
+            if ($message === 'verify') {
+                return $this->welcome_steps->step_route_type('verify', array());
+            }
+            if ($message === 'restart') {
+                return $this->welcome_steps->step_welcome('', array());
+            }
+            return $this->welcome_steps->step_welcome('', array());
+        }
+        
         // Estado final
         if ($step === 'end') {
             if ($message === 'restart') {
@@ -283,14 +294,14 @@ class MET_Conversation_Controller {
      * Manejar verificación de reserva
      */
     private function handle_booking_verification($message, $data) {
-        // Parsear código y email
-        $parts = array_map('trim', explode(',', $message));
+        $booking_code = sanitize_text_field(trim($message));
         
-        if (count($parts) < 2) {
+        // Validar formato básico
+        if (empty($booking_code)) {
             return array(
-                'message' => '❌ <strong>Formato incorrecto</strong><br><br>' .
-                            'Por favor, proporciona el código de reserva y email separados por coma.<br><br>' .
-                            '<em>Ejemplo: MET-123456, email@ejemplo.com</em>',
+                'message' => '❌ <strong>Código vacío</strong><br><br>' .
+                            'Por favor, ingresa un código de reserva válido.<br><br>' .
+                            '<em>Ejemplo: MET-1234</em>',
                 'nextStep' => 'verify_booking_code',
                 'options' => array(),
                 'data' => $data,
@@ -299,35 +310,114 @@ class MET_Conversation_Controller {
             );
         }
         
-        $booking_code = sanitize_text_field($parts[0]);
-        $email = sanitize_email($parts[1]);
+        // Verificar con el nuevo sistema
+        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-verifier.php';
+        $result = MET_Booking_Verifier::verify_code_data($booking_code);
         
-        // Verificar con el handler de reservas
-        require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-booking-handler.php';
-        $booking_handler = new MET_Booking_Handler();
-        $result = $booking_handler->verify_booking($booking_code, $email);
-        
-        if ($result['found']) {
+        if ($result['verified']) {
+            $order = $result['order'];
+            
+            // Formatear mensaje de éxito estilo chat
+            $items_text = isset($order['items_text']) ? $order['items_text'] : '';
+            if (empty($items_text) && !empty($order['items'])) {
+                $items_text = implode(', ', $order['items']);
+            }
+
+            $success_message = '✅ <strong>¡Reserva encontrada!</strong><br><br>' .
+                '<div style="background:#f2fff5;border-left:4px solid #28a745;padding:15px;border-radius:8px;margin:10px 0;">' .
+                '<p style="margin:0 0 8px;"><strong>📋 Código:</strong> ' . esc_html($order['code']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>🛒 Producto(s):</strong> ' . esc_html($items_text) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>👤 Cliente:</strong> ' . esc_html($order['customer']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>📅 Fecha de realización del pedido:</strong> ' . esc_html($order['date']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>💰 Total:</strong> ' . esc_html($order['total_text']) . '</p>' .
+                '<p style="margin:0;"><strong>📊 Estado:</strong> ' . esc_html($order['status_label']) . '</p>' .
+                '</div>';
+            
+            $options = array(
+                array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+            );
+            
             return array(
-                'message' => $result['message'],
-                'nextStep' => 'end',
-                'options' => array(
-                    array('text' => '🔄 Nueva reserva', 'value' => 'restart')
-                ),
+                'message' => $success_message,
+                'nextStep' => 'verify_result',
+                'options' => $options,
                 'data' => array(),
                 'showBackButton' => false
             );
         } else {
             return array(
-                'message' => $result['message'] . '<br><br>¿Quieres intentar de nuevo?',
-                'nextStep' => 'verify_booking_code',
+                'message' => '❌ <strong>Reserva no encontrada</strong><br><br>' . esc_html($result['message']) . '<br><br>¿Quieres intentar de nuevo?',
+                'nextStep' => 'route_type',
                 'options' => array(
-                    array('text' => '🔄 Intentar de nuevo', 'value' => 'retry'),
+                    array('text' => '🔄 Intentar de nuevo', 'value' => 'verify'),
                     array('text' => '🏠 Volver al inicio', 'value' => 'restart')
                 ),
                 'data' => $data,
                 'showBackButton' => false
             );
         }
+    }
+    
+    /**
+     * Mostrar todos los pedidos (debug)
+     */
+    private function show_debug_orders($data) {
+        if (!function_exists('wc_get_orders')) {
+            return array(
+                'message' => '❌ WooCommerce no está disponible.',
+                'nextStep' => 'verify_result',
+                'options' => array(
+                    array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+                ),
+                'data' => array()
+            );
+        }
+        
+        $orders = wc_get_orders(array(
+            'limit' => 10,
+            'orderby' => 'date',
+            'order' => 'DESC',
+        ));
+        
+        if (empty($orders)) {
+            return array(
+                'message' => '📦 <strong>No hay pedidos en el sistema</strong><br><br>Aún no se han creado pedidos.',
+                'nextStep' => 'verify_result',
+                'options' => array(
+                    array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+                ),
+                'data' => array()
+            );
+        }
+        
+        $message = '🐞 <strong>Debug: Últimos 10 pedidos</strong><br><br>';
+        $message .= '<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;border-radius:8px;margin:10px 0;">';
+        
+        foreach ($orders as $order) {
+            $order_id = $order->get_id();
+            $status = $order->get_status();
+            $total = $order->get_formatted_order_total();
+            $date = $order->get_date_created()->date('d/m/Y H:i');
+            $customer = trim($order->get_billing_first_name() . ' ' . $order->get_billing_last_name());
+            
+            $message .= '<p style="margin:0 0 10px;padding-bottom:10px;border-bottom:1px solid #e0e0e0;">';
+            $message .= '<strong>MET-' . $order_id . '</strong><br>';
+            $message .= '<small>Cliente: ' . esc_html($customer ?: 'Sin nombre') . '<br>';
+            $message .= 'Estado: ' . esc_html($status) . ' | Total: ' . wp_strip_all_tags($total) . '<br>';
+            $message .= 'Fecha: ' . esc_html($date) . '</small>';
+            $message .= '</p>';
+        }
+        
+        $message .= '</div>';
+        
+        return array(
+            'message' => $message,
+            'nextStep' => 'verify_result',
+            'options' => array(
+                array('text' => '🔍 Verificar una reserva', 'value' => 'verify'),
+                array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+            ),
+            'data' => array()
+        );
     }
 }

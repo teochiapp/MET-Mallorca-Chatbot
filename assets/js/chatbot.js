@@ -358,6 +358,77 @@
             
             // Trigger evento para que otros scripts sepan que el formulario está listo
             $(document).trigger('met-booking-form-loaded');
+
+            this.bindBookingVerifierForm();
+        },
+
+        bindBookingVerifierForm: function() {
+            const self = this;
+
+            $(document)
+                .off('submit.metBookingVerifier')
+                .on('submit.metBookingVerifier', '.met-chatbot-booking-verifier-form', function(e) {
+                    e.preventDefault();
+
+                    const $form = $(this);
+                    const $wrapper = $form.closest('.met-chatbot-booking-verifier');
+                    const $result = $wrapper.find('.met-chatbot-booking-verifier-result');
+                    const $input = $form.find('input[name="met_booking_code"]');
+                    const $button = $form.find('button[type="submit"]');
+                    const bookingCode = $input.val().trim();
+                    const originalLabel = $button.text();
+
+                    if (!bookingCode) {
+                        $result.html(self.renderInlineNotice('error', 'Ingresa un código válido.'));
+                        return;
+                    }
+
+                    $button.prop('disabled', true).text('Verificando...');
+                    $result.html(self.renderInlineNotice('info', 'Procesando tu reserva...'));
+
+                    $.ajax({
+                        url: metChatbot.ajaxUrl,
+                        method: 'POST',
+                        data: {
+                            action: 'met_verify_booking_inline',
+                            nonce: metChatbot.nonce,
+                            booking_code: bookingCode
+                        },
+                        success: function(response) {
+                            $button.prop('disabled', false).text(originalLabel);
+
+                            if (response && response.success) {
+                                $result.html(response.data.html);
+
+                                if (response.data.verified) {
+                                    self.showOptions([
+                                        {
+                                            text: '🏠 Volver al inicio',
+                                            value: 'restart'
+                                        }
+                                    ]);
+                                }
+                            } else {
+                                $result.html(self.renderInlineNotice('error', 'Error al verificar la reserva.'));
+                            }
+                        },
+                        error: function() {
+                            $button.prop('disabled', false).text(originalLabel);
+                            $result.html(self.renderInlineNotice('error', 'No pudimos verificar la reserva. Intenta de nuevo.'));
+                        }
+                    });
+                });
+        },
+
+        renderInlineNotice: function(type, message) {
+            const styles = {
+                success: 'border:1px solid #b0e9c1;background:#f2fff5;color:#135c1c;',
+                error: 'border:1px solid #f5c6cb;background:#fff5f5;color:#721c24;',
+                info: 'border:1px solid #bee5eb;background:#e8f7fb;color:#0c5460;'
+            };
+
+            const style = styles[type] || styles.info;
+            return `<div style="margin-top:10px;padding:12px;border-radius:6px;${style}">${message}</div>`;
         },
         
         // Mostrar typing indicator

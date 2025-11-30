@@ -31,8 +31,8 @@ class MET_Translations {
             
             // Verify booking
             'verify_title' => 'Verificar Reserva',
-            'verify_message' => 'Por favor, escribe tu <strong>número de reserva</strong> y tu <strong>email</strong> separados por coma.',
-            'verify_example' => 'Ejemplo: MET-123456, email@ejemplo.com',
+            'verify_message' => 'Por favor, escribe tu <strong>código de reserva</strong> con formato MET-1234.',
+            'verify_example' => 'Ejemplo: MET-123456',
             
             // Location
             'location_origin_title' => 'Ubicación de Origen',
@@ -152,8 +152,8 @@ class MET_Translations {
             
             // Verify booking
             'verify_title' => 'Verify Booking',
-            'verify_message' => 'Please enter your <strong>booking number</strong> and your <strong>email</strong> separated by a comma.',
-            'verify_example' => 'Example: MET-123456, email@example.com',
+            'verify_message' => 'Please enter your <strong>booking code</strong> using the MET-1234 format.',
+            'verify_example' => 'Example: MET-123456',
             
             // Location
             'location_origin_title' => 'Origin Location',
@@ -273,8 +273,8 @@ class MET_Translations {
             
             // Verify booking
             'verify_title' => 'Buchung überprüfen',
-            'verify_message' => 'Bitte geben Sie Ihre <strong>Buchungsnummer</strong> und Ihre <strong>E-Mail</strong> durch Komma getrennt ein.',
-            'verify_example' => 'Beispiel: MET-123456, email@beispiel.com',
+            'verify_message' => 'Bitte gib deinen <strong>Buchungscode</strong> im Format MET-1234 ein.',
+            'verify_example' => 'Beispiel: MET-123456',
             
             // Location
             'location_origin_title' => 'Startort',
