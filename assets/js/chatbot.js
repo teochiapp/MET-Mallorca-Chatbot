@@ -67,9 +67,34 @@
                     self.sendTextMessage();
                 }
             });
+
+            // Bloquear caracteres no numéricos cuando corresponda
+            $('#met-chatbot-input').on('keypress', function(e) {
+                const inputType = $(this).attr('data-input-type') || 'text';
+                const shouldForceNumber = inputType === 'number' || self.state.currentStep === 'passengers';
+
+                if (shouldForceNumber) {
+                    const char = String.fromCharCode(e.which);
+                    const isControl = e.ctrlKey || e.metaKey || e.altKey || e.which < 32;
+
+                    if (!isControl && !/^[0-9]$/.test(char)) {
+                        e.preventDefault();
+                    }
+                }
+            });
             
             // Auto-ajustar altura del textarea
             $('#met-chatbot-input').on('input', function() {
+                const inputType = $(this).attr('data-input-type') || 'text';
+                const shouldForceNumber = inputType === 'number' || self.state.currentStep === 'passengers';
+
+                if (shouldForceNumber) {
+                    const sanitized = this.value.replace(/[^0-9]/g, '');
+                    if (sanitized !== this.value) {
+                        this.value = sanitized;
+                    }
+                }
+
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 120) + 'px';
             });
@@ -132,18 +157,32 @@
         sendTextMessage: function() {
             const input = $('#met-chatbot-input');
             const message = input.val().trim();
-            
+            const inputType = input.attr('data-input-type') || 'text';
+            const shouldForceNumber = inputType === 'number' || this.state.currentStep === 'passengers';
+
             if (!message) return;
-            
+
+            let finalMessage = message;
+
+            if (shouldForceNumber) {
+                finalMessage = message.replace(/[^0-9]/g, '');
+
+                if (!finalMessage) {
+                    input.val('');
+                    input.css('height', 'auto');
+                    return;
+                }
+            }
+
             // Agregar mensaje del usuario
-            this.addMessage('user', message);
-            
+            this.addMessage('user', finalMessage);
+
             // Limpiar textarea y resetear altura
             input.val('');
             input.css('height', 'auto');
-            
+
             // Enviar al servidor
-            this.sendMessage(message, this.state.currentStep, this.state.conversationData);
+            this.sendMessage(finalMessage, this.state.currentStep, this.state.conversationData);
         },
         
         // Enviar mensaje al servidor
@@ -485,11 +524,21 @@
             const input = $('#met-chatbot-input');
             $('#met-chatbot-location-container').hide().empty();
             $('#met-chatbot-time-container').hide().empty();
-            
+            const effectiveType = type || 'text';
+            input.attr('data-input-type', effectiveType);
+            input.data('input-type', effectiveType);
+            if (effectiveType === 'number') {
+                input.attr('inputmode', 'numeric');
+                input.attr('pattern', '[0-9]*');
+            } else {
+                input.removeAttr('inputmode');
+                input.removeAttr('pattern');
+            }
+
             // Configurar placeholder según tipo
-            if (type === 'number') {
+            if (effectiveType === 'number') {
                 input.attr('placeholder', 'Escribe un número...');
-            } else if (type === 'email') {
+            } else if (effectiveType === 'email') {
                 input.attr('placeholder', 'Escribe tu email...');
             } else {
                 input.attr('placeholder', 'Escribe tu mensaje...');

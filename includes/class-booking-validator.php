@@ -172,13 +172,6 @@ class MET_Booking_Validator {
             );
         }
         
-        if ($passengers > 50) {
-            return array(
-                'valid' => false,
-                'error' => '❌ Para grupos de más de 50 personas, contacta directamente con nosotros.'
-            );
-        }
-        
         return array(
             'valid' => true,
             'passengers' => $passengers
