@@ -573,64 +573,54 @@ class MET_Checkout_Generator {
         
         return $html;
     }
-    
+
     /**
-     * Hook para modificar el precio del producto en el carrito
+     * Ajustar el precio del carrito para reflejar el total calculado por el chatbot
      */
-    public function modify_cart_item_price($cart) {
+    public function modify_cart_item_price($cart = null) {
         if (is_admin() && !defined('DOING_AJAX')) {
             return;
         }
-        
-        if (did_action('woocommerce_before_calculate_totals') >= 2) {
+
+        if (did_action('woocommerce_before_calculate_totals') >= 2 && $cart instanceof WC_Cart) {
             return;
         }
-        
-        error_log('MET Chatbot: modify_cart_item_price ejecutado');
-        error_log('Transfer Product ID: ' . $this->transfer_product_id);
-        
+
+        if (!$cart || !($cart instanceof WC_Cart)) {
+            if (function_exists('WC') && WC()->cart instanceof WC_Cart) {
+                $cart = WC()->cart;
+            } else {
+                return;
+            }
+        }
+
         foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
-            error_log('Revisando item: ' . $cart_item['data']->get_name() . ' (ID: ' . $cart_item['product_id'] . ')');
-            
-            // Verificar si es nuestro producto de traslado
-            if (isset($cart_item['product_id']) && $cart_item['product_id'] == $this->transfer_product_id) {
-                error_log('Es nuestro producto de traslado');
-                
-                $custom_price = null;
-                
-                // Obtener precio personalizado desde los datos del item
-                if (isset($cart_item['met_custom_price']) && $cart_item['met_custom_price'] > 0) {
-                    $custom_price = floatval($cart_item['met_custom_price']);
-                    error_log('Precio encontrado en met_custom_price: ' . $custom_price);
+            if (!isset($cart_item['product_id']) || intval($cart_item['product_id']) !== intval($this->transfer_product_id)) {
+                continue;
+            }
+
+            $custom_price = null;
+
+            if (isset($cart_item['met_custom_price']) && $cart_item['met_custom_price'] > 0) {
+                $custom_price = floatval($cart_item['met_custom_price']);
+            } elseif (isset($cart_item['met_booking_hash'])) {
+                $hash = $cart_item['met_booking_hash'];
+                $session_data = $this->get_booking_from_session($hash);
+
+                if ($session_data && isset($session_data['price_breakdown']['total'])) {
+                    $custom_price = floatval($session_data['price_breakdown']['total']);
                 }
-                // Si no está en los datos del item, buscar en sesión
-                elseif (isset($cart_item['met_booking_hash'])) {
-                    $hash = $cart_item['met_booking_hash'];
-                    error_log('Buscando en sesión con hash: ' . $hash);
-                    $session_data = $this->get_booking_from_session($hash);
-                    
-                    if ($session_data && isset($session_data['price_breakdown']['total'])) {
-                        $custom_price = floatval($session_data['price_breakdown']['total']);
-                        error_log('Precio encontrado en sesión: ' . $custom_price);
-                    } else {
-                        error_log('No se encontró precio en sesión');
-                    }
-                } else {
-                    error_log('No hay met_custom_price ni met_booking_hash');
-                }
-                
-                // Aplicar el precio si se encontró
-                if ($custom_price && $custom_price > 0) {
-                    // Asegurar formato correcto del precio
-                    $custom_price = wc_format_decimal($custom_price, 2);
-                    
+            }
+
+            if ($custom_price && $custom_price > 0) {
+                $custom_price = wc_format_decimal($custom_price, 2);
+
+                if (isset($cart_item['data']) && is_object($cart_item['data'])) {
                     $cart_item['data']->set_price($custom_price);
                     $cart_item['data']->set_regular_price($custom_price);
-                    
-                    error_log('Precio aplicado: ' . $custom_price);
-                } else {
-                    error_log('ERROR: No se pudo aplicar precio personalizado');
                 }
+
+                $cart->cart_contents[$cart_item_key]['met_custom_price'] = $custom_price;
             }
         }
     }
