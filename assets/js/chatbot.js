@@ -27,8 +27,8 @@
             this.syncLanguageWithTranslations();
             this.bindEvents();
             this.updateUILanguage();
-            this.startConversation();
             this.showInvitation();
+            this.updateToggleButtonUI();
         },
 
         syncLanguageWithTranslations: function() {
@@ -138,16 +138,20 @@
         // Toggle chatbot
         toggleChatbot: function() {
             this.state.isOpen = !this.state.isOpen;
+            this.updateToggleButtonUI();
+            
+            if (this.state.isOpen && this.state.messages.length === 0) {
+                this.startConversation();
+            }
+        },
+
+        updateToggleButtonUI: function() {
             $('#met-chatbot-widget').toggleClass('open', this.state.isOpen);
             $('#met-chatbot-toggle')
                 .toggleClass('is-open', this.state.isOpen)
                 .attr('aria-label', this.state.isOpen ? 'Cerrar chat' : 'Abrir chat');
             $('#met-chatbot-toggle .met-chatbot-icon').toggle(!this.state.isOpen);
             $('#met-chatbot-toggle .met-chatbot-close').toggle(this.state.isOpen);
-            
-            if (this.state.isOpen && this.state.messages.length === 0) {
-                this.startConversation();
-            }
         },
         
         // Iniciar conversación
@@ -817,6 +821,8 @@
     // Inicializar cuando el documento esté listo
     $(document).ready(function() {
         MetChatbot.init();
+        $('#met-chatbot-toggle .met-chatbot-icon').show();
+        $('#met-chatbot-toggle .met-chatbot-close').hide();
     });
     
 })(jQuery);
