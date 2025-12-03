@@ -15,6 +15,12 @@
             },
             messages: []
         },
+
+        policyLinks: {
+            es: 'https://metmallorca.com/es/condiciones-contratacion/',
+            en: 'https://metmallorca.com/en/condiciones-contratacion/',
+            de: 'https://metmallorca.com/de/condiciones-contratacion/'
+        },
         
         // Inicializar
         init: function() {
@@ -136,6 +142,8 @@
             $('#met-chatbot-toggle')
                 .toggleClass('is-open', this.state.isOpen)
                 .attr('aria-label', this.state.isOpen ? 'Cerrar chat' : 'Abrir chat');
+            $('#met-chatbot-toggle .met-chatbot-icon').toggle(!this.state.isOpen);
+            $('#met-chatbot-toggle .met-chatbot-close').toggle(this.state.isOpen);
             
             if (this.state.isOpen && this.state.messages.length === 0) {
                 this.startConversation();
@@ -778,6 +786,8 @@
             if (!window.MetTranslations) return;
             
             const t = window.MetTranslations.t.bind(window.MetTranslations);
+            const lang = this.state.conversationData.language || 'es';
+            const policyUrl = this.policyLinks[lang] || this.policyLinks.es;
             
             // Header
             $('#met-chatbot-title').text(t('assistant_title'));
@@ -788,7 +798,9 @@
             
             // Footer
             $('#met-footer-privacy-text').text(t('footer_privacy'));
-            $('#met-footer-privacy-link').text(t('footer_privacy_link'));
+            $('#met-footer-privacy-link')
+                .text(t('footer_privacy_link'))
+                .attr('href', policyUrl);
             
             // Placeholder del input (si está visible)
             const $input = $('#met-chatbot-input');

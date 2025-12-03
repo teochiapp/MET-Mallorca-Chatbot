@@ -896,25 +896,20 @@
     border-radius: 3px;
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .met-flag-es {
-    background-image: linear-gradient(#AA151B 0 25%, #F1BF00 25% 75%, #AA151B 75% 100%);
+    background-image: url('https://flagcdn.com/w40/es.png');
 }
 
 .met-flag-de {
-    background-image: linear-gradient(#000000 0 33%, #DD0000 33% 66%, #FFCE00 66% 100%);
+    background-image: url('https://flagcdn.com/w40/de.png');
 }
 
 .met-flag-en {
-    background-color: #00247D;
-    background-image:
-        linear-gradient(90deg, transparent 45%, #FFFFFF 45% 55%, transparent 55%),
-        linear-gradient(transparent 45%, #FFFFFF 45% 55%, transparent 55%),
-        linear-gradient(135deg, #CE1124 25%, transparent 25%),
-        linear-gradient(-135deg, #CE1124 25%, transparent 25%);
-    background-size: cover;
+    background-image: url('https://flagcdn.com/w40/gb.png');
 }
 
 .met-lang-label {
