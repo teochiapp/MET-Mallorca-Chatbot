@@ -97,7 +97,7 @@ if (!defined('ABSPATH')) {
         
         <!-- Footer con RGPD -->
         <div class="met-chatbot-footer">
-            <small><span id="met-footer-privacy-text">Al continuar aceptas la</span> <a href="<?php echo home_url('/politica-de-privacidad/'); ?>" target="_blank" id="met-footer-privacy-link">Política de Privacidad</a></small>
+            <small><span id="met-footer-privacy-text">Al continuar aceptas la</span> <a href="https://metmallorca.com/es/condiciones-contratacion/" target="_blank" id="met-footer-privacy-link">Política de Privacidad</a></small>
         </div>
     </div>
 </div>

@@ -270,11 +270,13 @@
     position: absolute;
 }
 
-.met-chatbot-widget.open .met-chatbot-icon {
+.met-chatbot-widget.open .met-chatbot-icon,
+.met-chatbot-toggle.is-open .met-chatbot-icon {
     display: none;
 }
 
-.met-chatbot-widget.open .met-chatbot-close {
+.met-chatbot-widget.open .met-chatbot-close,
+.met-chatbot-toggle.is-open .met-chatbot-close {
     display: block;
 }
 
@@ -906,12 +908,12 @@
 }
 
 .met-flag-en {
+    background-color: #00247D;
     background-image:
         linear-gradient(90deg, transparent 45%, #FFFFFF 45% 55%, transparent 55%),
         linear-gradient(transparent 45%, #FFFFFF 45% 55%, transparent 55%),
         linear-gradient(135deg, #CE1124 25%, transparent 25%),
-        linear-gradient(-135deg, #CE1124 25%, transparent 25%),
-        #00247D;
+        linear-gradient(-135deg, #CE1124 25%, transparent 25%);
     background-size: cover;
 }
 

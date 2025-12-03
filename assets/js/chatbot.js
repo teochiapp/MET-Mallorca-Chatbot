@@ -133,6 +133,9 @@
         toggleChatbot: function() {
             this.state.isOpen = !this.state.isOpen;
             $('#met-chatbot-widget').toggleClass('open', this.state.isOpen);
+            $('#met-chatbot-toggle')
+                .toggleClass('is-open', this.state.isOpen)
+                .attr('aria-label', this.state.isOpen ? 'Cerrar chat' : 'Abrir chat');
             
             if (this.state.isOpen && this.state.messages.length === 0) {
                 this.startConversation();
