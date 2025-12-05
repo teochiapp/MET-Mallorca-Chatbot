@@ -571,7 +571,7 @@
     border-radius: 12px;
     font-size: 14px;
     line-height: 1.5;
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 .met-message.bot .met-message-content {
