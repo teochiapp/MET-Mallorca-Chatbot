@@ -56,14 +56,16 @@ class MET_Booking_Verifier {
         if (empty($booking_code)) {
             return array(
                 'verified' => false,
-                'message' => __('Ingresa un código válido.', 'met-chatbot')
+                'message' => __('Ingresa un código válido.', 'met-chatbot'),
+                'error_code' => 'empty_code'
             );
         }
 
         if (!preg_match('/^MET-(\d+)$/i', $booking_code, $matches)) {
             return array(
                 'verified' => false,
-                'message' => __('El código debe tener el formato MET-1234.', 'met-chatbot')
+                'message' => __('El código debe tener el formato MET-1234.', 'met-chatbot'),
+                'error_code' => 'invalid_format'
             );
         }
 
@@ -72,7 +74,8 @@ class MET_Booking_Verifier {
         if (!function_exists('wc_get_order')) {
             return array(
                 'verified' => false,
-                'message' => __('WooCommerce no está disponible en este sitio.', 'met-chatbot')
+                'message' => __('WooCommerce no está disponible en este sitio.', 'met-chatbot'),
+                'error_code' => 'woocommerce_missing'
             );
         }
 
@@ -81,7 +84,8 @@ class MET_Booking_Verifier {
         if (!$order) {
             return array(
                 'verified' => false,
-                'message' => __('No encontramos una reserva con ese código.', 'met-chatbot')
+                'message' => __('No encontramos una reserva con ese código.', 'met-chatbot'),
+                'error_code' => 'not_found'
             );
         }
 
@@ -121,6 +125,7 @@ class MET_Booking_Verifier {
 
         return array(
             'verified' => true,
+            'error_code' => null,
             'order' => array(
                 'id' => $order->get_id(),
                 'code' => 'MET-' . $order->get_id(),

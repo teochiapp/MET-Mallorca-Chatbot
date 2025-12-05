@@ -18,7 +18,8 @@ class MET_Booking_Handler {
             return array(
                 'found' => false,
                 'message' => '❌ No encontramos esa reserva en MET Mallorca.<br><br>¿Podría ser de otra empresa?<br><br>Puedes adjuntar foto del voucher o indicarnos la empresa que figura en tu comprobante.',
-                'is_met' => false
+                'is_met' => false,
+                'error_code' => 'invalid_format'
             );
         }
         
@@ -30,7 +31,8 @@ class MET_Booking_Handler {
             return array(
                 'found' => false,
                 'message' => '❌ Error del sistema. Por favor, contacta con soporte.',
-                'is_met' => false
+                'is_met' => false,
+                'error_code' => 'system_error'
             );
         }
         
@@ -40,7 +42,8 @@ class MET_Booking_Handler {
             return array(
                 'found' => false,
                 'message' => '❌ No encontramos esa reserva en MET Mallorca.<br><br>Verifica que el código sea correcto.',
-                'is_met' => false
+                'is_met' => false,
+                'error_code' => 'not_found'
             );
         }
         
@@ -50,7 +53,8 @@ class MET_Booking_Handler {
             return array(
                 'found' => false,
                 'message' => '❌ El email no coincide con la reserva. Por favor, verifica los datos.',
-                'is_met' => true
+                'is_met' => true,
+                'error_code' => 'email_mismatch'
             );
         }
         
@@ -62,15 +66,8 @@ class MET_Booking_Handler {
             'is_met' => true,
             'message' => '✅ Tu reserva fue realizada con MET Mallorca.<br><br>' . $booking_details,
             'order_id' => $order_id,
-            'order' => array(
-                'id' => $order->get_id(),
-                'status' => $order->get_status(),
-                'date' => $order->get_date_created()->date('d/m/Y H:i'),
-                'customer' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-                'email' => $order->get_billing_email(),
-                'phone' => $order->get_billing_phone(),
-                'total' => $order->get_total()
-            )
+            'error_code' => null,
+            'order' => $this->build_order_payload($order)
         );
     }
     

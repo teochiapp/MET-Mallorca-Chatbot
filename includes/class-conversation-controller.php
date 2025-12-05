@@ -299,9 +299,7 @@ class MET_Conversation_Controller {
         // Validar formato básico
         if (empty($booking_code)) {
             return array(
-                'message' => '❌ <strong>Código vacío</strong><br><br>' .
-                            'Por favor, ingresa un código de reserva válido.<br><br>' .
-                            '<em>Ejemplo: MET-1234</em>',
+                'message' => MET_Translations::t('verify_error_missing_info'),
                 'nextStep' => 'verify_booking_code',
                 'options' => array(),
                 'data' => $data,
@@ -323,18 +321,18 @@ class MET_Conversation_Controller {
                 $items_text = implode(', ', $order['items']);
             }
 
-            $success_message = '✅ <strong>¡Reserva encontrada!</strong><br><br>' .
+            $success_message = MET_Translations::t('verify_success_prefix') . '<br><br>' .
                 '<div style="background:#f2fff5;border-left:4px solid #28a745;padding:15px;border-radius:8px;margin:10px 0;">' .
-                '<p style="margin:0 0 8px;"><strong>📋 Código:</strong> ' . esc_html($order['code']) . '</p>' .
-                '<p style="margin:0 0 8px;"><strong>🛒 Producto(s):</strong> ' . esc_html($items_text) . '</p>' .
-                '<p style="margin:0 0 8px;"><strong>👤 Cliente:</strong> ' . esc_html($order['customer']) . '</p>' .
-                '<p style="margin:0 0 8px;"><strong>📅 Fecha de realización del pedido:</strong> ' . esc_html($order['date']) . '</p>' .
-                '<p style="margin:0 0 8px;"><strong>💰 Total:</strong> ' . esc_html($order['total_text']) . '</p>' .
-                '<p style="margin:0;"><strong>📊 Estado:</strong> ' . esc_html($order['status_label']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>📋 ' . MET_Translations::t('verify_details_ref') . ':</strong> ' . esc_html($order['code']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>🛒 ' . MET_Translations::t('verify_details_services') . ':</strong> ' . esc_html($items_text) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>👤 ' . MET_Translations::t('verify_details_client') . ':</strong> ' . esc_html($order['customer']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>📅 ' . MET_Translations::t('verify_details_date') . ':</strong> ' . esc_html($order['date']) . '</p>' .
+                '<p style="margin:0 0 8px;"><strong>💰 ' . MET_Translations::t('verify_details_total') . ':</strong> ' . esc_html($order['total_text']) . '</p>' .
+                '<p style="margin:0;"><strong>📊 ' . MET_Translations::t('verify_details_status') . ':</strong> ' . esc_html($order['status_label']) . '</p>' .
                 '</div>';
             
             $options = array(
-                array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+                array('text' => MET_Translations::t('verify_option_restart'), 'value' => 'restart')
             );
             
             return array(
@@ -346,11 +344,11 @@ class MET_Conversation_Controller {
             );
         } else {
             return array(
-                'message' => '❌ <strong>Reserva no encontrada</strong><br><br>' . esc_html($result['message']) . '<br><br>¿Quieres intentar de nuevo?',
+                'message' => $this->buildVerifyErrorMessage($result['error_code'], $result['message']),
                 'nextStep' => 'route_type',
                 'options' => array(
-                    array('text' => '🔄 Intentar de nuevo', 'value' => 'verify'),
-                    array('text' => '🏠 Volver al inicio', 'value' => 'restart')
+                    array('text' => MET_Translations::t('verify_option_retry'), 'value' => 'verify'),
+                    array('text' => MET_Translations::t('verify_option_restart'), 'value' => 'restart')
                 ),
                 'data' => $data,
                 'showBackButton' => false
