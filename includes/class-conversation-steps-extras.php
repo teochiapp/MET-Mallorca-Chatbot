@@ -212,12 +212,16 @@ class MET_Conversation_Steps_Extras {
         MET_Translations::init_from_data($data);
         $config = array();
 
+        $free_badge_allowed = array('alzadores', 'sillas_bebe');
+
         foreach ($this->extras_config as $key => $extra) {
             $label = MET_Translations::t($extra['label_key']);
             if ($extra['price'] > 0) {
                 $info = '€' . $extra['price'] . ' ' . MET_Translations::t('extras_each');
             } else {
-                $info = '<span class="met-extras-free">' . MET_Translations::t('extras_free') . '</span>';
+                $info = in_array($key, $free_badge_allowed, true)
+                    ? '<span class="met-extras-free">' . MET_Translations::t('extras_free') . '</span>'
+                    : '';
             }
 
             $config[$key] = array(

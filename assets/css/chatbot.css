@@ -227,7 +227,7 @@
 
 /* Widget contenedor */
 .met-chatbot-widget {
-    position: fixed;
+    position: fixed !important;
     bottom: 20px;
     right: 20px;
     z-index: 9999;
@@ -925,6 +925,7 @@
 /* Responsive */
 @media (max-width: 480px) {
     .met-chatbot-widget {
+        position: fixed !important; /* Ensure chatbot widget remains positioned over content even when other styles set it to static */
         bottom: 10px;
         right: 10px;
     }
