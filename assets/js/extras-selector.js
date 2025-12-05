@@ -63,14 +63,22 @@
          * Crear selector individual
          */
         createExtraSelector: function(key, extra) {
-            const priceText = extra.price > 0 ? extra.info : '<span class="met-extras-free">Gratis</span>';
+            const priceText = extra.price > 0
+                ? extra.info
+                : (extra.info && extra.info.trim() !== ''
+                    ? extra.info
+                    : '');
             
+            const priceBadge = priceText
+                ? `<span class="met-extra-price${extra.price === 0 ? ' met-extras-free' : ''}">${priceText}</span>`
+                : '';
+
             return `
                 <div class="met-extra-item" data-extra-key="${key}">
                     <div class="met-extra-header">
                         <span class="met-extra-icon">${extra.icon}</span>
                         <span class="met-extra-label">${extra.label}</span>
-                        <span class="met-extra-price">${priceText}</span>
+                        ${priceBadge}
                     </div>
                     <div class="met-extra-counter">
                         <button type="button" class="met-counter-btn met-counter-minus" data-action="minus" data-key="${key}">

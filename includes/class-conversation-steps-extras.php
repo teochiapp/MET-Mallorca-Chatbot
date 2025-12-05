@@ -220,7 +220,7 @@ class MET_Conversation_Steps_Extras {
                 $info = '€' . $extra['price'] . ' ' . MET_Translations::t('extras_each');
             } else {
                 $info = in_array($key, $free_badge_allowed, true)
-                    ? '<span class="met-extras-free">' . MET_Translations::t('extras_free') . '</span>'
+                    ? MET_Translations::t('extras_free')
                     : '';
             }
 
