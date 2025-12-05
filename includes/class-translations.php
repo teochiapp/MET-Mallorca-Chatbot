@@ -159,6 +159,12 @@ class MET_Translations {
             'modify_datetime' => 'Fecha/Hora',
             'modify_passengers' => 'Pasajeros',
             'modify_start_over' => 'Empezar de nuevo',
+            'modify_locations_title' => 'Modificar Ubicaciones',
+            'modify_locations_question' => '¿Desde dónde te recogemos?',
+            'modify_datetime_title' => 'Modificar Fecha y Hora',
+            'modify_datetime_question' => '¿Qué día necesitas el traslado?',
+            'modify_passengers_title' => 'Modificar Pasajeros',
+            'modify_passengers_question' => '¿Cuántas personas viajan?',
             
             // Vehicle types
             'vehicle_standard' => 'Vehículo Estándar (1-4 pax)',
@@ -317,6 +323,12 @@ class MET_Translations {
             'modify_datetime' => 'Date/Time',
             'modify_passengers' => 'Passengers',
             'modify_start_over' => 'Start over',
+            'modify_locations_title' => 'Modify Locations',
+            'modify_locations_question' => 'Where shall we pick you up from?',
+            'modify_datetime_title' => 'Modify Date and Time',
+            'modify_datetime_question' => 'What day do you need the transfer?',
+            'modify_passengers_title' => 'Modify Passengers',
+            'modify_passengers_question' => 'How many people are travelling?',
             
             // Vehicle types
             'vehicle_standard' => 'Standard Vehicle (1-4 pax)',
@@ -474,7 +486,13 @@ class MET_Translations {
             'modify_locations' => 'Start/Ziel',
             'modify_datetime' => 'Datum/Uhrzeit',
             'modify_passengers' => 'Passagiere',
-            'modify_start_over' => 'Von vorne beginnen',
+            'modify_start_over' => 'Neu beginnen',
+            'modify_locations_title' => 'Standorte ändern',
+            'modify_locations_question' => 'Wo sollen wir dich abholen?',
+            'modify_datetime_title' => 'Datum und Uhrzeit ändern',
+            'modify_datetime_question' => 'An welchem Tag benötigst du den Transfer?',
+            'modify_passengers_title' => 'Passagiere ändern',
+            'modify_passengers_question' => 'Wie viele Personen reisen?',
             
             // Vehicle types
             'vehicle_standard' => 'Standardfahrzeug (1-4 Pax)',
