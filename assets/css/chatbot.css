@@ -381,7 +381,7 @@
     box-shadow: 0 8px 32px var(--met-shadow);
     display: none;
     flex-direction: column;
-    overflow: visible;
+    overflow: visible !important;
     animation: slideUp 0.3s ease;
 }
 
