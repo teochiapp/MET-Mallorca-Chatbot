@@ -121,7 +121,6 @@ class MET_Conversation_Steps_Details {
                 'message' => '👥 <strong>' . MET_Translations::t('passengers_large_group') . '</strong><br><br>' .
                             MET_Translations::t('passengers_large_message') . '<br><br>' .
                             MET_Translations::t('passengers_contact') . '<br>' .
-                            '📞 <a href="tel:+34971123456">+34 971 123 456</a><br>' .
                             '📧 <a href="mailto:metmallorca@yahoo.com">metmallorca@yahoo.com</a><br><br>' .
                             '<a href="https://metmallorca.com/es/presupuesto/" target="_blank" rel="noopener" style="color:#E86A1C;font-weight:600;">Solicitar presupuesto personalizado</a>',
                 'nextStep' => 'end',

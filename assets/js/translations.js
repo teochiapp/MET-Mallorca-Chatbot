@@ -46,7 +46,7 @@
                 'welcome_message': 'Soy tu asistente de reservas. Te ayudaré a calcular el precio de tu traslado y generar tu reserva en menos de 2 minutos.',
                 'welcome_question': '¿Qué tipo de traslado necesitas?',
                 'option_airport': 'Aeropuerto ↔ Destino',
-                'option_point_to_airport': 'Punto → Aeropuerto (PMI)',
+                'option_point_to_airport': 'Donde Estoy → Aeropuerto (PMI)',
                 'option_verify': 'Verificar mi reserva',
                 
                 // Route type step
@@ -64,7 +64,7 @@
                 'verify_checking': '🔍 Verificando tu reserva...',
                 'verify_error_not_met': '❌ No encontramos esa reserva en MET Mallorca. ¿Podría ser de otra empresa? Puedes adjuntar foto del voucher o indicarnos la empresa que figura en tu comprobante.',
                 'verify_error_system': '❌ Error del sistema. Por favor, contacta con soporte.',
-                'verify_error_not_found': '❌ No encontramos esa reserva en MET Mallorca. Verifica que el código sea correcto.',
+                'verify_error_not_found': '❌ Tu reserva no está registrada. Por favor, vuelve a comprobarla o realiza una nueva.',
                 'verify_error_email': '❌ El email no coincide con la reserva. Por favor, verifica los datos.',
                 'verify_success_prefix': '✅ Tu reserva fue realizada con MET Mallorca.',
                 'verify_details_title': 'Detalles de tu reserva:',
@@ -105,7 +105,7 @@
                 // Time step
                 'time_title': '¿A qué hora necesitas el traslado?',
                 'time_message': 'Selecciona una hora disponible (intervalos de 30 minutos).',
-                'time_example': 'Ejemplo: 14:00, 14:30, 15:00…',
+                'time_example': 'Ejemplo: 2:00 PM, 2:30 PM, 3:00 PM…',
                 'time_error_retry': 'Por favor, intenta de nuevo:',
                 
                 // Passengers step
@@ -144,7 +144,7 @@
                 'price_base': 'Precio base',
                 'price_vehicle': 'Vehículo',
                 'price_vehicle_supplement': 'Suplemento de vehículo',
-                'price_night_supplement': 'Suplemento nocturno',
+
                 'price_passenger_supplement': 'Pasajeros extra',
                 'price_total': 'TOTAL',
                 'price_extra_pet': '🐾 Mascota',
@@ -243,7 +243,7 @@
                 'welcome_message': 'I\'m your booking assistant. I\'ll help you calculate the price of your transfer and generate your booking in less than 2 minutes.',
                 'welcome_question': 'What type of transfer do you need?',
                 'option_airport': 'Airport ↔ Destination',
-                'option_point_to_airport': 'Point → Airport (PMI)',
+                'option_point_to_airport': 'Where I Am → Airport (PMI)',
                 'option_verify': 'Verify my booking',
                 
                 // Route type step
@@ -261,7 +261,7 @@
                 'verify_checking': '🔍 Checking your booking...',
                 'verify_error_not_met': '❌ We couldn\'t find that booking at MET Mallorca. Could it belong to another company? You can send us a photo of the voucher or tell us the company on your receipt.',
                 'verify_error_system': '❌ System error. Please contact support.',
-                'verify_error_not_found': '❌ We couldn\'t find that booking at MET Mallorca. Please make sure the code is correct.',
+                'verify_error_not_found': '❌ Your booking is not registered. Please check it again or make a new one.',
                 'verify_error_email': '❌ The email does not match the booking. Please double-check.',
                 'verify_success_prefix': '✅ Your booking was made with MET Mallorca.',
                 'verify_details_title': 'Your booking details:',
@@ -302,7 +302,7 @@
                 // Time step
                 'time_title': 'What time do you need the transfer?',
                 'time_message': 'Select an available time (30-minute intervals).',
-                'time_example': 'Example: 14:00, 14:30, 15:00…',
+                'time_example': 'Example: 2:00 PM, 2:30 PM, 3:00 PM…',
                 'time_error_retry': 'Please try again:',
                 
                 // Passengers step
@@ -341,7 +341,7 @@
                 'price_base': 'Base price',
                 'price_vehicle': 'Vehicle',
                 'price_vehicle_supplement': 'Vehicle supplement',
-                'price_night_supplement': 'Night supplement',
+
                 'price_passenger_supplement': 'Extra passengers',
                 'price_total': 'TOTAL',
                 'price_extra_pet': '🐾 Pet',
@@ -440,7 +440,7 @@
                 'welcome_message': 'Ich bin Ihr Buchungsassistent. Ich helfe Ihnen, den Preis Ihres Transfers zu berechnen und Ihre Buchung in weniger als 2 Minuten zu erstellen.',
                 'welcome_question': 'Welche Art von Transfer benötigen Sie?',
                 'option_airport': 'Flughafen ↔ Zielort',
-                'option_point_to_airport': 'Punkt → Flughafen (PMI)',
+                'option_point_to_airport': 'Wo Ich Bin → Flughafen (PMI)',
                 'option_verify': 'Meine Buchung überprüfen',
                 
                 // Route type step
@@ -458,7 +458,7 @@
                 'verify_checking': '🔍 Wir prüfen deine Buchung...',
                 'verify_error_not_met': '❌ Wir konnten diese Buchung nicht bei MET Mallorca finden. Könnte sie zu einem anderen Unternehmen gehören? Bitte sende uns ein Foto des Vouchers oder nenne die Firma auf deinem Beleg.',
                 'verify_error_system': '❌ Systemfehler. Bitte kontaktiere den Support.',
-                'verify_error_not_found': '❌ Wir konnten diese Buchung nicht bei MET Mallorca finden. Bitte überprüfe den Code.',
+                'verify_error_not_found': '❌ Ihre Buchung ist nicht registriert. Bitte überprüfen Sie sie erneut oder erstellen Sie eine neue.',
                 'verify_error_email': '❌ Die E-Mail stimmt nicht mit der Buchung überein. Bitte überprüfe die Angaben.',
                 'verify_success_prefix': '✅ Deine Buchung wurde bei MET Mallorca erstellt.',
                 'verify_details_title': 'Details deiner Buchung:',
@@ -499,7 +499,7 @@
                 // Time step
                 'time_title': 'Um welche Uhrzeit benötigen Sie den Transfer?',
                 'time_message': 'Wählen Sie eine verfügbare Uhrzeit (30-Minuten-Intervalle).',
-                'time_example': 'Beispiel: 14:00, 14:30, 15:00…',
+                'time_example': 'Beispiel: 14:00, 14:30, 15:00 Uhr…',
                 'time_error_retry': 'Bitte versuchen Sie es erneut:',
                 
                 // Passengers step
@@ -538,7 +538,7 @@
                 'price_base': 'Grundpreis',
                 'price_vehicle': 'Fahrzeug',
                 'price_vehicle_supplement': 'Fahrzeugsupplement',
-                'price_night_supplement': 'Nachtzuschlag',
+
                 'price_passenger_supplement': 'Zusatzpassagiere',
                 'price_total': 'GESAMT',
                 'price_extra_pet': '🐾 Haustier',

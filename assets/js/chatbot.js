@@ -649,7 +649,11 @@
             });
 
             $container.off('time-selected').on('time-selected', function(e, time) {
-                self.addMessage('user', time);
+                // Convert to 12h format for display
+                const displayTime = window.MetTimeSearcher.convertTo12Hour ? 
+                    window.MetTimeSearcher.convertTo12Hour(time) : time;
+                
+                self.addMessage('user', displayTime);
                 $container.hide().empty();
                 self.sendMessage(time, self.state.currentStep, self.state.conversationData);
             });

@@ -427,9 +427,7 @@ class MET_Checkout_Generator {
             $description .= '<li>Suplemento vehículo: €' . number_format($price_breakdown['vehicle_supplement'], 2) . '</li>';
         }
         
-        if ($price_breakdown['night_supplement'] > 0) {
-            $description .= '<li>Suplemento nocturno: €' . number_format($price_breakdown['night_supplement'], 2) . '</li>';
-        }
+
         
         if ($price_breakdown['extra_passengers'] > 0) {
             $description .= '<li>Pasajeros extra: €' . number_format($price_breakdown['extra_passengers'], 2) . '</li>';

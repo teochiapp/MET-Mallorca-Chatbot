@@ -41,7 +41,7 @@ class MET_Booking_Handler {
         if (!$order) {
             return array(
                 'found' => false,
-                'message' => '❌ No encontramos esa reserva en MET Mallorca.<br><br>Verifica que el código sea correcto.',
+                'message' => '❌ Tu reserva no está registrada. Por favor, vuelve a comprobarla o realiza una nueva.',
                 'is_met' => false,
                 'error_code' => 'not_found'
             );

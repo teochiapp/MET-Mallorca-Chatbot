@@ -17,6 +17,48 @@
             this.bindEvents();
         },
 
+        /**
+         * Convert 24-hour format to 12-hour AM/PM format
+         * @param {string} time24 - Time in HH:MM format
+         * @returns {string} Time in h:MM AM/PM format
+         */
+        convertTo12Hour: function(time24) {
+            const [hourStr, minute] = time24.split(':');
+            let hour = parseInt(hourStr, 10);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            
+            // Convert hour to 12-hour format
+            if (hour === 0) {
+                hour = 12; // Midnight
+            } else if (hour > 12) {
+                hour = hour - 12;
+            }
+            
+            return `${hour}:${minute} ${ampm}`;
+        },
+
+        /**
+         * Convert 12-hour AM/PM format back to 24-hour format
+         * @param {string} time12 - Time in h:MM AM/PM format
+         * @returns {string} Time in HH:MM format
+         */
+        convertTo24Hour: function(time12) {
+            const match = time12.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+            if (!match) return time12;
+            
+            let hour = parseInt(match[1], 10);
+            const minute = match[2];
+            const ampm = match[3].toUpperCase();
+            
+            if (ampm === 'PM' && hour !== 12) {
+                hour += 12;
+            } else if (ampm === 'AM' && hour === 12) {
+                hour = 0;
+            }
+            
+            return `${hour.toString().padStart(2, '0')}:${minute}`;
+        },
+
         createSearcher: function(placeholder, inputId) {
             const html = `
                 <div class="met-time-searcher">
@@ -117,9 +159,30 @@
         },
 
         filterSlots: function(query) {
-            const normalized = query.toLowerCase();
+            const self = this;
+            const normalized = query.toLowerCase().trim();
+            
+            // Normalize search query by removing spaces between number and AM/PM
+            // e.g., "2 am" or "2am" both become "2am"
+            const normalizedQuery = normalized.replace(/\s+/g, '');
+            
+            // Filter by matching either 24h or 12h format
             const matches = this.timeSlots.filter(function(slot) {
-                return slot.toLowerCase().indexOf(normalized) !== -1;
+                const time12 = self.convertTo12Hour(slot).toLowerCase();
+                const slotLower = slot.toLowerCase();
+                
+                // Remove spaces from slot for comparison
+                const time12NoSpace = time12.replace(/\s+/g, '');
+                const slotNoSpace = slotLower.replace(/\s+/g, '');
+                
+                // Check various patterns:
+                // 1. Direct match with original formats
+                // 2. Match without spaces (e.g., "2am" matches "2:00 AM")
+                // 3. Partial match (e.g., "2" matches "2:00 AM" and "2:30 AM")
+                return slotLower.indexOf(normalized) !== -1 || 
+                       time12.indexOf(normalized) !== -1 ||
+                       slotNoSpace.indexOf(normalizedQuery) !== -1 ||
+                       time12NoSpace.indexOf(normalizedQuery) !== -1;
             });
 
             if (matches.length === 0 && normalized.length === 0) {
@@ -130,6 +193,7 @@
         },
 
         showResults: function(results, $input) {
+            const self = this;
             const $searcher = $input.closest('.met-time-searcher');
             const $dropdown = $searcher.find('.met-time-dropdown');
             const $resultsContainer = $dropdown.find('.met-time-results');
@@ -140,9 +204,15 @@
                 $resultsContainer.html('<div class="met-time-no-results">Sin horarios disponibles</div>');
             } else {
                 results.forEach(function(slot) {
+                    // Check if already in 12h format (contains AM or PM)
+                    const isAlready12h = /AM|PM/i.test(slot);
+                    const displayTime = isAlready12h ? slot : self.convertTo12Hour(slot);
+                    const timeValue = isAlready12h ? self.convertTo24Hour(slot) : slot;
+                    
                     const $item = $('<div class="met-time-result-item"></div>')
-                        .text(slot)
-                        .data('time', slot);
+                        .text(displayTime)
+                        .data('time', timeValue)
+                        .data('display-time', displayTime);
                     $resultsContainer.append($item);
                 });
             }
@@ -156,9 +226,13 @@
             const $selected = $searcher.find('.met-time-selected');
             const $selectedText = $selected.find('.met-time-selected-text');
 
+            // Store 24-hour format for backend compatibility
             $searcher.data('selected-time', time);
+            
+            // Display 12-hour format to user
+            const displayTime = this.convertTo12Hour(time);
             $input.val('').hide();
-            $selectedText.text(time);
+            $selectedText.text(displayTime);
             $selected.show();
             $dropdown.hide();
 
@@ -214,6 +288,7 @@
             if (this.timeSlots.length > 0) return;
             for (let hour = 0; hour < 24; hour++) {
                 ['00', '30'].forEach(min => {
+                    // Store in 24-hour format for backend compatibility
                     this.timeSlots.push(`${hour.toString().padStart(2, '0')}:${min}`);
                 });
             }

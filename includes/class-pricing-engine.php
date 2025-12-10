@@ -39,8 +39,7 @@ class MET_Pricing_Engine {
             'bus' => 50             // Bus (17-20 pax)
         ),
         
-        // Suplemento por horario nocturno (22:00 - 06:00)
-        'night_supplement' => 10,
+
         
         // Suplemento por pasajero extra (después del límite del vehículo)
         'extra_passenger_rate' => 5,
@@ -344,7 +343,6 @@ class MET_Pricing_Engine {
         $breakdown = array(
             'base_price' => 0,
             'vehicle_supplement' => 0,
-            'night_supplement' => 0,
             'passenger_supplement' => 0,
             'extras' => array(),
             'total' => 0
@@ -380,10 +378,7 @@ class MET_Pricing_Engine {
             $breakdown['vehicle_supplement'] = 0; // Ya incluido en precio base
         }
         
-        // 3. Suplemento nocturno
-        if ($this->is_night_time($booking_data)) {
-            $breakdown['night_supplement'] = $this->config['night_supplement'];
-        }
+
         
         // 4. Suplemento por pasajeros extra
         $vehicle_capacity = $this->get_vehicle_capacity($vehicle_type);
@@ -398,7 +393,6 @@ class MET_Pricing_Engine {
         // 6. Calcular total
         $breakdown['total'] = $breakdown['base_price'] 
                             + $breakdown['vehicle_supplement'] 
-                            + $breakdown['night_supplement'] 
                             + $breakdown['passenger_supplement'] 
                             + array_sum($breakdown['extras']);
         
@@ -525,31 +519,7 @@ class MET_Pricing_Engine {
         return isset($capacities[$vehicle_type]) ? $capacities[$vehicle_type] : 4;
     }
     
-    /**
-     * Verificar si es horario nocturno (22:00 - 06:00)
-     */
-    private function is_night_time($booking_data) {
-        if (!isset($booking_data['datetime'])) {
-            return false;
-        }
-        
-        // Parsear fecha/hora (formato: DD/MM/YYYY - HH:MM)
-        $datetime_parts = explode(' - ', $booking_data['datetime']);
-        if (count($datetime_parts) < 2) {
-            return false;
-        }
-        
-        $time = trim($datetime_parts[1]);
-        $time_parts = explode(':', $time);
-        if (count($time_parts) < 2) {
-            return false;
-        }
-        
-        $hour = intval($time_parts[0]);
-        
-        // Horario nocturno: 22:00 - 06:00
-        return ($hour >= 22 || $hour < 6);
-    }
+
     
     /**
      * Calcular extras
@@ -620,10 +590,7 @@ class MET_Pricing_Engine {
         }
         $html .= '<br>';
         
-        // Suplemento nocturno
-        if ($breakdown['night_supplement'] > 0) {
-            $html .= '🌙 ' . MET_Translations::t('price_night_supplement') . ': +€' . number_format($breakdown['night_supplement'], 2) . '<br>';
-        }
+
         
         // Pasajeros extra
         if ($breakdown['passenger_supplement'] > 0) {
