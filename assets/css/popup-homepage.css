@@ -160,7 +160,7 @@
     overflow: hidden;
 }
 
-.met-popup-action::before {
+.met-popup-btn-blue::before {
     content: '';
     position: absolute;
     top: 0;
@@ -215,6 +215,12 @@
 
 .met-popup-btn-blue {
     color: var(--met-blue);
+    transition: color 0.3s ease;
+}
+
+/* Hover effect - cambiar texto azul a naranja */
+.met-popup-action:hover .met-popup-btn-blue {
+    color: var(--met-orange);
 }
 
 /* Contenedor para botón + mano (relativo) */
@@ -242,36 +248,67 @@
     }
     
     .met-popup-content {
-        min-height: 320px;
-    }
-    
-    .met-popup-inner {
-        padding: 40px 30px 30px;
-        min-height: 320px;
-    }
-    
-    .met-popup-text h2 {
-        font-size: 36px;
-    }
-    
-    .met-popup-action {
-        font-size: 18px;
-        padding: 18px 24px;
-    }
-}
-
-@media (max-width: 480px) {
-    .met-popup-text h2 {
-        font-size: 28px;
-    }
-    
-    .met-popup-action {
-        font-size: 16px;
-        padding: 16px 20px;
+        min-height: 300px;
     }
     
     .met-popup-inner {
         padding: 30px 20px 25px;
+        min-height: 300px;
+        gap: 24px;
+    }
+    
+    .met-popup-text h2 {
+        font-size: 32px;
+    }
+    
+    .met-popup-action {
+        width: 100%;
+        max-width: 320px;
+        font-size: 19px;
+        padding: 18px 24px;
+        height: 56px;
+    }
+    
+    .met-popup-cursor {
+        width: 45px;
+        bottom: -14px;
+        right: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .met-popup-content {
+        min-height: 280px;
+    }
+    
+    .met-popup-inner {
+        padding: 25px 15px 20px;
+        min-height: 280px;
+        gap: 20px;
+    }
+    
+    .met-popup-text h2 {
+        font-size: 26px;
+    }
+    
+    .met-popup-action {
+        width: 100%;
+        max-width: 280px;
+        font-size: 17px;
+        padding: 16px 20px;
+        height: 52px;
+        gap: 6px;
+    }
+    
+    .met-popup-action svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .met-popup-cursor {
+        width: 40px;
+        bottom: -12px;
+        right: 15px;
     }
 }
 
