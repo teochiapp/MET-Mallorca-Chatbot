@@ -1,0 +1,288 @@
+/**
+ * Estilos para el Popup de Homepage - MET Chatbot
+ * Diseño basado en la imagen de marca de MET Mallorca
+ */
+:root {
+    --met-orange: #EB8429;
+    --met-white: #FFFFFF;
+    --met-blue: #15699A;
+    --font-met: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+/* Contenedor del popup */
+#met-homepage-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    z-index: 9998;
+    max-width: 740px;
+    width: calc(100vw - 40px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+#met-homepage-popup.met-popup-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: all;
+}
+
+/* Contenido del popup */
+.met-popup-content {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 
+                0 5px 15px rgba(0, 0, 0, 0.3);
+    min-height: 400px;
+}
+
+/* Imagen de fondo */
+.met-popup-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../images/popup-chat-bg.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+/* Overlay oscuro sobre la imagen */
+.met-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.5) 100%
+    );
+    z-index: 2;
+}
+
+/* Contenido interno */
+.met-popup-inner {
+    position: relative;
+    z-index: 3;
+    padding: 30px 20px 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-height: 400px;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+/* Botón de cierre */
+.met-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: var(--met-white);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+}
+
+.met-popup-close:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Texto del popup */
+.met-popup-text {
+    text-align: center;
+    align-self: center;
+    width: 100%;
+}
+
+.met-popup-text h2 {
+    margin: 0;
+    font-family: var(--font-met);
+    font-size: 45px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.met-popup-title-orange {
+    color: var(--met-orange);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.met-popup-title-white {
+    color: var(--met-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Botón de acción */
+.met-popup-action {
+    width: 350px;
+    padding: 22px 32px;
+    height: 60px;
+    background: var(--met-orange);
+    color: var(--met-white);
+    border: none;
+    border-radius: 64px;
+    font-family: var(--font-met);
+    font-size: 23px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(235, 132, 41, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.met-popup-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.5s;
+    z-index: 0;
+}
+
+.met-popup-action:hover::before {
+    left: 100%;
+}
+
+.met-popup-action > * {
+    position: relative;
+    z-index: 1;
+}
+
+.met-popup-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(235, 132, 41, 0.5);
+}
+
+.met-popup-action:active {
+    transform: translateY(-1px);
+}
+
+.met-popup-action i {
+    font-size: 20px;
+}
+
+@keyframes cursor-bounce {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(1px, -1px);
+    }
+}
+
+/* Colores del texto del botón */
+.met-popup-btn-white {
+    color: var(--met-white);
+}
+
+.met-popup-btn-blue {
+    color: var(--met-blue);
+}
+
+/* Contenedor para botón + mano (relativo) */
+.met-popup-button-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Cursor/mano apuntando (absoluto, fuera del botón) */
+.met-popup-cursor {
+    position: absolute;
+    width: 50px;
+    height: auto;
+    bottom: -16px;
+    right: 22px;
+    z-index: 20;
+    animation: cursor-bounce 1s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #met-homepage-popup {
+        max-width: calc(100vw - 30px);
+    }
+    
+    .met-popup-content {
+        min-height: 320px;
+    }
+    
+    .met-popup-inner {
+        padding: 40px 30px 30px;
+        min-height: 320px;
+    }
+    
+    .met-popup-text h2 {
+        font-size: 36px;
+    }
+    
+    .met-popup-action {
+        font-size: 18px;
+        padding: 18px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .met-popup-text h2 {
+        font-size: 28px;
+    }
+    
+    .met-popup-action {
+        font-size: 16px;
+        padding: 16px 20px;
+    }
+    
+    .met-popup-inner {
+        padding: 30px 20px 25px;
+    }
+}
+
+/* Animación de entrada para el popup completo */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}

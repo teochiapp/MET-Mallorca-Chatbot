@@ -293,7 +293,7 @@
 
 .met-chatbot-icon {
     display: block;
-    color: white;
+    color: white !important;
 }
 
 .met-chatbot-close {

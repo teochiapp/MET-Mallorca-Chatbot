@@ -10,6 +10,9 @@
         // Todas las ubicaciones disponibles
         locations: [],
         
+        // Local street database
+        streetDatabase: null,
+        
         // Configuración
         config: {
             minChars: 2,
@@ -26,6 +29,29 @@
         init: function(locations) {
             this.locations = locations || [];
             this.bindEvents();
+            this.loadStreetDatabase();
+        },
+        
+        /**
+         * Cargar base de datos local de calles
+         */
+        loadStreetDatabase: function() {
+            const self = this;
+            const dbPath = metChatbot.pluginUrl + '/mallorca_streets.json';
+            
+            $.ajax({
+                url: dbPath,
+                dataType: 'json',
+                cache: true,
+                success: function(data) {
+                    self.streetDatabase = data;
+                    console.log('Street database loaded:', Object.keys(data).length, 'locations');
+                },
+                error: function() {
+                    console.warn('Could not load street database');
+                    self.streetDatabase = {};
+                }
+            });
         },
         
         /**
@@ -162,8 +188,58 @@
          * Buscar ubicaciones
          */
         search: function(query, $input) {
+            const self = this;
             const results = this.filterLocations(query);
-            this.showResults(results, $input);
+            
+            // If no results, try local street database first (fastest)
+            if (results.length === 0 && this.streetDatabase) {
+                const localResult = this.searchInLocalDatabase(query);
+                if (localResult) {
+                    this.showGeocodedResult(localResult, query, $input);
+                    return;
+                }
+            }
+            
+            // If still no results and query is long enough, try geocoding (reduced to 3 chars)
+            if (results.length === 0 && query.length >= 3) {
+                this.showLoadingMessage($input);
+                this.geocodeAddress(query).then(function(district) {
+                    if (district) {
+                        self.showGeocodedResult(district, query, $input);
+                    } else {
+                        self.showNoResults($input);
+                    }
+                }).catch(function() {
+                    self.showResults(results, $input);
+                });
+            } else {
+                this.showResults(results, $input);
+            }
+        },
+        
+        /**
+         * Buscar en la base de datos local de calles
+         */
+        searchInLocalDatabase: function(query) {
+            if (!this.streetDatabase) return null;
+            
+            const queryLower = query.toLowerCase().trim();
+            
+            // Buscar en cada distrito
+            for (const [location, data] of Object.entries(this.streetDatabase)) {
+                const streets = data.streets || [];
+                
+                // Buscar coincidencia en calles
+                for (const street of streets) {
+                    if (street.toLowerCase().includes(queryLower) || 
+                        queryLower.includes(street.toLowerCase())) {
+                        console.log(' Found in local DB:', street, '→', data.district);
+                        return data.district;
+                    }
+                }
+            }
+            
+            return null;
         },
         
         /**
@@ -366,5 +442,73 @@
 
         preloadLocations(30); // Reintentar durante ~3s
     });
+    
+    // Extend LocationSearcher with geocoding methods
+    LocationSearcher.geocodeAddress = function(address) {
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: metChatbot.ajaxUrl,
+                method: 'POST',
+                data: {
+                    action: 'met_geocode_location',
+                    nonce: metChatbot.nonce,
+                    address: address
+                },
+                timeout: 5000
+            }).done(function(response) {
+                if (response.success && response.data.district) {
+                    resolve(response.data.district);
+                } else {
+                    resolve(null);
+                }
+            }).fail(function() {
+                resolve(null);
+            });
+        });
+    };
+    
+    LocationSearcher.showLoadingMessage = function($input) {
+        const $searcher = $input.closest('.met-location-searcher');
+        const $dropdown = $searcher.find('.met-location-dropdown');
+        const $resultsContainer = $dropdown.find('.met-location-results');
+        
+        $resultsContainer.html(
+            '<div class="met-location-loading">' +
+            '<i class="fas fa-spinner fa-spin"></i> Buscando dirección...' +
+            '</div>'
+        );
+        $dropdown.show();
+    };
+    
+    LocationSearcher.showGeocodedResult = function(district, originalQuery, $input) {
+        const $searcher = $input.closest('.met-location-searcher');
+        const $dropdown = $searcher.find('.met-location-dropdown');
+        const $resultsContainer = $dropdown.find('.met-location-results');
+        
+        $resultsContainer.html(
+            '<div class="met-location-geocoded">' +
+            '<div class="met-location-result-item" data-location="' + district + '">' +
+            '<i class="fas fa-map-marker-alt"></i> ' + district +
+            '<div class="met-location-hint">📍 Desde: ' + originalQuery + '</div>' +
+            '</div>' +
+            '</div>'
+        );
+        $dropdown.show();
+    };
+    
+    LocationSearcher.showNoResults = function($input) {
+        const $searcher = $input.closest('.met-location-searcher');
+        const $dropdown = $searcher.find('.met-location-dropdown');
+        const $resultsContainer = $dropdown.find('.met-location-results');
+        
+        $resultsContainer.html(
+            '<div class="met-location-no-results">' +
+            'No se encontró esta dirección.<br>' +
+            '<small style="margin-top:8px;display:block;">💡 <strong>Tip:</strong> Escribe solo el nombre del pueblo o ciudad<br>' +
+            '(ej: Andratx, Alcudia, Pollença, Santa Ponsa)</small>' +
+            '</div>'
+        );
+        $dropdown.show();
+    };
 
 })(jQuery);

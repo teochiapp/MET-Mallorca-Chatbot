@@ -57,6 +57,8 @@ class MET_Chatbot {
         add_action('wp_ajax_nopriv_met_get_time_slots', array($this, 'get_time_slots'));
         add_action('wp_ajax_met_verify_booking_inline', array($this, 'verify_booking_inline'));
         add_action('wp_ajax_nopriv_met_verify_booking_inline', array($this, 'verify_booking_inline'));
+        add_action('wp_ajax_met_geocode_location', array($this, 'geocode_location'));
+        add_action('wp_ajax_nopriv_met_geocode_location', array($this, 'geocode_location'));
 
         // REST API routes
         add_action('rest_api_init', array($this, 'register_rest_routes'));
@@ -140,6 +142,16 @@ class MET_Chatbot {
             MET_CHATBOT_VERSION
         );
         
+        // CSS para popup de homepage (solo en homepage)
+        if (is_front_page() || is_home()) {
+            wp_enqueue_style(
+                'met-popup-homepage-style',
+                MET_CHATBOT_PLUGIN_URL . 'assets/css/popup-homepage.css',
+                array('met-chatbot-style'),
+                MET_CHATBOT_VERSION
+            );
+        }
+        
         // JavaScript de traducciones (debe cargarse primero)
         wp_enqueue_script(
             'met-translations',
@@ -185,10 +197,22 @@ class MET_Chatbot {
             true
         );
         
+        // JavaScript del popup de homepage (solo en homepage)
+        if (is_front_page() || is_home()) {
+            wp_enqueue_script(
+                'met-popup-homepage',
+                MET_CHATBOT_PLUGIN_URL . 'assets/js/popup-homepage.js',
+                array('jquery', 'met-chatbot-script'),
+                MET_CHATBOT_VERSION,
+                true
+            );
+        }
+        
         // Pasar datos al JavaScript
         wp_localize_script('met-chatbot-script', 'metChatbot', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('met_chatbot_nonce')
+            'nonce' => wp_create_nonce('met_chatbot_nonce'),
+            'pluginUrl' => MET_CHATBOT_PLUGIN_URL
         ));
     }
     
@@ -197,6 +221,11 @@ class MET_Chatbot {
      */
     public function render_chatbot() {
         include MET_CHATBOT_PLUGIN_DIR . 'templates/chatbot-widget.php';
+        
+        // Renderizar popup solo en homepage
+        if (is_front_page() || is_home()) {
+            include MET_CHATBOT_PLUGIN_DIR . 'templates/popup-homepage.php';
+        }
     }
     
     /**
@@ -552,6 +581,266 @@ class MET_Chatbot {
         }
 
         return null;
+    }
+
+    /**
+     * Geocode location using Nominatim API (OpenStreetMap - Free)
+     */
+    public function geocode_location() {
+        check_ajax_referer('met_chatbot_nonce', 'nonce');
+        
+        $address = isset($_POST['address']) ? sanitize_text_field($_POST['address']) : '';
+        
+        if (empty($address)) {
+            wp_send_json_error(array('message' => 'Address is required'));
+        }
+        
+        // Build Nominatim query - search broadly first
+        $address_encoded = urlencode($address . ', Mallorca, Spain');
+        $url = "https://nominatim.openstreetmap.org/search?" .
+               "q={$address_encoded}&format=json&addressdetails=1&limit=1";
+        
+        // Make request with proper headers
+        $response = wp_remote_get($url, array(
+            'headers' => array(
+                'User-Agent' => 'MET Mallorca Chatbot/1.0'
+            ),
+            'timeout' => 5
+        ));
+        
+        if (is_wp_error($response)) {
+            error_log('MET Geocoding - Request error: ' . $response->get_error_message());
+            wp_send_json_error(array(
+                'message' => 'Geocoding request failed',
+                'user_message' => 'Error de conexión. Intenta de nuevo.'
+            ));
+        }
+        
+        $data = json_decode(wp_remote_retrieve_body($response), true);
+        
+        if (empty($data)) {
+            error_log('MET Geocoding - No results from Nominatim for: ' . $address);
+            // User-friendly message
+            wp_send_json_error(array(
+                'message' => 'No results found from Nominatim',
+                'user_message' => 'No encontramos esta calle. Prueba escribiendo solo el nombre del pueblo o ciudad (ej: Andratx, Alcudia, Pollença)'
+            ));
+        }
+        
+        // Extract city/town with more flexibility
+        $address_parts = isset($data[0]['address']) ? $data[0]['address'] : array();
+        $city = null;
+        
+        error_log('MET Geocoding - Address parts: ' . print_r($address_parts, true));
+        
+        // Try different levels of administrative areas
+        if (isset($address_parts['city'])) {
+            $city = $address_parts['city'];
+        } elseif (isset($address_parts['town'])) {
+            $city = $address_parts['town'];
+        } elseif (isset($address_parts['village'])) {
+            $city = $address_parts['village'];
+        } elseif (isset($address_parts['municipality'])) {
+            $city = $address_parts['municipality'];
+        } elseif (isset($address_parts['county'])) {
+            $city = $address_parts['county'];
+        } elseif (isset($address_parts['suburb'])) {
+            $city = $address_parts['suburb'];
+        }
+        
+        if (!$city) {
+            error_log('MET Geocoding - Could not extract city from address parts');
+            wp_send_json_error(array(
+                'message' => 'Could not determine city',
+                'user_message' => 'Escribe el nombre del pueblo o ciudad (ej: Palma, Andratx, Alcudia)',
+                'address_parts' => $address_parts
+            ));
+        }
+        
+        error_log('MET Geocoding - Extracted city: ' . $city);
+        
+        // Map to existing district
+        $district = $this->map_to_existing_district($city);
+        
+        error_log('MET Geocoding - Mapped district: ' . $district);
+        
+        wp_send_json_success(array(
+            'district' => $district,
+            'original_city' => $city,
+            'query' => $address
+        ));
+    }
+
+    /**
+     * Map geocoded city to existing district
+     */
+    private function map_to_existing_district($city) {
+        error_log('MET Geocoding - Starting district mapping for: ' . $city);
+        
+        // Manual mapping for common Mallorca locations
+        $manual_mapping = array(
+            // Palma variations
+            'palma' => 'Palma',
+            'palma de mallorca' => 'Palma',
+            'ciutat de mallorca' => 'Palma',
+            
+            // Puerto Pollensa / Port de Pollença
+            'port de pollença' => 'Puerto Pollensa',
+            'puerto pollensa' => 'Puerto Pollensa',
+            'pollença' => 'Puerto Pollensa',
+            'pollensa' => 'Puerto Pollensa',
+            
+            // Alcudia
+            'alcúdia' => 'Alcudia',
+            'alcudia' => 'Alcudia',
+            'port d\'alcúdia' => 'Puerto de Alcudia',
+            'puerto de alcudia' => 'Puerto de Alcudia',
+            
+            // Magaluf / Magalluf
+            'magaluf' => 'Magalluf',
+            'magalluf' => 'Magalluf',
+            
+            // Palma Nova
+            'palmanova' => 'Palma Nova',
+            'palma nova' => 'Palma Nova',
+            
+            // Santa Ponsa
+            'santa ponça' => 'Santa Ponsa',
+            'santa ponsa' => 'Santa Ponsa',
+            
+            // Cala Millor
+            'cala millor' => 'Cala Millor',
+            
+            // Cala d'Or
+            'cala d\'or' => 'Cala D´or',
+            'cala dor' => 'Cala D´or',
+            
+            // Sóller / Soller
+            'sóller' => 'Port de Soller',
+            'soller' => 'Port de Soller',
+            'port de sóller' => 'Port de Soller',
+            'puerto de soller' => 'Port de Soller',
+            
+            // Cala Ratjada
+            'cala ratjada' => 'Cala Ratjada',
+            'capdepera' => 'Cala Ratjada',
+            
+            // Andratx / Port d'Andratx
+            'andratx' => 'Andratx',
+            'port d\'andratx' => 'Andratx',
+            'puerto de andratx' => 'Andratx',
+            
+            // Manacor
+            'manacor' => 'Manacor',
+            
+            // Inca
+            'inca' => 'Inca',
+            
+            // Calvià
+            'calvià' => 'Calvia',
+            'calvia' => 'Calvia',
+            
+            // Llucmajor
+            'llucmajor' => 'Llucmajor',
+            
+            // Sa Pobla
+            'sa pobla' => 'Sa Pobla',
+            
+            // Campos
+            'campos' => 'Campos',
+            
+            // Felanitx
+            'felanitx' => 'Felanitx',
+            
+            // Santanyí
+            'santanyí' => 'Santanyi',
+            'santanyi' => 'Santanyi',
+            
+            // Artà
+            'artà' => 'Arta',
+            'arta' => 'Arta',
+        );
+        
+        $city_lower = strtolower(trim($city));
+        
+        // Check manual mapping first
+        if (isset($manual_mapping[$city_lower])) {
+            error_log('MET Geocoding - Manual mapping found: ' . $manual_mapping[$city_lower]);
+            return $manual_mapping[$city_lower];
+        }
+        
+        // Try getting locations from Chauffeur plugin first
+        $locations = array();
+        if (class_exists('CHBSLocation')) {
+            $Location = new CHBSLocation();
+            $location_dict = $Location->getDictionary();
+            foreach ($location_dict as $location_data) {
+                $locations[] = $location_data['post']->post_title;
+            }
+            error_log('MET Geocoding - Found ' . count($locations) . ' locations from Chauffeur');
+        }
+        
+        // Fallback to pricing locations
+        if (empty($locations)) {
+            require_once MET_CHATBOT_PLUGIN_DIR . 'includes/class-pricing-engine.php';
+            $pricing_engine = new MET_Pricing_Engine();
+            $locations = $pricing_engine->get_all_locations();
+            error_log('MET Geocoding - Using pricing locations, found: ' . count($locations));
+        }
+        
+        if (empty($locations)) {
+            error_log('MET Geocoding - No locations available for mapping');
+            return $city;
+        }
+        
+        error_log('MET Geocoding - Searching for: ' . $city_lower . ' in ' . count($locations) . ' locations');
+        
+        // 1. Try exact match first
+        foreach ($locations as $location_name) {
+            if (strtolower(trim($location_name)) === $city_lower) {
+                error_log('MET Geocoding - Exact match found: ' . $location_name);
+                return $location_name;
+            }
+        }
+        
+        // 2. Try partial match (contains)
+        foreach ($locations as $location_name) {
+            $location_lower = strtolower($location_name);
+            
+            // Check if location contains city or city contains location
+            if (strpos($location_lower, $city_lower) !== false) {
+                error_log('MET Geocoding - Partial match (location contains city): ' . $location_name);
+                return $location_name;
+            }
+            
+            if (strpos($city_lower, $location_lower) !== false) {
+                error_log('MET Geocoding - Partial match (city contains location): ' . $location_name);
+                return $location_name;
+            }
+        }
+        
+        // 3. Try fuzzy matching with similar_text
+        $best_match = null;
+        $best_similarity = 0;
+        
+        foreach ($locations as $location_name) {
+            $similarity = 0;
+            similar_text($city_lower, strtolower($location_name), $similarity);
+            
+            if ($similarity > $best_similarity && $similarity >= 70) {
+                $best_match = $location_name;
+                $best_similarity = $similarity;
+            }
+        }
+        
+        if ($best_match) {
+            error_log('MET Geocoding - Fuzzy match found: ' . $best_match . ' (similarity: ' . $best_similarity . '%)');
+            return $best_match;
+        }
+        
+        // Return original if no match
+        error_log('MET Geocoding - No match found, returning original: ' . $city);
+        return $city;
     }
 }
 

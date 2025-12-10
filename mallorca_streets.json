@@ -1,0 +1,2034 @@
+{
+    "_comment": "Base de datos extendida de calles principales de Mallorca - 135 distritos",
+    "Palma": {
+        "district": "Palma",
+        "streets": [
+            "Avinguda Jaime III",
+            "Passeig del Born",
+            "Passeig Marítim",
+            "La Rambla",
+            "Carrer de Sant Miquel",
+            "Plaza Mayor",
+            "Carrer de la Pau",
+            "Avinguda Gabriel Roca",
+            "Carrer de l'Unió",
+            "Paseo Mallorca",
+            "Carrer dels Oms",
+            "Via Sindicat",
+            "Carrer del Sindicat",
+            "Carrer de Jaume II",
+            "Plaza de Cort",
+            "Plaza de la Reina",
+            "Carrer de Colom",
+            "Carrer del Palau Reial",
+            "Carrer de la Bosseria",
+            "Carrer de la Argenteria",
+            "Avinguda Alexandre Rosselló",
+            "Avinguda Comte de Sallent",
+            "Avinguda Alemanya",
+            "Avinguda Portugal",
+            "Carrer 31 de Desembre",
+            "Carrer General Riera",
+            "Carrer Eusebi Estada",
+            "Carrer Aragó",
+            "Carrer Manacor",
+            "Carrer Jacint Verdaguer",
+            "Carrer Balmes",
+            "Carrer Blanquerna",
+            "Avinguda Argentina",
+            "Carrer Monsenyor Palmer",
+            "Carrer Andrea Doria",
+            "Carrer Joan Miró",
+            "Plaça d'Espanya",
+            "Parc de les Estacions",
+            "Carrer Arxiduc Lluís Salvador",
+            "Carrer Indústria",
+            "Carrer Fàbrica",
+            "Carrer Caro",
+            "Carrer Sant Magí",
+            "Carrer Espartero",
+            "Plaça del Progrés",
+            "Avinguda Picasso",
+            "Camí de Jesús",
+            "Camí dels Reis",
+            "Carrer son Armadans",
+            "Carrer George Bernanos",
+            "Carrer Robert Graves",
+            "Autopista Palma - Inca",
+            "Autopista Palma - sa Pobla",
+            "Autovia Palma - Manacor",
+            "Autovía Palma Inca",
+            "Avinguda de Palma",
+            "Avinguda de la Badia de Palma",
+            "Caminal de s'Espalmador",
+            "Camí d'Estellencs (Camí de Palma a Puigpunyent)",
+            "Camí de Palma a Puigpunyent",
+            "Caretera Palma-Felantix",
+            "Carrer de Palma",
+            "Carrer de l'Espalmador",
+            "Carrer de la Palma",
+            "Carrer de s'Espalmador",
+            "Carretera Palma - Alcúdia",
+            "Carretera Palma - Andratx",
+            "Carretera Palma - Port de Sóller",
+            "Carretera Palma- Port de Sóller",
+            "Carretera de Palma a Andratx",
+            "Carretera de Palma a Manacor",
+            "Gran Via de l'Illa de l'Espalmador",
+            "PALMA",
+            "Passeig Marítim de Palmanova",
+            "Rambla dels Ducs de Palma de Mallorca",
+            "Rotonda Sa Font Nord-Palma",
+            "Rotonda de Sa Creu-Palma",
+            "Via Palma",
+            "camí vell a Palma",
+            "camí vell de Palma",
+            "camí vell de Palma a Sóller",
+            "carrer Espalmador",
+            "carretera de Palma",
+            "carretera vella de Palma"
+        ]
+    },
+    "Playa de Palma": {
+        "district": "Playa de Palma",
+        "streets": [
+            "Paseo Marítimo",
+            "Carrer Marbella",
+            "Carrer Llobregat",
+            "Carrer Trobadors",
+            "Carrer Miquel Pellisa",
+            "Carrer del Llaüt",
+            "Carrer de la Missió de San Diego",
+            "Carrer Pare Bartomeu Salvà",
+            "Avinguda Fra Joan Llabrés",
+            "Carrer Mar d'Aral",
+            "Carrer Canonge Mateu Rotger",
+            "Carrer Acapulco"
+        ]
+    },
+    "Arenal": {
+        "district": "Arenal",
+        "streets": [
+            "Carrer Pare Bartomeu Salvà",
+            "Avenida Nacional",
+            "Carrer de Trafalgar",
+            "Carrer Sant Cristòfol",
+            "Carrer Terral",
+            "Carrer Berga",
+            "Carrer Miramar",
+            "Carrer Trencadors",
+            "Carrer Maria Antònia Salvà",
+            "Plaça Major",
+            "Carrer Gran i General Consell",
+            "Avinguda Europa",
+            "Carrer Arenal",
+            "Carrer de Concepción Arenal",
+            "Carrer de s'Arenal",
+            "carretera de s'Arenal"
+        ]
+    },
+    "Can Pastilla": {
+        "district": "Can Pastilla",
+        "streets": [
+            "Carrer Historiador Pere Xamena",
+            "Carrer Palangrers",
+            "Avinguda Nacional",
+            "Carrer Virgili",
+            "Carrer Horaci",
+            "Carrer Ovidi",
+            "Carrer de la Caravel·la",
+            "Carrer del Bergantí",
+            "Plaça Pius IX",
+            "Camí de Can Pastilla",
+            "Go Karts Can Pastilla",
+            "Gran Via de Can Pastilla"
+        ]
+    },
+    "Magalluf": {
+        "district": "Magalluf",
+        "streets": [
+            "Avenida Magalluf",
+            "Carrer Punta Ballena",
+            "Avinguda Notario Alemany Tous",
+            "Carrer Martín Ros García",
+            "Avinguda de l'Olivera",
+            "Carrer Galeón",
+            "Carrer Blanc",
+            "Carrer Contralmirall Riera Alemany",
+            "Carrer Galió",
+            "Carrer Pinada",
+            "Carretera Magalluf - Santa Ponça"
+        ]
+    },
+    "Palma Nova": {
+        "district": "Palma Nova",
+        "streets": [
+            "Passeig del Mar",
+            "Avinguda Son Caliu",
+            "Carrer de las Palmeras",
+            "Carrer Torrenova",
+            "Avinguda Cas Saboners",
+            "Carrer Germans Montcada",
+            "Paseo del Mar",
+            "Carrer Miquel dels Sants Oliver",
+            "Carrer Paris",
+            "Carrer Duque de Extremera"
+        ]
+    },
+    "Santa Ponsa": {
+        "district": "Santa Ponsa",
+        "streets": [
+            "Carrer Puig de Massanella",
+            "Avinguda Rei Jaume I",
+            "Carrer Puig Major",
+            "Carrer Ramon de Montcada",
+            "Gran Via Puig de Galatzó",
+            "Carrer Santa Ponsa",
+            "Carrer Nunyo Sanç",
+            "Via de la Creu",
+            "Avinguda del Golf",
+            "Carrer Hug de Mataplana",
+            "Carrer Balmes",
+            "Carrer Gran Via"
+        ]
+    },
+    "Paguera": {
+        "district": "Paguera",
+        "streets": [
+            "Carrer Pins",
+            "Boulevard de Paguera",
+            "Carrer Gaviotas",
+            "Carrer Palmira",
+            "Carrer Eucaliptus",
+            "Carrer Malgrats",
+            "Carrer Sebel·lí",
+            "Carrer Tora",
+            "Carrer Mallorca",
+            "Carrer Eivissa"
+        ]
+    },
+    "Andratx": {
+        "district": "Andratx",
+        "streets": [
+            "Carrer Major",
+            "Carrer de la Curia",
+            "Carrer Larache",
+            "Carrer Joan Carles I",
+            "Carrer des Saluet",
+            "Avinguda de la Cúria",
+            "Carrer del Metge Gaspar Pujol",
+            "Carrer Nou",
+            "Carrer de s'Hort",
+            "Plaça d'Espanya",
+            "Carretera d'Andratx",
+            "camí vell d'Andratx",
+            "camí vell d'Es Capdellà a Andratx",
+            "pont d'Andratx"
+        ]
+    },
+    "Puerto de Andraitx": {
+        "district": "Puerto de Andraitx",
+        "streets": [
+            "Avinguda Mateo Bosch",
+            "Carrer Almirante Riera Alemany",
+            "Carrer de la Sirena",
+            "Passeig de la Mar",
+            "Carrer Isaac Peral",
+            "Carrer de la Llotja",
+            "Plaça de ses Salines",
+            "Camí de sa Mola"
+        ]
+    },
+    "Camp de Mar": {
+        "district": "Camp de Mar",
+        "streets": [
+            "Avinguda Camp de Mar",
+            "Carrer Gregal",
+            "Carrer Ponent",
+            "Carrer de la Torre",
+            "Avinguda del Camp de Mar",
+            "Carretera d'es Camp de Mar",
+            "passeig del Camp de Mar"
+        ]
+    },
+    "Sant Telm": {
+        "district": "Sant Telm",
+        "streets": [
+            "Carrer Cala Basset",
+            "Avinguda s'Algar",
+            "Carrer Mossèn Joan Vicenç",
+            "Plaça de Mossèn Joan Sebastià"
+        ]
+    },
+    "Alcudia": {
+        "district": "Alcudia",
+        "streets": [
+            "Carrer Major",
+            "Avinguda Pedro Mas i Reus",
+            "Carrer de la Porta de Mallorca",
+            "Carrer d'en Serra",
+            "Plaça Constitució",
+            "Carrer del Moll",
+            "Carrer Proa",
+            "Carrer Sant Jaume",
+            "Camí de Manresa",
+            "Avinguda Prínceps d'Espanya",
+            "Avinguda d'Alcúdia",
+            "Carrer Alcudia",
+            "Carrer d'Alcúdia",
+            "Murades d'Alcúdia",
+            "Rotonda dels Pagesos-Albufera/Alcudia",
+            "camí d'Alcudiarrom",
+            "camí vell d'Alcúdia",
+            "platja d'Alcúdia"
+        ]
+    },
+    "Puerto de Alcudia": {
+        "district": "Puerto de Alcudia",
+        "streets": [
+            "Avinguda Tucán",
+            "Carrer dels Mariners",
+            "Avinguda de la Playa",
+            "Passeig Marítim",
+            "Carrer del Coral",
+            "Carrer de Teodor Canet",
+            "Carrer de l'Hostaleria",
+            "Carrer dels Pins",
+            "Carrer del Llac"
+        ]
+    },
+    "Playa de Muro": {
+        "district": "Playa de Muro",
+        "streets": [
+            "Carrer Espalmador",
+            "Avinguda S'Albufera",
+            "Carrer Dunes",
+            "Carrer Falcó",
+            "Carrer Cigonya",
+            "Carretera d'Artà"
+        ]
+    },
+    "Can Picafort": {
+        "district": "Can Picafort",
+        "streets": [
+            "Carrer Isabel Garau",
+            "Paseo Colón",
+            "Avinguda Trias",
+            "Carrer Savines",
+            "Passeig de l'Enginyer Roca",
+            "Avinguda dels Anglesos",
+            "Rotonda de Sa Ma-Can Picafort"
+        ]
+    },
+    "Puerto Pollensa": {
+        "district": "Puerto Pollensa",
+        "streets": [
+            "Passeig Saralegui",
+            "Carrer Anglada Camarasa",
+            "Carrer Joan XXIII",
+            "Passeig Voramar",
+            "Carrer Mestral",
+            "Carrer Formentor",
+            "Carrer del Ecònom Torres",
+            "Plaça Miquel Capllonch",
+            "Carrer de la Gola"
+        ]
+    },
+    "Pollensa": {
+        "district": "Puerto Pollensa",
+        "streets": [
+            "Carrer Major",
+            "Plaça Major",
+            "Carrer del Calvari",
+            "Carrer del Temple",
+            "Carrer de Sant Domingo",
+            "Carrer Horta",
+            "Carrer Roser Vell"
+        ]
+    },
+    "Cala San Vicente": {
+        "district": "Cala San Vicente",
+        "streets": [
+            "Carrer Cala Clara",
+            "Carrer Molins",
+            "Carrer Temporal",
+            "Carrer del Pi"
+        ]
+    },
+    "Formentor": {
+        "district": "Formentor",
+        "streets": [
+            "Carrer Formentor",
+            "Carretera del Far",
+            "Platja de Formentor",
+            "Calle de Formentor",
+            "Carrer de Formentor",
+            "Carrer del Cap de Formentor",
+            "carrer del Pi de Formentor",
+            "passatge Formentor"
+        ]
+    },
+    "Cala Millor": {
+        "district": "Cala Millor",
+        "streets": [
+            "Avinguda Joan Servera Camps",
+            "Carrer Binicanella",
+            "Carrer Son Moro",
+            "Passeig Maritim",
+            "Carrer de na Penyal",
+            "Carrer del Sol",
+            "Avinguda del Bon Temps",
+            "Carrer Cristina",
+            "Carrer de s'Estanyol",
+            "Carrer Platja de Cala Millor",
+            "Karting Cala Millor",
+            "Passatge de Cala Millor"
+        ]
+    },
+    "Sa Coma": {
+        "district": "Sa Coma",
+        "streets": [
+            "Carrer de les Estrelles",
+            "Avinguda de les Savines",
+            "Carrer del Llessamí",
+            "Carrer dels Cards",
+            "Carrer de les Dàl·lies",
+            "Avinguda de les Palmeres",
+            "Avinguda de Sa Coma",
+            "Camí de Sa Coma",
+            "Camí de sa Coma de Son Quint",
+            "Camí de sa Coma de ses Abelles",
+            "Camí de sa Coma des Moro",
+            "Camí de sa Coma nova",
+            "Carrer de sa Coma",
+            "Carrer de sa Comassa",
+            "Passeig de sa platja de sa Coma",
+            "Túnel de sa Coma",
+            "camí de sa Coma Bella",
+            "camí de sa Coma Clova",
+            "camí de sa Coma Freda",
+            "camí de sa Coma Gran",
+            "camí de sa Coma Llarga",
+            "camí de sa Coma Sequera",
+            "camí de sa Coma de s'Arpella",
+            "camí de sa Coma de sa Teia",
+            "camí de sa Coma des Garballó",
+            "camí de sa Coma des Mart",
+            "camí de sa coma d'en Vidal",
+            "camí de sa coma d'en Vidal (GR-221)",
+            "camí de ses Penyes o de sa Coma Calenta",
+            "camí del Pinar de sa Coma",
+            "pas de sa Coma",
+            "pont de sa Coma",
+            "sa Coma"
+        ]
+    },
+    "SIllot": {
+        "district": "SIllot",
+        "streets": [
+            "Passeig del Mar",
+            "Carrer de la Rosa",
+            "Carrer del Gregal",
+            "Ronda del Matí"
+        ]
+    },
+    "Cala Bona": {
+        "district": "Cala Bona",
+        "streets": [
+            "Carrer Isaac Peral",
+            "Passeig del Moll",
+            "Carrer de Tramuntana",
+            "Carrer Na Llambies",
+            "Carrer de Cala Bona",
+            "Passeig Marítim de Cala Bona"
+        ]
+    },
+    "Cala Ratjada": {
+        "district": "Cala Ratjada",
+        "streets": [
+            "Carrer Leonor Servera",
+            "Avinguda América",
+            "Carrer Elionor Bosch",
+            "Carrer Agulla",
+            "Plaça dels Pins",
+            "Carrer de s'Entrada",
+            "Carrer Magallanes",
+            "Carrer del Far"
+        ]
+    },
+    "Capdepera": {
+        "district": "Capdepera",
+        "streets": [
+            "Carrer Major",
+            "Plaça Orient",
+            "Carrer Poniente",
+            "Carrer Ciutat",
+            "Carrer del Port",
+            "Carrer Centre",
+            "Carrer de Capdepera"
+        ]
+    },
+    "Canyamel": {
+        "district": "Canyamel",
+        "streets": [
+            "Avinguda Canyamel",
+            "Carrer de les Coves",
+            "Via de Meles",
+            "Carrer Costa i Llobera",
+            "Avinguda de Canyamel",
+            "Carrer de sa Canyamel",
+            "Carretera de Canyamel"
+        ]
+    },
+    "Font de Sa Cala": {
+        "district": "Font de Sa Cala",
+        "streets": [
+            "Carrer de la Font",
+            "Avinguda Canyamel",
+            "Carrer Provençals"
+        ]
+    },
+    "Cala Mesquida": {
+        "district": "Cala Mesquida",
+        "streets": [
+            "Carrer Punta de n'Amer",
+            "Urb. Cala Mesquida",
+            "Carrer de Cala Mesquida"
+        ]
+    },
+    "Cala Agulla": {
+        "district": "Cala Agulla",
+        "streets": [
+            "Carrer dels Pins",
+            "Carrer de l'Agulla",
+            "Camí de Cala Agulla",
+            "Carrer de Cala Agulla"
+        ]
+    },
+    "Arta": {
+        "district": "Arta",
+        "streets": [
+            "Carrer de Ciutat",
+            "Carrer Antoni Blanes",
+            "Carrer Major",
+            "Plaça del Conqueridor",
+            "Carrer de Sant Salvador",
+            "Camí vell d'Artà",
+            "Camí vell d'Artà a Pollença",
+            "Carrer d'Artà",
+            "Carrer de Cartagena",
+            "Carrer de Cartago",
+            "Carrer de Fartàritx",
+            "Carretera d'Artà",
+            "Passeig d'Artà",
+            "Passeig de Fartàritx",
+            "apartaments Cecília",
+            "camí d'Artà a Lluc",
+            "camí de Can Quartana",
+            "camí de Son Vivot o camí d'Artà a Lluc",
+            "carrer dels Cartaginesos"
+        ]
+    },
+    "Port de Soller": {
+        "district": "Port de Soller",
+        "streets": [
+            "Carrer Canonge Oliver",
+            "Passeig de la Platja",
+            "Carrer Marina",
+            "Carrer Santa Catalina",
+            "Carrer de Bèlgica",
+            "Camí del Far",
+            "Travessa del Port",
+            "Plaça de sa Torre"
+        ]
+    },
+    "Soller": {
+        "district": "Soller",
+        "streets": [
+            "Gran Via",
+            "Carrer de la Lluna",
+            "Plaza Constitució",
+            "Carrer Isabel II",
+            "Carrer de Sa Mar",
+            "Carrer de la Victoria",
+            "Carrer de Sant Joan",
+            "Camí des Sollerics",
+            "Carrer de Solleric",
+            "Carretera de Sóller",
+            "Passatge Particular Sóller",
+            "avinguda de Sóller",
+            "camí de na Sollerica",
+            "camí vell de Solleric",
+            "canaleta de Solleric",
+            "carretera del Coll de Sóller",
+            "túnel de Sóller"
+        ]
+    },
+    "Valldemossa": {
+        "district": "Valldemossa",
+        "streets": [
+            "Carrer de la Rosa",
+            "Avinguda Palma",
+            "Carrer Uetam",
+            "Plaza Cartuja",
+            "Carrer Jovellanos",
+            "Via Blanquerna",
+            "Carretera de Valldemossa",
+            "Passatge Particular Valldemossa",
+            "camí de sa Comuna de Valldemossa (GR 221)",
+            "carrer d'Els Valldemossa"
+        ]
+    },
+    "Deia": {
+        "district": "Deia",
+        "streets": [
+            "Carrer Arxiduc Lluís Salvador",
+            "Carrer Es Puig",
+            "Carrer Teix",
+            "Via Arxiduc Lluis Salvador",
+            "Camí de Can Deià",
+            "Carrer de Deià",
+            "Carrer de Joan Deià, escultor",
+            "carretera de Deià",
+            "passatge particular de Deià"
+        ]
+    },
+    "Fornalutx": {
+        "district": "Fornalutx",
+        "streets": [
+            "Carrer de la Església",
+            "Carrer Major",
+            "Carrer de l'Alba",
+            "Plaça d'Espanya",
+            "Carrer de Fornalutx",
+            "carretera de Fornalutx",
+            "passatge Fornalutx"
+        ]
+    },
+    "Banyalbufar": {
+        "district": "Banyalbufar",
+        "streets": [
+            "Carrer Baronia",
+            "Carrer Major",
+            "Carrer de la Constitució"
+        ]
+    },
+    "Estallencs": {
+        "district": "Estallencs",
+        "streets": [
+            "Carrer Eusebi Pascual",
+            "Carrer de la Mar"
+        ]
+    },
+    "Esporlas": {
+        "district": "Esporlas",
+        "streets": [
+            "Carrer Major",
+            "Carrer de la Quartera",
+            "Plaça del Jardinet",
+            "Carrer de Sant Pere"
+        ]
+    },
+    "Bunyola": {
+        "district": "Bunyola",
+        "streets": [
+            "Carrer Major",
+            "Plaça Andreu Estarellas",
+            "Carrer de Santa Catalina",
+            "Camí vell de Bunyola",
+            "Carrer de Bunyola",
+            "camí Reial de Bunyola a Alaró",
+            "carrer de Can Bunyola"
+        ]
+    },
+    "Inca": {
+        "district": "Inca",
+        "streets": [
+            "Avinguda del General Luque",
+            "Carrer Major",
+            "Plaza de España",
+            "Carrer Jaume Armengol",
+            "Gran Via de Colom",
+            "Avinguda dels Reis Catòlics",
+            "Carrer de la Pau",
+            "Carrer del Born",
+            "Avinguda d'Inca",
+            "Camí vell Inca-sa Pobla",
+            "Camí vell d'Inca",
+            "Carrer del Cinca",
+            "Carretera d'Inca",
+            "Carretera vella d'Inca",
+            "Finca Son Serra",
+            "camí d'Inca",
+            "camí vell Inca-Lloseta",
+            "camí vell Inca-Llubí"
+        ]
+    },
+    "Manacor": {
+        "district": "Manacor",
+        "streets": [
+            "Avinguda Mossèn Alcover",
+            "Carrer Major",
+            "Via Roma",
+            "Plaza del Convent",
+            "Passeig de l'Estació",
+            "Avinguda del Parc",
+            "Carrer de Sant Joan",
+            "Carrer de la Unitat",
+            "Camí de Manacor",
+            "Carrer Manacor",
+            "Carrer de Manacor",
+            "Carretera Manacor-Porto Cristo",
+            "Carretera Manacor-Portocristo",
+            "Passeig de Manacor",
+            "carretera de Manacor"
+        ]
+    },
+    "Felanitx": {
+        "district": "Felanitx",
+        "streets": [
+            "Plaça Major",
+            "Carrer Major",
+            "Carrer Nuestra Señora de San Salvador",
+            "Carrer de Sant Agustí",
+            "Passeig d'Ernest Mestre",
+            "Carrer de la Mar",
+            "Carrer Felanitx",
+            "Carrer de Felanitx",
+            "Carretera Felanitx-Portocolom",
+            "Ronda de Felanitx",
+            "camí vell de Felanitx"
+        ]
+    },
+    "Calvia": {
+        "district": "Calvia",
+        "streets": [
+            "Carrer Major",
+            "Plaça de l'Església",
+            "Carrer de Sa Coma",
+            "Avinguda Es Capdella",
+            "Carrer Calvià",
+            "Carrer de Calvià",
+            "Passeig de Calvià",
+            "al sector Calvià",
+            "carrer de la Costa de Calvià"
+        ]
+    },
+    "Capdella": {
+        "district": "Capdella",
+        "streets": [
+            "Carrer Major",
+            "Carrer Galatzó",
+            "Avinguda d'Es Capdellà",
+            "Carrer de Capdellà",
+            "Carrer des Capdellà",
+            "Carretera Vella des Capdellà",
+            "carrer d'Es Capdellà"
+        ]
+    },
+    "Illetas": {
+        "district": "Illetas",
+        "streets": [
+            "Passeig Illetes",
+            "Carrer Ginesta",
+            "Carrer Tramuntana",
+            "Passeig dels Pins"
+        ]
+    },
+    "Portals Nous": {
+        "district": "Portals Nous",
+        "streets": [
+            "Carrer Falconer",
+            "Carrer de Sa Torre",
+            "Avinguda Tomás Blanes Tolosa",
+            "Plaza Alcàsser"
+        ]
+    },
+    "Bendinat": {
+        "district": "Bendinat",
+        "streets": [
+            "Carrer Arquitecto Francisco Casas",
+            "Carrer de la Ginesta",
+            "Carrer de Sant Bartomeu",
+            "Avenida Bendinat",
+            "Avinguda de Bendinat",
+            "Túnel de Bendinat"
+        ]
+    },
+    "Cas Catala": {
+        "district": "Cas Catala",
+        "streets": [
+            "Paseo Marítimo",
+            "Carrer de la Mar",
+            "Avinguda Major"
+        ]
+    },
+    "Costa de La Calma": {
+        "district": "Costa de La Calma",
+        "streets": [
+            "Avinguda de la Playa",
+            "Carrer de Santa Ponça",
+            "Carrer del Bellavista"
+        ]
+    },
+    "Costa den Blanes": {
+        "district": "Costa den Blanes",
+        "streets": [
+            "Carrer Son Maties de Davall",
+            "Avinguda Costa d'en Blanes"
+        ]
+    },
+    "El Toro": {
+        "district": "El Toro",
+        "streets": [
+            "Carrer Son Ferrer",
+            "Carrer Gran Via",
+            "Plaça del Toro",
+            "Carrer del Toro"
+        ]
+    },
+    "Port Adriano": {
+        "district": "Port Adriano",
+        "streets": [
+            "Urbanització el Toro",
+            "Carrer de la Platja"
+        ]
+    },
+    "Cala Vinyes": {
+        "district": "Cala Vinyes",
+        "streets": [
+            "Carrer Violeta",
+            "Carrer Sol",
+            "Carrer de la Oca"
+        ]
+    },
+    "Cala Fornells": {
+        "district": "Cala Fornells",
+        "streets": [
+            "Carrer Cala Fornells",
+            "Carrer de la Penya",
+            "Carrer de Cala Fornells",
+            "Carrertera de Cala Fornells",
+            "Petit Cala Fornells",
+            "Rotonda de Cala Fornells"
+        ]
+    },
+    "Portals Vells": {
+        "district": "Portals Vells",
+        "streets": [
+            "Avinguda Cala Figuera",
+            "Carrer de la Torre",
+            "Avinguda Portals Vells"
+        ]
+    },
+    "Son Vida": {
+        "district": "Son Vida",
+        "streets": [
+            "Carrer de Génova",
+            "Carrer Raixa",
+            "Carrer Son Vida",
+            "Avinguda Son Vida",
+            "Camí de Son Vida",
+            "Carrer de Son Vidal",
+            "Plaça de Son Vida"
+        ]
+    },
+    "San Agustin": {
+        "district": "San Agustin",
+        "streets": [
+            "Carrer des Bergantí",
+            "Carrer Noruega",
+            "Carrer de Sant Agustí",
+            "Vía San Agustín"
+        ]
+    },
+    "Cala Major": {
+        "district": "Cala Major",
+        "streets": [
+            "Paseo Calanova",
+            "Carrer de Joan Miró",
+            "Avinguda Joan Miró",
+            "Carrer Miquel Roselló",
+            "Carrer de Cala Major"
+        ]
+    },
+    "Llucmajor": {
+        "district": "Llucmajor",
+        "streets": [
+            "Plaça Espanya",
+            "Carrer Obispo Taixaquet",
+            "Carrer Major",
+            "Passeig Jaume III",
+            "Carrer de la Fira",
+            "Ronda de Migjorn",
+            "Carrer Sindicat",
+            "Carrer de Llucmajor",
+            "camí vell de Llucmajor",
+            "carretera de Llucmajor",
+            "carretera vella de Llucmajor"
+        ]
+    },
+    "Campos": {
+        "district": "Campos",
+        "streets": [
+            "Plaça Major",
+            "Carrer Major",
+            "Carrer Convent",
+            "Carrer Nou",
+            "Carrer de Palma",
+            "Camí de Campos",
+            "Carrer de Campos",
+            "Carrer de Can Campos",
+            "Carrer de Son Campos",
+            "camí des Palmer a Campos",
+            "carrer Campos",
+            "placeta de Can Campos"
+        ]
+    },
+    "Sa Rapita": {
+        "district": "Sa Rapita",
+        "streets": [
+            "Carrer Sant Cristòfol",
+            "Avinguda Miramar",
+            "Carrer Escorball",
+            "carrer de sa Ràpita"
+        ]
+    },
+    "La Rapita": {
+        "district": "La Rapita",
+        "streets": [
+            "Avinguda de Sa Ràpita",
+            "Carrer Sant Cristòfol",
+            "Carrer Escorball",
+            "Carrer Pagell",
+            "Carrer Mero",
+            "Carrer Dentol",
+            "Carrer Sord",
+            "Carrer Anfós",
+            "Carrer Déntol",
+            "Carrer Mussola",
+            "Carrer Oblada",
+            "Carrer Roger",
+            "Carrer Tord",
+            "Carrer Esparall",
+            "Carrer Tintorera",
+            "Carrer Salpa",
+            "Carrer Mujol",
+            "Carrer Llobarro",
+            "Via de la Mar",
+            "Carrer de la Rapita"
+        ]
+    },
+    "SEstanyol": {
+        "district": "SEstanyol",
+        "streets": [
+            "Avinguda d'es Trenc",
+            "Carrer de la Mar",
+            "Carrer Major",
+            "Carrer Cuabarrada",
+            "Carrer Pescadors",
+            "Carrer de s'Entrada",
+            "Carrer Ponent",
+            "Carrer Llevant",
+            "Carrer des Far",
+            "Plaça del Pescador",
+            "Travessia de la Mar",
+            "Carrer del Port"
+        ]
+    },
+    "Vallgornera": {
+        "district": "Vallgornera",
+        "streets": [
+            "Carrer Albatros",
+            "Carrer de la Talaia",
+            "Carrer Falcó",
+            "Carrer Àguila",
+            "Carrer Gavina",
+            "Carrer Corb Marí",
+            "Carrer Pelicà",
+            "Carrer Cigonya",
+            "Carrer Flamenc",
+            "Carrer Grua",
+            "Carrer Voltor",
+            "Carrer Milà",
+            "Avinguda Vallgornera",
+            "Camí de Vallgornera",
+            "Carrer de Vallgornera"
+        ]
+    },
+    "Cala Pi": {
+        "district": "Cala Pi",
+        "streets": [
+            "Carrer Torrent",
+            "Carrer Penya-segat",
+            "Carrer de la Torre",
+            "Carrer Penyes",
+            "Carrer Penya-roja",
+            "Carrer Penya-fort",
+            "Carrer Penya-blanca",
+            "Carrer Penya-acantilada",
+            "Avinguda Vallgornera",
+            "Carrer del Far",
+            "Camí Vell de Cala Pi",
+            "Camí de Cala Pi",
+            "Carrer de Cala Pi",
+            "carretera de Cala Pi",
+            "passeig de Cala Pi"
+        ]
+    },
+    "Bahia Grande": {
+        "district": "Bahia Grande",
+        "streets": [
+            "Carrer dels Mariners",
+            "Carrer Isaac Peral",
+            "Carrer Colom",
+            "Carrer Magallanes",
+            "Carrer Juan Sebastián Elcano",
+            "Carrer Americo Vespucio",
+            "Carrer Marco Polo",
+            "Carrer Vasco de Gama",
+            "Carrer Roger de Llúria",
+            "Carrer Jaume I",
+            "Via de la Bahia"
+        ]
+    },
+    "Bahia Azul": {
+        "district": "Bahia Azul",
+        "streets": [
+            "Carrer Garonda",
+            "Carrer de les Ones",
+            "Carrer de l'Escuma",
+            "Carrer del Coral",
+            "Carrer de la Perla",
+            "Carrer del Nacre",
+            "Carrer de l'Alguer",
+            "Carrer del Mollet",
+            "Carrer de sa Caleta",
+            "Carrer de s'Arenalet",
+            "Carrer de s'Illot"
+        ]
+    },
+    "Santany": {
+        "district": "Santany",
+        "streets": [
+            "Plaza Mayor",
+            "Carrer Bisbe Verger",
+            "Carrer de la Pau",
+            "Carrer del Roser",
+            "Carrer Sant Andreu",
+            "Carrer Portell",
+            "Carrer Llamp",
+            "Carrer Sol",
+            "Carrer Centre",
+            "Carrer Palma",
+            "Carrer Bernat Vidal i Tomàs",
+            "Carrer Llombards",
+            "Carrer de s'Aljub",
+            "Carrer de la Mar",
+            "Plaça de la Constitució",
+            "Carrer Rafalet",
+            "Camí del Santanyiner",
+            "Carrer Santanyí",
+            "Carrer de Santanyí",
+            "Carrer de l'Hostal de Santanyí",
+            "Klippenweg C.Figuera--C.Santanyí",
+            "tren de Santanyí"
+        ]
+    },
+    "Cala Figuera": {
+        "district": "Cala Figuera",
+        "streets": [
+            "Carrer Virgen del Carmen",
+            "Carrer Bernareggi",
+            "Carrer del Far",
+            "Carrer de la Llum",
+            "Carrer de s'Olivera",
+            "Carrer de la Marina",
+            "Carrer des Caló",
+            "Carrer de s'Estret",
+            "Carrer Juan Sebastián Elcano",
+            "Carrer Sant Pere",
+            "Carrer Tomarinar",
+            "Camí de Cala Figuera",
+            "Carretera de Cala Figuera",
+            "DH Cala Figuera",
+            "Passatge Cala Figuera",
+            "carrer de Cala Figuera"
+        ]
+    },
+    "Cala Santany": {
+        "district": "Cala Santany",
+        "streets": [
+            "Carrer del Porto",
+            "Carrer de sa Cova",
+            "Carrer Costa",
+            "Carrer de la Punta",
+            "Carrer de sa Torre",
+            "Carrer des Pontàs",
+            "Carrer de sa Bassa",
+            "Carrer de la Platja"
+        ]
+    },
+    "Cala Mondrago": {
+        "district": "Cala Mondrago",
+        "streets": [
+            "Carrer de s'Amarador",
+            "Camí de sa Torre",
+            "Carrer de Mondragó",
+            "Carrer des Parc",
+            "Carrer de ses Fonts Nanes",
+            "Camí de ses Fonts",
+            "Carrer de Cala Mondragó",
+            "Carretera de Cala Mondragó",
+            "camí de Cala Mondragó"
+        ]
+    },
+    "Cala Llombards": {
+        "district": "Cala Llombards",
+        "streets": [
+            "Carrer de Cala Santanyí",
+            "Carrer de la Mar",
+            "Carrer des Pontàs",
+            "Carrer de s'Almunia",
+            "Carrer des Caló des Moro",
+            "Carrer de na Torta",
+            "Carrer de na Bruna",
+            "Carrer de Cala Llombards",
+            "avinguda de Cala Llombards",
+            "camí de Cala Llombards"
+        ]
+    },
+    "Porto Petro": {
+        "district": "Cala Barca",
+        "streets": [
+            "Passeig des Port",
+            "Carrer de la Torre",
+            "Carrer des Far",
+            "Carrer de sa Platja",
+            "Carrer de Cristòfol Colom",
+            "Carrer de Magallanes",
+            "Carrer de Churruca",
+            "Carrer de Gravina",
+            "Plaça des Caló",
+            "Carrer des Patró Joan"
+        ]
+    },
+    "Cala Barca": {
+        "district": "Cala Barca",
+        "streets": [
+            "Carrer Porto Petro",
+            "Carrer de sa Barca",
+            "Carrer de sa Trencadora",
+            "Carrer de Mondragó",
+            "Carrer des Savinar",
+            "Carrer de sa Punta",
+            "carrer de Cala Barca"
+        ]
+    },
+    "Alqueria Blanca": {
+        "district": "Alqueria Blanca",
+        "streets": [
+            "Carrer Pare Pere",
+            "Carrer de Sant Josep",
+            "Carrer de Sant Roc",
+            "Carrer de s'Era",
+            "Plaça de Sant Josep",
+            "Carrer des Convent",
+            "Carrer de sa Teulera",
+            "Carrer de s'Alqueria Blanca",
+            "camí de s'Alqueria Blanca",
+            "camí de s'Alqueria Blanca nova"
+        ]
+    },
+    "Calonge": {
+        "district": "Calonge",
+        "streets": [
+            "Carrer Major",
+            "Plaza San Miguel",
+            "Carrer de l'Església",
+            "Carrer de Sant Antoni",
+            "Carrer de sa Font",
+            "Carrer des Pou",
+            "Avinguda de Calonge"
+        ]
+    },
+    "Cala Dor": {
+        "district": "Cala Dor",
+        "streets": [
+            "Avinguda Cala Llonga",
+            "Carrer Pedregar",
+            "Avinguda Bélgica",
+            "Carrer de la Marina",
+            "Carrer Tagomago",
+            "Avinguda d'es Fortí",
+            "Carrer de ses Puntes",
+            "Carrer de sa Cova",
+            "Carrer de s'Espalmador",
+            "Carrer de sa Galera",
+            "Carrer de Formentera",
+            "Carrer d'Eivissa",
+            "Carrer de Menorca",
+            "Avinguda Benvinguts",
+            "Carrer Santanyí",
+            "Carrer Felanitx"
+        ]
+    },
+    "Cala Ferrera": {
+        "district": "Cala Ferrera",
+        "streets": [
+            "Carrer Cala Serena",
+            "Carrer de s'Espalmador",
+            "Carrer des Far",
+            "Carrer de na Bruna",
+            "Carrer de sa Torre",
+            "Carrer de s'Oratge",
+            "Carrer de la Tramuntana",
+            "Avinguda de Cala Ferrera",
+            "carrer de Cala Ferrera",
+            "carretera de Cala Ferrera"
+        ]
+    },
+    "Cala Serena": {
+        "district": "Cala Serena",
+        "streets": [
+            "Avinguda Cala Serena",
+            "Carrer de la Sínia",
+            "Carrer de s'Hort",
+            "Carrer de sa Tanca",
+            "Carrer de ses Roques",
+            "Carrer de Cala Serena"
+        ]
+    },
+    "Porto Cristo": {
+        "district": "Porto Cristo",
+        "streets": [
+            "Carrer Gual",
+            "Carrer Bordils",
+            "Passeig de la Sirena",
+            "Avinguda dels Pins",
+            "Carrer del Port",
+            "Carrer de la Niña",
+            "Carrer de la Pinta",
+            "Carrer de Santa Maria",
+            "Carrer de Sant Jordi",
+            "Carrer de Sant Lluís",
+            "Carrer del Carme",
+            "Plaça de l'Aljub",
+            "Carrer de la Muntanya",
+            "Carrer de Mestral",
+            "Carrer de Llevant",
+            "Carrer de Ponent",
+            "Carrer de Migjorn",
+            "Carrer Porto Cristo",
+            "Carrer de Porto Cristo"
+        ]
+    },
+    "Porto Cristo Novo": {
+        "district": "Porto Cristo Novo",
+        "streets": [
+            "Avinguda Son Moro",
+            "Carrer de la Devesa",
+            "Carrer de la Ginesta",
+            "Carrer del Romaní",
+            "Carrer de la Farigola",
+            "Carrer del Bruc"
+        ]
+    },
+    "Cala Mandia": {
+        "district": "Cala Mandia",
+        "streets": [
+            "Carrer Romanins",
+            "Passeig de la Pau",
+            "Carrer de les Flors",
+            "Carrer de la Primavera",
+            "Carrer del Sol",
+            "Carrer de la Lluna"
+        ]
+    },
+    "Cala Romantica": {
+        "district": "Playa Romantica",
+        "streets": [
+            "Passeig de l'Estany",
+            "Carrer de s'Estany",
+            "Carrer de la Platja"
+        ]
+    },
+    "Playa Romantica": {
+        "district": "Playa Romantica",
+        "streets": [
+            "Avinguda Es Riuetó",
+            "Carrer de s'Estany d'en Mas",
+            "Carrer des Mirador"
+        ]
+    },
+    "Cala Marsal": {
+        "district": "Cala Marsal",
+        "streets": [
+            "Carrer Cala Marçal",
+            "Carrer del Far",
+            "Carrer de la Gavina",
+            "Carrer del Corb Marí",
+            "Carrer de la Torre"
+        ]
+    },
+    "Porto Colom": {
+        "district": "Porto Colom",
+        "streets": [
+            "Carrer Cristòfol Colom",
+            "Carrer Pescadors",
+            "Carrer del Far",
+            "Ronda del Creuer",
+            "Carrer de la Mar",
+            "Carrer de l'Assumpció",
+            "Carrer del Carme",
+            "Carrer de Sant Jaume",
+            "Carrer de la Verge",
+            "Plaça de l'Església",
+            "Carrer de la Punta",
+            "Carrer de sa Capella",
+            "Carrer des Babo",
+            "Carrer de ses Roques",
+            "Carrer de l'Oest"
+        ]
+    },
+    "Calas de Mallorca": {
+        "district": "Calas de Mallorca",
+        "streets": [
+            "Avinguda de Calas de Mallorca",
+            "Carrer de Formentor",
+            "Carrer de Cabrera",
+            "Carrer de Dragonera",
+            "Carrer de Menorca",
+            "Carrer d'Eivissa",
+            "Carrer de Mallorca",
+            "Carrer de la Penya"
+        ]
+    },
+    "Cala Murada": {
+        "district": "Cala Murada",
+        "streets": [
+            "Carrer Mistral",
+            "Via de la Mola",
+            "Carrer de Galícia",
+            "Carrer d'Astúries",
+            "Carrer de Cantàbria",
+            "Carrer del País Basc",
+            "Carrer de Navarra",
+            "Carrer de Cala Murada",
+            "carretera de Cala Murada"
+        ]
+    },
+    "Cala Moreia": {
+        "district": "Cala Moreia",
+        "streets": [
+            "Carrer de Cala Moreia",
+            "Carrer de la Rosa",
+            "Carrer del Clavell",
+            "Carrer del Gerani"
+        ]
+    },
+    "Cala Morlanda": {
+        "district": "Cala Morlanda",
+        "streets": [
+            "Carrer Cala Morlanda",
+            "Carrer de la Roqueta",
+            "Carrer del Caló",
+            "Passatge de Cala Morlanda",
+            "camí de Cala Morlanda"
+        ]
+    },
+    "SHorta": {
+        "district": "SHorta",
+        "streets": [
+            "Carrer de Sa Indioteria",
+            "Carrer Major",
+            "Carrer de la Rectoria",
+            "Carrer de Sant Isidre",
+            "Carrer de ses Comes",
+            "Carrer de sa Pedrera"
+        ]
+    },
+    "Son Macia": {
+        "district": "Son Macia",
+        "streets": [
+            "Carrer Major",
+            "Carrer de l'Església",
+            "Carrer de la Plaça",
+            "Carrer de s'Aigua",
+            "Carrer de Son Macià",
+            "camí de Son Macià",
+            "carretera de Son Macià",
+            "carretera de Son Macià a Cales de Mallorca"
+        ]
+    },
+    "Son Carrio": {
+        "district": "Son Carrio",
+        "streets": [
+            "Carrer Aigua",
+            "Carrer Major",
+            "Carrer de Sant Miquel",
+            "Carrer de la Mar",
+            "Carrer de sa Torre",
+            "Plaça de l'Església",
+            "carretera de Son Carrió"
+        ]
+    },
+    "Son Servera": {
+        "district": "Son Servera",
+        "streets": [
+            "Carrer Sant Joan",
+            "Plaza Sant Joan",
+            "Carrer Major",
+            "Carrer de la Doctor Servera",
+            "Carrer de Pere Antoni Servera",
+            "Carrer del Tren",
+            "Carrer de la Creu",
+            "Carrer de l'Or",
+            "Carrer de les Roques",
+            "Carrer des Cos",
+            "Carrer de ses Eres",
+            "Camí de Son Servera",
+            "Camí dels Establits de Son Servera",
+            "Carrer de Son Servera",
+            "camí vell de Son Servera",
+            "carretera de Son Servera"
+        ]
+    },
+    "Costa de Los Pinos": {
+        "district": "Costa de Los Pinos",
+        "streets": [
+            "Avinguda dels Pins",
+            "Carrer del Golf",
+            "Carrer del Pi Tort",
+            "Carrer del Pi Dret",
+            "Carrer de la Platja",
+            "Carrer del Mirador"
+        ]
+    },
+    "Sa Pobla": {
+        "district": "Sa Pobla",
+        "streets": [
+            "Plaça Major",
+            "Carrer Major",
+            "Carrer Mercat",
+            "Carrer Gran",
+            "Carrer de la Pau",
+            "Carrer de l'Església",
+            "Carrer de Sant Antoni",
+            "Carrer de Sa Marjal",
+            "Carrer del Misteri",
+            "Ronda de Sa Pobla",
+            "Carrer de Fartàritx",
+            "Carrer de Crestatx",
+            "Camí de Talapi",
+            "Carrer Ronda Sud (SE)",
+            "Carrer de Sa Pobla",
+            "Carretera de Muro - Sa Pobla"
+        ]
+    },
+    "Muro": {
+        "district": "Muro",
+        "streets": [
+            "Carrer Major",
+            "Plaza Constitución",
+            "Carrer del Mar",
+            "Carrer de Santa Anna",
+            "Carrer de Sant Joan",
+            "Carrer de la Comtesa",
+            "Carrer de l'Estació",
+            "Carrer dels Màrtirs",
+            "Avinguda de les Platges de Muro",
+            "Camí de Muro",
+            "Carrer Ronda de Muro (E)",
+            "Carrer Ronda de Muro (SE)",
+            "Carretera de Muro",
+            "Pont de Muro",
+            "Ronda de Muro (E)",
+            "Ronda de Muro (SE)",
+            "Rotonda de Sa Sínia-Muro",
+            "camí vell de Muro",
+            "carrer de Muro",
+            "carretera Muro - Maria"
+        ]
+    },
+    "Llubi": {
+        "district": "Llubi",
+        "streets": [
+            "Carrer Major",
+            "Plaza de la Carretera",
+            "Carrer de la Creu",
+            "Carrer de Sant Feliu",
+            "Carrer de sa Roca",
+            "Carrer de s'Aigua",
+            "Camí de Llubí",
+            "Camí vell de Llubí",
+            "Carrer Cas Llubiner",
+            "Carrer de Llubí",
+            "Carretera de Llubí",
+            "Passatge particular de Llubí",
+            "Rotonda de Llubí",
+            "camí vell de Sencelles a Llubí",
+            "carrerassa d'en Martí Llubiner"
+        ]
+    },
+    "Maria de la Salud": {
+        "district": "Maria de la Salud",
+        "streets": [
+            "Carrer Major",
+            "Plaça des Mercat",
+            "Carrer de la Rectoria",
+            "Carrer de Sant Antoni",
+            "Carrer de les Flors"
+        ]
+    },
+    "Sineu": {
+        "district": "Sineu",
+        "streets": [
+            "Plaça Es Fossar",
+            "Carrer Major",
+            "Carrer de l'Estació",
+            "Carrer de Sant Francesc",
+            "Carrer de la Font",
+            "Carrer del Mercat",
+            "Carrer de l'Hospital",
+            "Camí Vell de Sineu",
+            "Carrer Sineu",
+            "Carretera vella de Sineu",
+            "avinguda de Sineu",
+            "camí vell de Sineu a Algaida",
+            "carrer de Sineu",
+            "carretera de Sineu"
+        ]
+    },
+    "Petra": {
+        "district": "Petra",
+        "streets": [
+            "Carrer del Sol",
+            "Carrer Barracar",
+            "Carrer Major",
+            "Carrer de la Font",
+            "Plaça de Ramon Llull",
+            "Carrer de l'Hospital",
+            "Carrer de Manacor",
+            "Camí de Can Petra",
+            "Carrer Petra",
+            "Carrer de Petra",
+            "Carrer del Pare Miquel de Petra",
+            "camí de Petra",
+            "carrer de la Senyora Petra",
+            "carretera Porreres - Petra"
+        ]
+    },
+    "Ariany": {
+        "district": "Ariany",
+        "streets": [
+            "Carrer Major",
+            "Plaça Major",
+            "Carrer de Sant Josep",
+            "Carrer de la Creu",
+            "Carrer Ariany",
+            "Carrer dels Marquesos d'Ariany",
+            "camí vell d'Ariany"
+        ]
+    },
+    "Santa Maria": {
+        "district": "Santa Maria",
+        "streets": [
+            "Carrer Major",
+            "Plaza de l'Hostal",
+            "Carrer Llarg",
+            "Carrer de la Coanegra",
+            "Carrer de Sant Antoni",
+            "Carrer de la Rectoria",
+            "Plaça Nova",
+            "Carrer Santa Maria Josepa",
+            "Carrer de Santa Maria",
+            "Carrer de la Santa Maria",
+            "Carrer del Bastió de Santa Maria",
+            "Plaza de Santa María (reproduction)",
+            "Plaça de Santa Maria la Major",
+            "avinguda Santa Maria",
+            "carrer de Santa Maria de Bellver",
+            "carrer de Santa Maria del Camí",
+            "carrer del Baró de Santa Maria del Sepulcre"
+        ]
+    },
+    "Consell": {
+        "district": "Consell",
+        "streets": [
+            "Carrer Major",
+            "Plaza Major",
+            "Carrer d'Alcúdia",
+            "Carrer de Palma",
+            "Carrer de l'Església",
+            "Avinguda del Gran i General Consell",
+            "Camí de Consell",
+            "Carrer Consell",
+            "Carrer de Consell",
+            "Carrer del Gran i General Consell"
+        ]
+    },
+    "Binissalem": {
+        "district": "Binissalem",
+        "streets": [
+            "Plaça de l'Església",
+            "Carrer Conquistador",
+            "Carrer de la Rectoria",
+            "Carrer de la Portella",
+            "Carrer de Bonaire",
+            "Carrer de la Creu",
+            "Camí de Biniagual",
+            "Carrer de Binissalem",
+            "camí de Binissalem",
+            "camí vell de Binissalem",
+            "carretera vella Binissalem-Lloseta"
+        ]
+    },
+    "Alaro": {
+        "district": "Alaro",
+        "streets": [
+            "Plaça Vila",
+            "Carrer del Pont",
+            "Carrer Petit",
+            "Carrer d'Enmig",
+            "Carrer de Can Barbut",
+            "Carrer de la Rectoria",
+            "Carrer de los Dameto",
+            "Camí Vell d'Alaró",
+            "Camí Vell d'Alaró (camí romà)",
+            "Camí d'Orient al Castell d'Alaró",
+            "Carrer Puig d'Alaró",
+            "Carrer d'Alaró"
+        ]
+    },
+    "Lloseta": {
+        "district": "Lloseta",
+        "streets": [
+            "Carrer Major",
+            "Plaza España",
+            "Avinguda del Cocó",
+            "Carrer de l'Església",
+            "Carrer Nou",
+            "Camí Vell De Lloseta",
+            "Carrer de Lloseta",
+            "Carrer de sa Lloseta",
+            "camí vell de Selva a Lloseta"
+        ]
+    },
+    "Selva": {
+        "district": "Selva",
+        "streets": [
+            "Carrer Major",
+            "Plaza Major",
+            "Carrer de sa Font",
+            "Carrer de Sant Llorenç",
+            "Camí de Selva a Mancor",
+            "Camí vell de Selva i Lluc",
+            "Carrer de Selva",
+            "Carrer de la Mare-selva",
+            "camí de Massanella a Selva",
+            "carrer Mare Selva",
+            "carrer Mareselva"
+        ]
+    },
+    "Caimari": {
+        "district": "Caimari",
+        "streets": [
+            "Carrer Major",
+            "Plaça Major",
+            "Carrer de la Nostra Senyora de Lluc",
+            "Accés piscina de Caimari",
+            "Carrer d'Andreu Caimari",
+            "Carrer de Can Caimari",
+            "Carrer de Margalida Caimari",
+            "camí antic de Caimari",
+            "camí de Caimari a Binibona",
+            "camí de Caimari a Mancor",
+            "camí de Caimari a Moscari",
+            "camí de Can Caimari",
+            "camí de Mancor a Caimari",
+            "carrer Caimari",
+            "carrer d'Antoni Caimari"
+        ]
+    },
+    "Mancor del Vall": {
+        "district": "Mancor del Vall",
+        "streets": [
+            "Carrer Major",
+            "Plaça de Dalt",
+            "Carrer de Baix"
+        ]
+    },
+    "Biniamar": {
+        "district": "Biniamar",
+        "streets": [
+            "Carrer Major",
+            "Plaça Major",
+            "Carrer de Biniamar",
+            "Passatge Particular Biniamar",
+            "camí de Biniamar",
+            "camí de Biniarroi a Biniamar",
+            "camí vell de Biniamar"
+        ]
+    },
+    "Campanet": {
+        "district": "Campanet",
+        "streets": [
+            "Carrer Major",
+            "Plaza Major",
+            "Carrer de la Creu",
+            "Carrer de Sant Miquel",
+            "Carrer Nou",
+            "Camí Vell de Campanet",
+            "Camí de Campanet",
+            "Carrer de Campanet",
+            "Carrer de la Campaneta",
+            "camí de sa Campaneta"
+        ]
+    },
+    "Buger": {
+        "district": "Buger",
+        "streets": [
+            "Carrer Major",
+            "Carrer de la Masia",
+            "Carrer de Búger",
+            "Carrer de na Búger",
+            "Carretera de Búger",
+            "Passatge particular de Búger",
+            "Ronda Búger (O)",
+            "Ronda Búger (SO)",
+            "Ronda de Búger (NO)",
+            "Ronda de Búger (O)",
+            "Ronda de Búger (SO)",
+            "Rotonda de Búger",
+            "camí de Búger",
+            "camí vell de Búger",
+            "plaça de na Búger"
+        ]
+    },
+    "Sencelles": {
+        "district": "Sencelles",
+        "streets": [
+            "Carrer Major",
+            "Plaza Nueva",
+            "Carrer de la Rectoria",
+            "Carrer de Sant Pere",
+            "Carrer de Sencelles",
+            "Carretera de Sencelles",
+            "Passatge particular de Sencelles",
+            "camí de Sencelles"
+        ]
+    },
+    "Biniali": {
+        "district": "Biniali",
+        "streets": [
+            "Carrer Major",
+            "Plaça de la Puríssima",
+            "Camí de Biniali",
+            "Camí de Biniali (o del Pont)",
+            "Carrer de Biniali",
+            "passatge particular Biniali"
+        ]
+    },
+    "Costix": {
+        "district": "Costix",
+        "streets": [
+            "Carrer Major",
+            "Plaça del Jardí"
+        ]
+    },
+    "Algaida": {
+        "district": "Algaida",
+        "streets": [
+            "Carrer Fra Joan Llabres",
+            "Plaza Vila",
+            "Carrer de la Roca",
+            "Carrer de l'Aigua",
+            "Carrer de la Ribera",
+            "Carrer del Laberint",
+            "Camí vell d'Algaida",
+            "Carrer d'Algaida"
+        ]
+    },
+    "Porreras": {
+        "district": "Porreras",
+        "streets": [
+            "Carrer Major",
+            "Plaza Vila",
+            "Carrer de l'Hospital",
+            "Carrer de Sant Joan",
+            "Carrer Nou"
+        ]
+    },
+    "Sant Joan": {
+        "district": "Sant Joan",
+        "streets": [
+            "Carrer Major",
+            "Plaza Constitució",
+            "Carrer de Palma",
+            "Carrer de la Consolació",
+            "Carrer Sant Joan",
+            "Carrer Sant Joan de la Creu",
+            "Carrer de Sant Joan",
+            "Carrer de Sant Joan Evangelista",
+            "Carrer de Sant Joan de Déu",
+            "Carrer de Sant Joan de la Creu",
+            "Carrer de Son Sant Joan",
+            "Carrer de la Família Sant Joan",
+            "camí de Sant Joan",
+            "camí de Sant Joan a Porreres",
+            "camí vell de Sant Joan",
+            "camí vell de sa Font de Son Sant Joan",
+            "carrer d'en Pere de Sant Joan",
+            "carrer de Sant Joan Baptista de La Salle",
+            "carrer de Sant Joan Pelós",
+            "carrer de Sant Joan de la Salle",
+            "carretera de Sant Joan",
+            "estació de Sant Joan",
+            "plaça de Sant Joan"
+        ]
+    },
+    "San Lorenzo": {
+        "district": "San Lorenzo",
+        "streets": [
+            "Carrer Molí d'En Bou",
+            "Carrer Major",
+            "Carrer del Mar",
+            "Plaça de l'Ajuntament"
+        ]
+    },
+    "Ses Salines": {
+        "district": "Ses Salines",
+        "streets": [
+            "Plaça Major",
+            "Carrer Sant Bartomeu",
+            "Carrer de la Pau",
+            "Carrer de la Mar",
+            "Carrer de s'Águila",
+            "Carrer de Ses Salines",
+            "Carrer del Cap de Ses Salines"
+        ]
+    },
+    "Colonia Sant Jordi": {
+        "district": "Colonia Sant Jordi",
+        "streets": [
+            "Carrer Major",
+            "Avinguda Primavera",
+            "Carrer Gabriel Roca",
+            "Carrer de la Platja",
+            "Carrer de la Sal",
+            "Avinguda Marquès del Palmer"
+        ]
+    },
+    "Son Serra Marina": {
+        "district": "Son Serra Marina",
+        "streets": [
+            "Avinguda Llevant",
+            "Carrer de la Marineta",
+            "Carrer del Sol",
+            "Carrer de la Vela"
+        ]
+    },
+    "Colonia Sant Pere": {
+        "district": "Colonia Sant Pere",
+        "streets": [
+            "Carrer Pescadors",
+            "Passeig de la Mar",
+            "Carrer Sant Pere",
+            "Carrer de s'Estanyol",
+            "Carrer de la Mar"
+        ]
+    },
+    "Betlem": {
+        "district": "Betlem",
+        "streets": [
+            "Carrer Betlem",
+            "Avinguda Colom",
+            "Carrer dels Àngels",
+            "Carrer de Betlem",
+            "Passeig de Betlem",
+            "camí de Betlem",
+            "camí de l'ermita de Betlem per Can Canals",
+            "carreró de Betlem",
+            "carretera de l'ermita de Betlem"
+        ]
+    },
+    "Aucanada": {
+        "district": "Aucanada",
+        "streets": [
+            "Carrer Na Serralta",
+            "Carrer des Far",
+            "Carrer de la Torre",
+            "Carrer d'Aucanada"
+        ]
+    },
+    "Mal Pas": {
+        "district": "Mal Pas",
+        "streets": [
+            "Avinguda Mal Pas",
+            "Carrer de la Punta",
+            "Carrer de la Pineda",
+            "Camí des Mal Pas",
+            "Carrer Mal Pas",
+            "avinguda del Mal Pas",
+            "camí del Mal Pas",
+            "coma del Mal Pas"
+        ]
+    },
+    "Son Gual": {
+        "district": "Son Gual",
+        "streets": [
+            "Carrer Bisbe Campins",
+            "Camí de Son Gual",
+            "Carrer de la Vall",
+            "Carrer Son Gual",
+            "Carrer Son Gual A (N.O.)",
+            "Carrer Son Gual B (N.O.)",
+            "Carrer Son Gual C (N.O.)",
+            "Carrer Son Gual D (N.O.)",
+            "Carrer Son Gual E (N.O.)",
+            "Carrer Son Gual F (N.O.)",
+            "Carrer Son Gual G (N.O.)",
+            "Carrer Son Gual H (N.O.)",
+            "Carrer Son Gual I-I (N.O.)",
+            "Carrer Son Gual II-B (N.O.)",
+            "Carrer Son Gual II-C (N.O.)",
+            "Carrer Son Gual II-D (N.O.)",
+            "Carrer Son Gual II-E (N.O.)",
+            "Carrer Son Gual II-F (N.O.)",
+            "Carrer Son Gual II-H (N.O.)",
+            "Carrer Son Gual J (N.O.)",
+            "Carrer Son Gual O (N.O.)",
+            "Son Gualet"
+        ]
+    },
+    "Marratxí": {
+        "district": "Sa Cabaneta",
+        "streets": [
+            "Carrer Major",
+            "Avinguda Antoni Maura",
+            "Carrer de la Cabana",
+            "Camí de n'Olesa",
+            "Passeig de Marratxí"
+        ]
+    },
+    "Sa Cabaneta": {
+        "district": "Sa Cabaneta",
+        "streets": [
+            "Carrer Cabana",
+            "Camí de n'Olesa",
+            "Carrer de la Font",
+            "Camí de sa Cabaneta"
+        ]
+    },
+    "Portol": {
+        "district": "Portol",
+        "streets": [
+            "Carrer Pou Nou",
+            "Carrer Major",
+            "Carrer de l'Església",
+            "Carretera de Pòrtol"
+        ]
+    },
+    "Palmanyola": {
+        "district": "Palmanyola",
+        "streets": [
+            "Carrer Major",
+            "Avinguda de les Flors",
+            "Avinguda de les Roses",
+            "Avinguda dels Clavells"
+        ]
+    },
+    "Sa Planera": {
+        "district": "Sa Planera",
+        "streets": [
+            "Carrer Porrassa",
+            "Carrer del Pi"
+        ]
+    },
+    "Els Garrovers": {
+        "district": "Els Garrovers",
+        "streets": [
+            "Carrer Compositor Lassus",
+            "Carrer de Chopin",
+            "Avinguda dels Garrovers",
+            "Carrer dels Garrovers"
+        ]
+    },
+    "Son Daviu": {
+        "district": "Son Daviu",
+        "streets": [
+            "Carrer de Son Daviu Nou",
+            "Camí a Son Daviu",
+            "camí de Son Daviu"
+        ]
+    },
+    "Cas Congos": {
+        "district": "Cas Congos",
+        "streets": [
+            "Carrer dels Tamarells",
+            "Carrer de sa Plaça"
+        ]
+    },
+    "Lluc": {
+        "district": "Lluc",
+        "streets": [
+            "Camí de Lluc",
+            "Plaça dels Peregrins",
+            "Carrer del Santuari",
+            "Avinguda de Lluc",
+            "Camí Vell de Lluc",
+            "Camí de Llucamet",
+            "Camí de Son Lluc",
+            "Carrer Lluc",
+            "Carrer Llucalcari",
+            "Carrer de Lluc Mesquida",
+            "Carrer de Llucalcari",
+            "Carrer de Llucamet",
+            "Carrer de Nostra Senyora de Lluc",
+            "Carrer de Sant Lluc",
+            "Carrer de Santa Llucia",
+            "Carrer de la Mare de Déu de Lluc",
+            "Carrer de la Posada de Lluc",
+            "Carrer de la Verge de Lluc",
+            "Carrer del Lluç",
+            "Carrer del Mestre Lluc Mesquida",
+            "Carrer dels Blavets de Lluc",
+            "Carrer des Pou d'en Lluc",
+            "Horts de Llucamar",
+            "Plaça de la Mare de Déu de Lluc",
+            "antiga carretera de Lluc (GR 222)",
+            "camí Vell Pollença-Lluc (GR-221)",
+            "camí Vell de Lluc (GR-221)",
+            "camí Vell de Lluc a Pollença (GR-221)",
+            "camí de Ca na Pelluca",
+            "camí de Can Lluc",
+            "camí de Can Pelluc",
+            "camí de Santa Llúcia",
+            "camí de Son Llucià",
+            "camí de s'Hort d'en Joan Llucia",
+            "camí de sa Planeta de Son Lluc",
+            "carrer Son Lluc",
+            "carrer de Can Lluca",
+            "carrer des Lluç",
+            "carretera de Lluc",
+            "carretera vella de Lluc",
+            "costa de Ca na Lluca",
+            "placeta d'en Lluc"
+        ]
+    },
+    "Lluc Alcari": {
+        "district": "Lluc Alcari",
+        "streets": [
+            "Carrer Major",
+            "Camí de Llucalcari"
+        ]
+    },
+    "Cala Llamps": {
+        "district": "Cala Llamps",
+        "streets": [
+            "Camí de Cala Llamp",
+            "Carrer de la Talaia"
+        ]
+    }
+}
