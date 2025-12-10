@@ -160,7 +160,7 @@
     overflow: hidden;
 }
 
-.met-popup-btn-blue::before {
+.met-popup-action::before {
     content: '';
     position: absolute;
     top: 0;
@@ -188,7 +188,8 @@
 
 .met-popup-action:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(235, 132, 41, 0.5);
+    background: var(--met-blue);
+    box-shadow: 0 12px 35px rgba(21, 105, 154, 0.6);
 }
 
 .met-popup-action:active {
