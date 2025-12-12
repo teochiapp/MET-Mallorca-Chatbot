@@ -6,8 +6,31 @@
     --met-orange: #EB8429;
     --met-white: #FFFFFF;
     --met-blue: #15699A;
-    --font-met: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* Backdrop para atenuar el fondo de la página */
+.met-popup-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9997;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    pointer-events: none;
+}
+
+.met-popup-backdrop.met-backdrop-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
 /* Contenedor del popup */
 #met-homepage-popup {
     position: fixed;
@@ -309,7 +332,7 @@
     .met-popup-cursor {
         width: 40px;
         bottom: -12px;
-        right: 15px;
+        right: 0px;
     }
 }
 

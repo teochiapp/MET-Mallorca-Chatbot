@@ -55,6 +55,7 @@
         // Mostrar popup
         showPopup: function() {
             const $popup = $('#met-homepage-popup');
+            const $backdrop = $('#met-popup-backdrop');
             
             if (this.state.isVisible) {
                 return;
@@ -62,11 +63,13 @@
             
             this.state.isVisible = true;
             $popup.addClass('met-popup-visible');
+            $backdrop.addClass('met-backdrop-visible');
         },
         
         // Ocultar popup
         hidePopup: function() {
             const $popup = $('#met-homepage-popup');
+            const $backdrop = $('#met-popup-backdrop');
             
             if (!this.state.isVisible) {
                 return;
@@ -74,6 +77,7 @@
             
             this.state.isVisible = false;
             $popup.removeClass('met-popup-visible');
+            $backdrop.removeClass('met-backdrop-visible');
             
             // Guardar timestamp
             this.saveTimestamp();

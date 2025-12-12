@@ -8,6 +8,9 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
+<!-- Backdrop para atenuar el fondo de la página -->
+<div id="met-popup-backdrop" class="met-popup-backdrop"></div>
+
 <!-- Popup de Homepage -->
 <div id="met-homepage-popup" class="met-homepage-popup">
     <div class="met-popup-content">
@@ -33,21 +36,21 @@ if (!defined('ABSPATH')) {
             <div class="met-popup-button-wrapper">
                 <button id="met-popup-action" class="met-popup-action">
                     <span class="met-popup-btn-white">HABLA </span><span class="met-popup-btn-blue">POR CHAT</span>
-                    
-                    <!-- Icono de chat dentro del botón -->
+
+                    <!-- Icono de chat dentro del botón (lets-icons chat-alt-3-light) -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-message-square-more-icon lucide-message-square-more">
-                        <path
-                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                        <path d="M8 10h.01" />
-                        <path d="M12 10h.01" />
-                        <path d="M16 10h.01" />
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="letsicon-chat-alt-3-light">
+                        <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.4876 3.35471 14.8936 4 16.1272L3 21L7.8728 20C9.10636 20.6453 10.5124 21 12 21Z"/>
+                        <path d="M8.5 12.5H8.51"/>
+                        <path d="M12 12.5H12.01"/>
+                        <path d="M15.5 12.5H15.51"/>
                     </svg>
                 </button>
-                
+
                 <!-- Mano/cursor apuntando (absoluto, fuera del botón) -->
-                <svg class="met-popup-cursor" width="65" height="58" viewBox="0 0 65 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="met-popup-cursor" width="65" height="58" viewBox="0 0 65 58" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d_2022_12)">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M23.5677 33.5766L18.7534 31.7786C15.4662 30.5509 11.5384 32.1117 9.97474 35.2626L10.3391 34.5284C9.95103 35.3104 10.242 36.3334 10.9903 36.8108L20.1023 42.6246C21.5468 43.5463 24.1559 44.433 25.8805 44.5736C25.8805 44.5736 36.0319 45.1591 37.4744 47.1186L39.3007 49.5993L49.5135 42.0805L52.3063 40.0245L54.62 38.3212L57.1732 36.4415L55.3469 33.9608C53.9043 32.0013 53.2131 22.9935 53.2131 22.9935C53.0391 21.2718 52.0742 18.7233 51.0412 17.3201L43.4444 7.00124C41.7163 4.75063 38.4145 4.32643 36.0222 6.0876C34.8255 6.96867 34.5377 8.60807 35.3791 9.751L35.9875 10.5775C34.3056 8.29287 31.0038 7.86866 28.6115 9.62984C27.4148 10.5109 27.1269 12.1503 27.9684 13.2932L28.5768 14.1197C26.8949 11.8351 23.5931 11.4109 21.2008 13.1721C20.0041 14.0531 19.7162 15.6925 20.5577 16.8355L21.1661 17.6619C20.8958 17.2948 20.6418 17.0318 20.3958 16.8562L11.8898 6.68616C10.7395 5.31092 8.70279 5.08402 7.29269 6.12214C5.87277 7.16749 5.58229 9.14662 6.62195 10.5588L14.1536 20.7892L23.5677 33.5766Z"
