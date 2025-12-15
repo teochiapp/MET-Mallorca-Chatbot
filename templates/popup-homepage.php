@@ -14,6 +14,19 @@ if (!defined('ABSPATH')) {
 <!-- Popup de Homepage -->
 <div id="met-homepage-popup" class="met-homepage-popup">
     <div class="met-popup-content">
+        <!-- Language selector in top-right corner -->
+        <div class="met-popup-language-selector">
+            <button class="met-popup-lang-btn active" data-lang="es" title="Español">
+                <span class="met-flag met-flag-es" aria-hidden="true"></span>
+            </button>
+            <button class="met-popup-lang-btn" data-lang="en" title="English">
+                <span class="met-flag met-flag-en" aria-hidden="true"></span>
+            </button>
+            <button class="met-popup-lang-btn" data-lang="de" title="Deutsch">
+                <span class="met-flag met-flag-de" aria-hidden="true"></span>
+            </button>
+        </div>
+
         <button id="met-popup-close" class="met-popup-close" aria-label="Cerrar popup">
             <i class="fas fa-times"></i>
         </button>
@@ -41,10 +54,11 @@ if (!defined('ABSPATH')) {
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                         class="letsicon-chat-alt-3-light">
-                        <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.4876 3.35471 14.8936 4 16.1272L3 21L7.8728 20C9.10636 20.6453 10.5124 21 12 21Z"/>
-                        <path d="M8.5 12.5H8.51"/>
-                        <path d="M12 12.5H12.01"/>
-                        <path d="M15.5 12.5H15.51"/>
+                        <path
+                            d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 13.4876 3.35471 14.8936 4 16.1272L3 21L7.8728 20C9.10636 20.6453 10.5124 21 12 21Z" />
+                        <path d="M8.5 12.5H8.51" />
+                        <path d="M12 12.5H12.01" />
+                        <path d="M15.5 12.5H15.51" />
                     </svg>
                 </button>
 

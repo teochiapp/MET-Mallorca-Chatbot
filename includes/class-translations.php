@@ -8,10 +8,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MET_Translations {
-    
+class MET_Translations
+{
+
     private static $current_lang = 'es';
-    
+
     private static $translations = array(
         // ========== ESPAÑOL ==========
         'es' => array(
@@ -22,19 +23,19 @@ class MET_Translations {
             'option_airport' => '<i class="fas fa-plane"></i> Aeropuerto ↔ Destino',
             'option_point_to_airport' => '<i class="fas fa-car"></i> Donde Estoy → Aeropuerto (PMI)',
             'option_verify' => '<i class="fas fa-search"></i> Verificar mi reserva',
-            
+
             // Route type
             'route_airport_title' => 'Traslado desde el Aeropuerto',
             'route_airport_question' => 'Perfecto, ¿a qué destino te llevamos?',
             'route_point_title' => 'Traslado hacia el Aeropuerto',
             'route_point_question' => 'Perfecto. Busca y selecciona tu ubicación de origen:',
-            
+
             // Verify booking
             'verify_title' => 'Verificar Reserva',
-            'verify_message' => 'Por favor, escribe tu <strong>código de reserva</strong> con formato MET-1234.',
-            'verify_example' => 'Ejemplo: MET-123456',
-            'verify_error_invalid_format' => '❌ El código debe tener el formato MET-1234.',
-            'verify_error_missing_info' => '❌ Por favor, proporciona el código de reserva y el email separados por coma.<br><br>Ejemplo: MET-123456, email@ejemplo.com',
+            'verify_message' => 'Por favor, escribe tu <strong>número de pedido</strong>.',
+            'verify_example' => 'Ejemplo: 1234',
+            'verify_error_invalid_format' => '❌ El código debe ser un número válido.',
+            'verify_error_missing_info' => '❌ Por favor, proporciona el número de pedido y el email separados por coma.<br><br>Ejemplo: 1234, email@ejemplo.com',
             'verify_checking' => '🔍 Verificando tu reserva...',
             'verify_error_not_met' => '❌ No encontramos esa reserva en MET Mallorca.<br><br>¿Podría ser de otra empresa?<br><br>Puedes adjuntar una foto del voucher o indicarnos la empresa que figura en tu comprobante.',
             'verify_error_system' => '❌ Error del sistema. Por favor, contacta con soporte.',
@@ -70,24 +71,24 @@ class MET_Translations {
             'order_status_cancelled' => '❌ Cancelada',
             'order_status_refunded' => '💸 Reembolsada',
             'order_status_failed' => '❌ Fallida',
-            
+
             // Location
             'location_origin_title' => 'Ubicación de Origen',
             'location_origin_question' => 'Busca y selecciona tu ubicación de recogida:',
             'location_destination_title' => '¿Cuál es tu destino?',
             'location_destination_question' => 'Busca y selecciona tu ubicación de destino:',
-            
+
             // Date
             'date_title' => '¿Qué día necesitas el traslado?',
             'date_format' => 'Escribe la fecha en formato <strong>DD/MM/YYYY</strong>',
             'date_example' => 'Ejemplo: 25/12/2025',
             'date_error_retry' => 'Por favor, intenta de nuevo:',
-            
+
             // Time
             'time_title' => '¿A qué hora necesitas el traslado?',
             'time_message' => 'Selecciona una hora disponible (intervalos de 30 minutos).',
             'time_example' => 'Ejemplo: 2:00 PM, 2:30 PM, 3:00 PM…',
-            
+
             // Passengers
             'passengers_title' => '¿Cuántas personas viajan?',
             'passengers_question' => 'Escribe el número de pasajeros:',
@@ -95,7 +96,7 @@ class MET_Translations {
             'passengers_large_group' => 'Grupo Grande',
             'passengers_large_message' => 'Para grupos de más de 20 personas, te recomendamos solicitar un presupuesto personalizado.',
             'passengers_contact' => 'Por favor, contacta con nosotros en:',
-            
+
             // Extras
             'extras_title' => 'Opciones Extras',
             'extras_message' => 'Selecciona las opciones adicionales que necesites para tu viaje:',
@@ -131,7 +132,7 @@ class MET_Translations {
             'price_extra_meet_greet' => '👋 Meet & Greet',
             'price_extra_bolsa_golf' => '⛳ Bolsa de Golf',
             'price_extra_bicicleta' => '🚴 Bicicleta',
-            
+
             // Summary
             'summary_title' => 'Resumen de tu Reserva',
             'summary_route' => 'Ruta',
@@ -144,7 +145,7 @@ class MET_Translations {
             'summary_modify_data' => '<i class="fas fa-edit"></i> Modificar datos',
             'summary_error_missing' => 'Error: Faltan datos necesarios para calcular el precio.',
             'summary_error_fields' => 'Campos faltantes',
-            
+
             // Confirm
             'confirm_perfect' => '¡Perfecto!',
             'confirm_message' => 'Tu reserva está lista. Haz clic en el botón de abajo para ir al checkout seguro y completar el pago.',
@@ -152,7 +153,7 @@ class MET_Translations {
             'confirm_payment_secure' => 'Pago seguro con Redsys/Getnet a través de WooCommerce',
             'confirm_data_protected' => 'Tus datos están protegidos',
             'confirm_another_booking' => 'Hacer otra reserva',
-            
+
             // Modify
             'modify_title' => '¿Qué deseas modificar?',
             'modify_locations' => 'Origen/Destino',
@@ -165,18 +166,18 @@ class MET_Translations {
             'modify_datetime_question' => '¿Qué día necesitas el traslado?',
             'modify_passengers_title' => 'Modificar Pasajeros',
             'modify_passengers_question' => '¿Cuántas personas viajan?',
-            
+
             // Vehicle types
             'vehicle_standard' => 'Vehículo Estándar (1-4 pax)',
             'vehicle_van' => 'Van (5-8 pax)',
             'vehicle_minibus' => 'Minibus (9-16 pax)',
             'vehicle_bus' => 'Bus (17-20 pax)',
-            
+
             // Location options
             'location_airport' => '<i class="fas fa-plane"></i> Aeropuerto',
             'location_hotel' => '<i class="fas fa-hotel"></i> Hotel / Alojamiento',
         ),
-        
+
         // ========== ENGLISH (British) ==========
         'en' => array(
             // Welcome step
@@ -186,19 +187,19 @@ class MET_Translations {
             'option_airport' => '<i class="fas fa-plane"></i> Airport ↔ Destination',
             'option_point_to_airport' => '<i class="fas fa-car"></i> Where I Am → Airport (PMI)',
             'option_verify' => '<i class="fas fa-search"></i> Verify my booking',
-            
+
             // Route type
             'route_airport_title' => 'Transfer from the Airport',
             'route_airport_question' => 'Perfect, where shall we take you?',
             'route_point_title' => 'Transfer to the Airport',
             'route_point_question' => 'Perfect. Search and select your origin location:',
-            
+
             // Verify booking
             'verify_title' => 'Verify Booking',
-            'verify_message' => 'Please enter your <strong>booking code</strong> using the MET-1234 format.',
-            'verify_example' => 'Example: MET-123456',
-            'verify_error_invalid_format' => '❌ The code must follow the MET-1234 format.',
-            'verify_error_missing_info' => '❌ Please provide the booking code and email separated by a comma.<br><br>Example: MET-123456, email@example.com',
+            'verify_message' => 'Please enter your <strong>order number</strong>.',
+            'verify_example' => 'Example: 1234',
+            'verify_error_invalid_format' => '❌ The code must be a valid number.',
+            'verify_error_missing_info' => '❌ Please provide the order number and email separated by a comma.<br><br>Example: 1234, email@example.com',
             'verify_checking' => '🔍 Checking your booking...',
             'verify_error_not_met' => '❌ We couldn\'t find that booking at MET Mallorca.<br><br>Could it belong to another company?<br><br>Please send us a photo of the voucher or tell us the company shown on your receipt.',
             'verify_error_system' => '❌ System error. Please contact support.',
@@ -234,24 +235,24 @@ class MET_Translations {
             'order_status_cancelled' => '❌ Cancelled',
             'order_status_refunded' => '💸 Refunded',
             'order_status_failed' => '❌ Failed',
-            
+
             // Location
             'location_origin_title' => 'Origin Location',
             'location_origin_question' => 'Search and select your pick-up location:',
             'location_destination_title' => 'What is your destination?',
             'location_destination_question' => 'Search and select your destination location:',
-            
+
             // Date
             'date_title' => 'What day do you need the transfer?',
             'date_format' => 'Enter the date in <strong>DD/MM/YYYY</strong> format',
             'date_example' => 'Example: 25/12/2025',
             'date_error_retry' => 'Please try again:',
-            
+
             // Time
             'time_title' => 'What time do you need the transfer?',
             'time_message' => 'Select an available time (30-minute intervals).',
             'time_example' => 'Example: 2:00 PM, 2:30 PM, 3:00 PM…',
-            
+
             // Passengers
             'passengers_title' => 'How many people are travelling?',
             'passengers_question' => 'Enter the number of passengers:',
@@ -259,7 +260,7 @@ class MET_Translations {
             'passengers_large_group' => 'Large Group',
             'passengers_large_message' => 'For groups of more than 20 people, we recommend requesting a personalised quote.',
             'passengers_contact' => 'Please contact us at:',
-            
+
             // Extras
             'extras_title' => 'Extra Options',
             'extras_message' => 'Select the additional options you need for your journey:',
@@ -295,7 +296,7 @@ class MET_Translations {
             'price_extra_meet_greet' => '👋 Meet & Greet',
             'price_extra_bolsa_golf' => '⛳ Golf bag',
             'price_extra_bicicleta' => '🚴 Bicycle',
-            
+
             // Summary
             'summary_title' => 'Your Booking Summary',
             'summary_route' => 'Route',
@@ -308,7 +309,7 @@ class MET_Translations {
             'summary_modify_data' => '<i class="fas fa-edit"></i> Modify details',
             'summary_error_missing' => 'Error: Missing data required to calculate the price.',
             'summary_error_fields' => 'Missing fields',
-            
+
             // Confirm
             'confirm_perfect' => 'Perfect!',
             'confirm_message' => 'Your booking is ready. Click the button below to go to secure checkout and complete payment.',
@@ -316,7 +317,7 @@ class MET_Translations {
             'confirm_payment_secure' => 'Secure payment with Redsys/Getnet through WooCommerce',
             'confirm_data_protected' => 'Your data is protected',
             'confirm_another_booking' => 'Make another booking',
-            
+
             // Modify
             'modify_title' => 'What would you like to modify?',
             'modify_locations' => 'Origin/Destination',
@@ -329,18 +330,18 @@ class MET_Translations {
             'modify_datetime_question' => 'What day do you need the transfer?',
             'modify_passengers_title' => 'Modify Passengers',
             'modify_passengers_question' => 'How many people are travelling?',
-            
+
             // Vehicle types
             'vehicle_standard' => 'Standard Vehicle (1-4 pax)',
             'vehicle_van' => 'Van (5-8 pax)',
             'vehicle_minibus' => 'Minibus (9-16 pax)',
             'vehicle_bus' => 'Bus (17-20 pax)',
-            
+
             // Location options
             'location_airport' => '<i class="fas fa-plane"></i> Airport',
             'location_hotel' => '<i class="fas fa-hotel"></i> Hotel / Accommodation',
         ),
-        
+
         // ========== DEUTSCH ==========
         'de' => array(
             // Welcome step
@@ -350,19 +351,19 @@ class MET_Translations {
             'option_airport' => '<i class="fas fa-plane"></i> Flughafen ↔ Zielort',
             'option_point_to_airport' => '<i class="fas fa-car"></i> Wo Ich Bin → Flughafen (PMI)',
             'option_verify' => '<i class="fas fa-search"></i> Meine Buchung überprüfen',
-            
+
             // Route type
             'route_airport_title' => 'Transfer vom Flughafen',
             'route_airport_question' => 'Perfekt, wohin sollen wir Sie bringen?',
             'route_point_title' => 'Transfer zum Flughafen',
             'route_point_question' => 'Perfekt. Suchen und wählen Sie Ihren Startort:',
-            
+
             // Verify booking
             'verify_title' => 'Buchung überprüfen',
-            'verify_message' => 'Bitte gib deinen <strong>Buchungscode</strong> im Format MET-1234 ein.',
-            'verify_example' => 'Beispiel: MET-123456',
-            'verify_error_invalid_format' => '❌ Der Code muss dem Format MET-1234 entsprechen.',
-            'verify_error_missing_info' => '❌ Bitte gib den Buchungscode und die E-Mail getrennt durch ein Komma ein.<br><br>Beispiel: MET-123456, email@beispiel.com',
+            'verify_message' => 'Bitte gib deine <strong>Bestellnummer</strong> ein.',
+            'verify_example' => 'Beispiel: 1234',
+            'verify_error_invalid_format' => '❌ Der Code muss eine gültige Nummer sein.',
+            'verify_error_missing_info' => '❌ Bitte gib die Bestellnummer und die E-Mail getrennt durch ein Komma ein.<br><br>Beispiel: 1234, email@beispiel.com',
             'verify_checking' => '🔍 Wir prüfen deine Buchung...',
             'verify_error_not_met' => '❌ Wir konnten diese Buchung nicht bei MET Mallorca finden.<br><br>Könnte sie zu einem anderen Unternehmen gehören?<br><br>Sende uns gern ein Foto des Vouchers oder nenne die Firma auf deinem Beleg.',
             'verify_error_system' => '❌ Systemfehler. Bitte kontaktiere den Support.',
@@ -398,24 +399,24 @@ class MET_Translations {
             'order_status_cancelled' => '❌ Storniert',
             'order_status_refunded' => '💸 Erstattet',
             'order_status_failed' => '❌ Fehlgeschlagen',
-            
+
             // Location
             'location_origin_title' => 'Startort',
             'location_origin_question' => 'Suchen und wählen Sie Ihren Abholort:',
             'location_destination_title' => 'Was ist Ihr Zielort?',
             'location_destination_question' => 'Suchen und wählen Sie Ihren Zielort:',
-            
+
             // Date
             'date_title' => 'An welchem Tag benötigen Sie den Transfer?',
             'date_format' => 'Geben Sie das Datum im Format <strong>TT/MM/JJJJ</strong> ein',
             'date_example' => 'Beispiel: 25/12/2025',
             'date_error_retry' => 'Bitte versuchen Sie es erneut:',
-            
+
             // Time
             'time_title' => 'Um welche Uhrzeit benötigen Sie den Transfer?',
             'time_message' => 'Wählen Sie eine verfügbare Uhrzeit (30-Minuten-Intervalle).',
             'time_example' => 'Beispiel: 14:00, 14:30, 15:00 Uhr…',
-            
+
             // Passengers
             'passengers_title' => 'Wie viele Personen reisen?',
             'passengers_question' => 'Geben Sie die Anzahl der Passagiere ein:',
@@ -423,7 +424,7 @@ class MET_Translations {
             'passengers_large_group' => 'Große Gruppe',
             'passengers_large_message' => 'Für Gruppen von mehr als 20 Personen empfehlen wir, ein individuelles Angebot anzufordern.',
             'passengers_contact' => 'Bitte kontaktieren Sie uns unter:',
-            
+
             // Extras
             'extras_title' => 'Zusatzoptionen',
             'extras_message' => 'Wählen Sie die zusätzlichen Optionen, die Sie für Ihre Reise benötigen:',
@@ -459,7 +460,7 @@ class MET_Translations {
             'price_extra_meet_greet' => '👋 Meet & Greet',
             'price_extra_bolsa_golf' => '⛳ Golftasche',
             'price_extra_bicicleta' => '🚴 Fahrrad',
-            
+
             // Summary
             'summary_title' => 'Ihre Buchungszusammenfassung',
             'summary_route' => 'Route',
@@ -472,7 +473,7 @@ class MET_Translations {
             'summary_modify_data' => '<i class="fas fa-edit"></i> Details ändern',
             'summary_error_missing' => 'Fehler: Fehlende Daten zur Preisberechnung.',
             'summary_error_fields' => 'Fehlende Felder',
-            
+
             // Confirm
             'confirm_perfect' => 'Perfekt!',
             'confirm_message' => 'Ihre Buchung ist fertig. Klicken Sie auf die Schaltfläche unten, um zur sicheren Kasse zu gehen und die Zahlung abzuschließen.',
@@ -480,7 +481,7 @@ class MET_Translations {
             'confirm_payment_secure' => 'Sichere Zahlung mit Redsys/Getnet über WooCommerce',
             'confirm_data_protected' => 'Ihre Daten sind geschützt',
             'confirm_another_booking' => 'Weitere Buchung vornehmen',
-            
+
             // Modify
             'modify_title' => 'Was möchten Sie ändern?',
             'modify_locations' => 'Start/Ziel',
@@ -493,57 +494,61 @@ class MET_Translations {
             'modify_datetime_question' => 'An welchem Tag benötigst du den Transfer?',
             'modify_passengers_title' => 'Passagiere ändern',
             'modify_passengers_question' => 'Wie viele Personen reisen?',
-            
+
             // Vehicle types
             'vehicle_standard' => 'Standardfahrzeug (1-4 Pax)',
             'vehicle_van' => 'Van (5-8 Pax)',
             'vehicle_minibus' => 'Minibus (9-16 Pax)',
             'vehicle_bus' => 'Bus (17-20 Pax)',
-            
+
             // Location options
             'location_airport' => '<i class="fas fa-plane"></i> Flughafen',
             'location_hotel' => '<i class="fas fa-hotel"></i> Hotel / Unterkunft',
         )
     );
-    
+
     /**
      * Establecer idioma actual
      */
-    public static function set_language($lang) {
+    public static function set_language($lang)
+    {
         if (isset(self::$translations[$lang])) {
             self::$current_lang = $lang;
         }
     }
-    
+
     /**
      * Obtener idioma actual
      */
-    public static function get_language() {
+    public static function get_language()
+    {
         return self::$current_lang;
     }
-    
+
     /**
      * Traducir una clave
      */
-    public static function t($key) {
+    public static function t($key)
+    {
         $lang = self::$current_lang;
-        
+
         if (isset(self::$translations[$lang][$key])) {
             return self::$translations[$lang][$key];
         }
-        
+
         // Fallback a español
         if (isset(self::$translations['es'][$key])) {
             return self::$translations['es'][$key];
         }
-        
+
         return $key;
     }
-    
+
     /**
      * Obtener idioma desde los datos de conversación
      */
-    public static function init_from_data($data) {
+    public static function init_from_data($data)
+    {
         if (isset($data['language']) && !empty($data['language'])) {
             self::set_language($data['language']);
         }

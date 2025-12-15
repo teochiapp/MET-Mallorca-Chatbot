@@ -57,10 +57,10 @@
                 
                 // Verify booking
                 'verify_title': 'Verificar Reserva',
-                'verify_message': 'Por favor, escribe tu <strong>número de reserva</strong> y tu <strong>email</strong> separados por coma.',
-                'verify_example': 'Ejemplo: MET-123456, email@ejemplo.com',
-                'verify_error_missing_info': '❌ Por favor, proporciona el código de reserva y email separados por coma. Ejemplo: MET-123456, email@ejemplo.com',
-                'verify_error_invalid_format': '❌ El código debe tener el formato MET-1234.',
+                'verify_message': 'Por favor, escribe tu <strong>número de pedido</strong> y tu <strong>email</strong> separados por coma.',
+                'verify_example': 'Ejemplo: 1234, email@ejemplo.com',
+                'verify_error_missing_info': '❌ Por favor, proporciona el número de pedido y email separados por coma. Ejemplo: 1234, email@ejemplo.com',
+                'verify_error_invalid_format': '❌ El código debe ser un número válido.',
                 'verify_checking': '🔍 Verificando tu reserva...',
                 'verify_error_not_met': '❌ No encontramos esa reserva en MET Mallorca. ¿Podría ser de otra empresa? Puedes adjuntar foto del voucher o indicarnos la empresa que figura en tu comprobante.',
                 'verify_error_system': '❌ Error del sistema. Por favor, contacta con soporte.',
@@ -254,10 +254,10 @@
                 
                 // Verify booking
                 'verify_title': 'Verify Booking',
-                'verify_message': 'Please enter your <strong>booking number</strong> and your <strong>email</strong> separated by a comma.',
-                'verify_example': 'Example: MET-123456, email@example.com',
-                'verify_error_missing_info': '❌ Please provide the booking code and email separated by a comma. Example: MET-123456, email@example.com',
-                'verify_error_invalid_format': '❌ The code must follow the MET-1234 format.',
+                'verify_message': 'Please enter your <strong>order number</strong> and your <strong>email</strong> separated by a comma.',
+                'verify_example': 'Example: 1234, email@example.com',
+                'verify_error_missing_info': '❌ Please provide the order number and email separated by a comma. Example: 1234, email@example.com',
+                'verify_error_invalid_format': '❌ The code must be a valid number.',
                 'verify_checking': '🔍 Checking your booking...',
                 'verify_error_not_met': '❌ We couldn\'t find that booking at MET Mallorca. Could it belong to another company? You can send us a photo of the voucher or tell us the company on your receipt.',
                 'verify_error_system': '❌ System error. Please contact support.',
@@ -451,10 +451,10 @@
                 
                 // Verify booking
                 'verify_title': 'Buchung überprüfen',
-                'verify_message': 'Bitte geben Sie Ihre <strong>Buchungsnummer</strong> und Ihre <strong>E-Mail</strong> durch Komma getrennt ein.',
-                'verify_example': 'Beispiel: MET-123456, email@beispiel.com',
-                'verify_error_missing_info': '❌ Bitte gib Buchungscode und E-Mail getrennt durch ein Komma ein. Beispiel: MET-123456, email@beispiel.com',
-                'verify_error_invalid_format': '❌ Der Code muss dem Format MET-1234 entsprechen.',
+                'verify_message': 'Bitte geben Sie Ihre <strong>Bestellnummer</strong> und Ihre <strong>E-Mail</strong> durch Komma getrennt ein.',
+                'verify_example': 'Beispiel: 1234, email@beispiel.com',
+                'verify_error_missing_info': '❌ Bitte gib Bestellnummer und E-Mail getrennt durch ein Komma ein. Beispiel: 1234, email@beispiel.com',
+                'verify_error_invalid_format': '❌ Der Code muss eine gültige Nummer sein.',
                 'verify_checking': '🔍 Wir prüfen deine Buchung...',
                 'verify_error_not_met': '❌ Wir konnten diese Buchung nicht bei MET Mallorca finden. Könnte sie zu einem anderen Unternehmen gehören? Bitte sende uns ein Foto des Vouchers oder nenne die Firma auf deinem Beleg.',
                 'verify_error_system': '❌ Systemfehler. Bitte kontaktiere den Support.',

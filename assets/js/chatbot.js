@@ -828,5 +828,8 @@
         $('#met-chatbot-toggle .met-chatbot-icon').show();
         $('#met-chatbot-toggle .met-chatbot-close').hide();
     });
+
+    // Exponer MetChatbot globalmente para que el popup pueda acceder
+    window.MetChatbot = MetChatbot;
     
 })(jQuery);
