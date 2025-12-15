@@ -236,7 +236,7 @@
                 },
                 error: function() {
                     self.hideTyping();
-                    self.addMessage('bot', 'Lo siento, ha ocurrido un error de conexión. Por favor, intenta de nuevo.');
+                    self.addMessage('bot', 'Tu reserva no está registrada. Por favor, vuelve a comprobarla o realiza una nueva.');
                 }
             });
         },
@@ -346,7 +346,7 @@
                     }
                 },
                 error: function() {
-                    self.addMessage('bot', 'Error al verificar la reserva. Por favor, intenta de nuevo.');
+                    self.addMessage('bot', 'Tu reserva no está registrada. Por favor, vuelve a comprobarla o realiza una nueva.');
                 }
             });
         },

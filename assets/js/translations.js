@@ -38,7 +38,7 @@
                 'btn_modify': 'Modificar',
                 
                 // Mensajes de error
-                'error_connection': 'Lo siento, ha ocurrido un error de conexión. Por favor, intenta de nuevo.',
+                'error_connection': 'Tu reserva no está registrada. Por favor, vuelve a comprobarla o realiza una nueva.',
                 'error_general': 'Lo siento, ha ocurrido un error. Por favor, intenta de nuevo.',
                 
                 // Welcome step
