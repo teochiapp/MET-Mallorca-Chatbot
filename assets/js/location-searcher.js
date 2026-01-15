@@ -24,18 +24,29 @@
         searchTimer: null,
         
         /**
-         * Normalizar término de búsqueda
-         * Convierte variantes equivalentes (Puerto <-> Pto)
+         * Crear variantes de búsqueda para términos equivalentes
+         * Genera todas las posibles variantes (Puerto <-> Pto)
          */
-        normalizeSearchTerm: function(term) {
-            if (!term) return '';
+        createSearchVariants: function(term) {
+            if (!term) return [term];
             
-            let normalized = term.toLowerCase();
+            const variants = [];
+            const lower = term.toLowerCase();
             
-            // Convertir "puerto" a "pto" para búsqueda
-            normalized = normalized.replace(/\bpuerto\b/g, 'pto');
+            // Agregar el término original en minúsculas
+            variants.push(lower);
             
-            return normalized;
+            // Si contiene "pto" (con punto o sin punto), agregar variante con "puerto"
+            if (/\bpto\.?\b/i.test(lower)) {
+                variants.push(lower.replace(/\bpto\.?\b/g, 'puerto'));
+            }
+            
+            // Si contiene "puerto", agregar variante con "pto"
+            if (/\bpuerto\b/i.test(lower)) {
+                variants.push(lower.replace(/\bpuerto\b/g, 'pto'));
+            }
+            
+            return variants;
         },
         
         /**
@@ -238,7 +249,7 @@
         searchInLocalDatabase: function(query) {
             if (!this.streetDatabase) return null;
             
-            const normalizedQuery = this.normalizeSearchTerm(query);
+            const queryVariants = this.createSearchVariants(query);
             
             // Buscar en cada distrito
             for (const [location, data] of Object.entries(this.streetDatabase)) {
@@ -246,12 +257,16 @@
                 
                 // Buscar coincidencia en calles
                 for (const street of streets) {
-                    const normalizedStreet = this.normalizeSearchTerm(street);
+                    const streetVariants = this.createSearchVariants(street);
                     
-                    if (normalizedStreet.includes(normalizedQuery) || 
-                        normalizedQuery.includes(normalizedStreet)) {
-                        console.log('✓ Found in local DB:', street, '→', data.district);
-                        return data.district;
+                    // Comprobar si alguna variante coincide
+                    for (const qv of queryVariants) {
+                        for (const sv of streetVariants) {
+                            if (sv.includes(qv) || qv.includes(sv)) {
+                                console.log('✓ Found in local DB:', street, '→', data.district);
+                                return data.district;
+                            }
+                        }
                     }
                 }
             }
@@ -263,14 +278,26 @@
          * Filtrar ubicaciones
          */
         filterLocations: function(query) {
-            const normalizedQuery = this.normalizeSearchTerm(query);
+            const queryVariants = this.createSearchVariants(query);
             const results = [];
             
             for (let i = 0; i < this.locations.length && results.length < this.config.maxResults; i++) {
                 const location = this.locations[i];
-                const normalizedLocation = this.normalizeSearchTerm(location);
+                const locationVariants = this.createSearchVariants(location);
                 
-                if (normalizedLocation.indexOf(normalizedQuery) !== -1) {
+                // Comprobar si alguna variante de query coincide con alguna variante de location
+                let found = false;
+                for (const qv of queryVariants) {
+                    for (const lv of locationVariants) {
+                        if (lv.indexOf(qv) !== -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
+                
+                if (found) {
                     results.push(location);
                 }
             }
