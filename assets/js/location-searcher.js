@@ -24,6 +24,21 @@
         searchTimer: null,
         
         /**
+         * Normalizar término de búsqueda
+         * Convierte variantes equivalentes (Puerto <-> Pto)
+         */
+        normalizeSearchTerm: function(term) {
+            if (!term) return '';
+            
+            let normalized = term.toLowerCase();
+            
+            // Convertir "puerto" a "pto" para búsqueda
+            normalized = normalized.replace(/\bpuerto\b/g, 'pto');
+            
+            return normalized;
+        },
+        
+        /**
          * Inicializar el buscador
          */
         init: function(locations) {
@@ -223,7 +238,7 @@
         searchInLocalDatabase: function(query) {
             if (!this.streetDatabase) return null;
             
-            const queryLower = query.toLowerCase().trim();
+            const normalizedQuery = this.normalizeSearchTerm(query);
             
             // Buscar en cada distrito
             for (const [location, data] of Object.entries(this.streetDatabase)) {
@@ -231,9 +246,11 @@
                 
                 // Buscar coincidencia en calles
                 for (const street of streets) {
-                    if (street.toLowerCase().includes(queryLower) || 
-                        queryLower.includes(street.toLowerCase())) {
-                        console.log(' Found in local DB:', street, '→', data.district);
+                    const normalizedStreet = this.normalizeSearchTerm(street);
+                    
+                    if (normalizedStreet.includes(normalizedQuery) || 
+                        normalizedQuery.includes(normalizedStreet)) {
+                        console.log('✓ Found in local DB:', street, '→', data.district);
                         return data.district;
                     }
                 }
@@ -246,12 +263,14 @@
          * Filtrar ubicaciones
          */
         filterLocations: function(query) {
-            const queryLower = query.toLowerCase();
+            const normalizedQuery = this.normalizeSearchTerm(query);
             const results = [];
             
             for (let i = 0; i < this.locations.length && results.length < this.config.maxResults; i++) {
                 const location = this.locations[i];
-                if (location.toLowerCase().indexOf(queryLower) !== -1) {
+                const normalizedLocation = this.normalizeSearchTerm(location);
+                
+                if (normalizedLocation.indexOf(normalizedQuery) !== -1) {
                     results.push(location);
                 }
             }
